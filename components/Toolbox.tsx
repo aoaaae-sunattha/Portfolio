@@ -39,8 +39,8 @@ const tools = [
   },
   {
     phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Self-Improving Agent',
-    desc: 'Powers the AEON Signal project — fetches global market data (War, Oil, Gold, USD) and forecasts a crypto buy/sell/hold signal with a confidence % and reasoning. Connected to Obsidian as a knowledge wiki; evaluates its own forecast accuracy daily and learns why it was right or wrong.',
-    uses: 'crypto signal · market analysis · forecast eval · Obsidian · self-improvement',
+    desc: 'Powers the AEON Signal project — fetches multi-pillar market data (Technicals, Macro news, Sentiment, Price) via Binance, Tavily, and Fear & Greed Index, then forecasts BTC/ETH/XRP buy/sell/hold signals with confidence % and reasoning, delivered to Telegram. Connected to Obsidian as a knowledge vault; evaluates its own forecast accuracy daily and learns why it was right or wrong.',
+    uses: 'crypto signal · Binance · Tavily · Fear & Greed · Telegram · Obsidian · self-improvement',
   },
   {
     phase: 'Steps 02–05', icon: <Plug size={22} />, name: 'MCP', role: 'Tool Bridge',
