@@ -167,7 +167,7 @@ export default function Hero() {
           {[
             { label: 'Currently', value: 'QA × AI tooling' },
             { label: 'Based in', value: 'Chiang Mai, TH · UTC+7' },
-            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI' },
+            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI · OpenClaw · Hermes · Paperclip' },
             { label: 'Open to', value: 'QA / GenAI engineering roles' },
           ].map(({ label, value }, i, arr) => (
             <div key={label} style={{
