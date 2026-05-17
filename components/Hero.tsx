@@ -165,17 +165,18 @@ export default function Hero() {
           paddingTop: '1.5rem',
         }}>
           {[
-            { label: 'Currently', value: 'QA × AI tooling' },
-            { label: 'Based in', value: 'Chiang Mai, TH · UTC+7' },
-            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI · OpenClaw · Hermes · Paperclip' },
-            { label: 'Open to', value: 'QA / GenAI engineering roles' },
-          ].map(({ label, value }, i, arr) => (
+            { label: 'Currently', value: 'QA × AI tooling', flex: false },
+            { label: 'Based in', value: 'Chiang Mai, TH · UTC+7', flex: false },
+            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI · OpenClaw · Hermes · Paperclip', flex: true },
+            { label: 'Open to', value: 'QA / GenAI engineering roles', flex: false },
+          ].map(({ label, value, flex }, i, arr) => (
             <div key={label} style={{
               paddingRight: i < arr.length - 1 ? '2.5rem' : 0,
               marginRight: i < arr.length - 1 ? '2.5rem' : 0,
               borderRight: i < arr.length - 1 ? '1px solid var(--line)' : 'none',
               paddingTop: '.25rem',
               paddingBottom: '.25rem',
+              ...(flex ? { flex: 1, minWidth: 0 } : {}),
             }}>
               <span style={{
                 display: 'block',
@@ -189,7 +190,7 @@ export default function Hero() {
               }}>
                 {label}
               </span>
-              <span style={{ fontSize: '.84rem', color: 'var(--ink-2)', fontWeight: 500 }}>{value}</span>
+              <span style={{ fontSize: flex ? '.78rem' : '.84rem', color: 'var(--ink-2)', fontWeight: 500, lineHeight: 1.5 }}>{value}</span>
             </div>
           ))}
         </div>
