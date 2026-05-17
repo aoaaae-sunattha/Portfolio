@@ -35,7 +35,7 @@ export default function Hero() {
 
   return (
     <section id="top" className="hero-section" style={{
-      padding: '9rem 2rem 5rem',
+      padding: '9rem 2rem 2rem',
       maxWidth: 1180,
       margin: '0 auto',
       position: 'relative',
