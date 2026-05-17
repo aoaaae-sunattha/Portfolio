@@ -166,13 +166,13 @@ export default function Hero() {
           paddingTop: '1.5rem',
         }}>
           {[
-            { label: 'Currently', value: 'QA × AI tooling' },
-            { label: 'Based in', value: 'Chiang Mai, TH · UTC+7' },
-            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP\nCrewAI · OpenClaw · Hermes · Paperclip' },
-            { label: 'Open to', value: 'QA / GenAI engineering roles' },
-          ].map(({ label, value }, i, arr) => (
+            { label: 'Currently', value: 'QA × AI tooling', grow: false },
+            { label: 'Based in', value: 'Chiang Mai, TH · UTC+7', grow: false },
+            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP\nCrewAI · OpenClaw · Hermes · Paperclip', grow: true },
+            { label: 'Open to', value: 'QA / GenAI engineering roles', grow: false },
+          ].map(({ label, value, grow }, i, arr) => (
             <div key={label} style={{
-              flex: 1,
+              flex: grow ? 1 : '0 0 auto',
               minWidth: 0,
               paddingRight: i < arr.length - 1 ? '2.5rem' : 0,
               marginRight: i < arr.length - 1 ? '2.5rem' : 0,
