@@ -34,8 +34,8 @@ const tools = [
   },
   {
     phase: 'Experiment', img: '/openclaw.svg', name: 'OpenClaw', role: 'Local AI Assistant',
-    desc: 'Local-first personal AI assistant — runs on your own machine, no cloud required. Used for experimenting with multi-model setups (Claude, GPT, local models) and building custom skills outside the main pipeline.',
-    uses: 'multi-model experimentation · custom skills · local automation',
+    desc: 'Local-first AI assistant, no cloud required. Built a Flight Tracker with it — checks the cheapest flights daily and sends a Telegram notification automatically. Also used for multi-model experimentation and building custom skills outside the main pipeline.',
+    uses: 'local automation · flight tracker · Telegram notifications · custom skills',
   },
   {
     phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Open-Weight Model',
