@@ -501,8 +501,10 @@ a { color: inherit; text-decoration: none; }
   border-top: 1px solid var(--line);
   padding: 1rem 1.6rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: .6rem;
   background: var(--bg-2);
 }
@@ -525,7 +527,16 @@ a { color: inherit; text-decoration: none; }
 .shot-row img { width: 100%; height: 96px; object-fit: cover; display: block; }
 
 /* ─── Lab ─── */
-.lab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.lab-slider-wrap { position: relative; display: flex; align-items: stretch; gap: .5rem; }
+.lab-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  flex: 1;
+}
+.lab-slider::-webkit-scrollbar { display: none; }
+.lab-slide { flex: 0 0 100%; scroll-snap-align: start; padding: .25rem; box-sizing: border-box; }
 .lab-item {
   background: var(--card);
   border: 1px solid var(--line);
@@ -534,17 +545,46 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   gap: .6rem;
+  width: 550px;
+  height: 420px;
+  margin: 0 auto;
+  box-sizing: border-box;
   transition: border-color .15s, transform .15s, box-shadow .15s;
   box-shadow: 0 1px 2px rgba(0,0,0,.02);
+  overflow: hidden;
 }
 .lab-item:hover { border-color: var(--coral-line); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.04); }
 .lab-item h4 { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 500; letter-spacing: -.4px; line-height: 1.2; }
 .lab-item p { font-size: .9rem; line-height: 1.55; color: var(--ink-2); flex: 1; }
 .lab-item .lab-tags { display: flex; gap: .35rem; flex-wrap: wrap; margin-top: .3rem; }
 .lab-item .lab-tags span { font-family: var(--font-mono); font-size: .66rem; color: var(--grey); padding: .18rem .55rem; border-radius: 99px; background: var(--surface); }
+.lab-arrow {
+  flex-shrink: 0;
+  width: 2rem; height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink-2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  align-self: center;
+  transition: border-color .15s, color .15s;
+}
+.lab-arrow:hover:not(:disabled) { border-color: var(--coral-line); color: var(--coral); }
+.lab-dots { display: flex; justify-content: center; gap: .45rem; margin-top: .9rem; }
+.lab-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--line);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.lab-dot.active { background: var(--coral); transform: scale(1.25); }
 
 /* ─── Skills ─── */
-.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; align-items: stretch; }
+.skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: stretch; }
 .skills-grid > * { height: 100%; }
 .skill-col { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.3rem 1.4rem; height: 100%; }
 .skill-col h5 {
@@ -564,7 +604,7 @@ a { color: inherit; text-decoration: none; }
 .skill-col ul li b { color: var(--ink); font-weight: 600; }
 
 /* ─── Workflow ─── */
-.flow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; align-items: stretch; }
+.flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: stretch; }
 .flow-grid > * { height: 100%; }
 .flow-step {
   background: var(--card);
@@ -581,7 +621,7 @@ a { color: inherit; text-decoration: none; }
 .flow-step p { font-size: .85rem; color: var(--ink-2); line-height: 1.5; }
 
 /* ─── QA for AI ─── */
-.qa-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+.qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .qa-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -703,7 +743,7 @@ a { color: inherit; text-decoration: none; }
   .tbox { grid-template-columns: 1fr; }
 
   /* Lab */
-  .lab-grid { grid-template-columns: 1fr; }
+  .lab-arrow { display: none; }
 
   /* Contact */
   .contact-card { padding: 2.5rem 1.5rem; }

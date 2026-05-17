@@ -1,29 +1,48 @@
+'use client'
+import { useRef, useState, useEffect } from 'react'
 import { FadeUp } from './Animate'
 
 const items = [
   {
-    title: 'AEON — Multi-agent forecast system',
-    desc: '7-agent CrewAI system that fetches Binance market data, generates 24-hour forecasts, and runs a built-in QA Auditor that compares predictions against real outcomes. Self-evaluating loop.',
-    tags: ['CrewAI', 'Gemini 2.5', 'Python', 'Binance API', 'Self-audit'],
+    title: 'AEON Lite — Crypto signal & self-learning forecast system',
+    desc: 'Hermes-orchestrated agent that runs twice daily, fetching technical indicators (RSI, EMA, ATR via CCXT/Binance) and macro sentiment (Tavily + Fear & Greed Index) to produce LONG/SHORT/HOLD signals with confidence scores for BTC, ETH, and XRP. A Claude-powered Trader Agent generates the forecast; a QA Auditor evaluates outcomes against real prices and writes lessons back into Obsidian. Each new cycle reads prior lessons before deciding — a self-correcting feedback loop.',
+    tags: ['Hermes', 'Node.js', 'Claude', 'Gemini 2.5 Flash', 'Binance API', 'Obsidian', 'Self-audit'],
   },
   {
-    title: 'Flight Tracker — API resilience QA',
-    desc: 'Self-directed QA exercise: 14 test cases covering API retry behavior, date-safety edge cases, and error reporting. Documented as TC-01 → TC-14 with reproducible test data.',
-    tags: ['API testing', 'Retry logic', 'Error states', 'Test cases'],
+    title: 'Flight Deal Finder — Autonomous Price Watch Agent',
+    desc: 'OpenClaw agent that runs on a daily schedule, monitors user-configured flight watches (route, date, budget), and sends proactive Telegram alerts when prices match criteria — no user prompting required. The LLM acts as a travel advisor, reasoning over price trends and giving the user enough context to decide when to book. QA scope covers 20 test cases across scheduling, threshold detection, input validation, API error states, and advisory quality.',
+    tags: ['OpenClaw', 'Claude AI', 'Duffel API', 'Telegram Bot', 'Agent scheduling', 'Node.js'],
   },
   {
     title: 'Prompt Compiler — Modular LLM prompt builder',
-    desc: 'Node.js ESM CLI that assembles, validates, and outputs system prompts for multiple LLM targets from a single source of truth. Modular blocks compiled per target.',
+    desc: 'Takes structured input via a wizard or CLI flags, runs it through a validation and enrichment pipeline, and compiles a finished system prompt in the native format of the chosen LLM target. Supports Claude, Gemini, Codex, AI Agent, and QA-oriented Project CT — no API calls, compile-time only.',
     tags: ['Node.js ESM', 'Prompt eng', 'CLI', 'Multi-target'],
-  },
-  {
-    title: 'Golden Dataset Toolkit',
-    desc: "Small framework I use to manage golden test datasets for LLM features. Pulls from Clotilde's intent regression suite. Negation + anaphora cases included as policy.",
-    tags: ['Regression', 'Eval', 'Negation tests', 'Anaphora'],
   },
 ]
 
 export default function Lab() {
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+
+  function goTo(index: number) {
+    const slider = sliderRef.current
+    if (!slider) return
+    const wrapped = (index + items.length) % items.length
+    const slide = slider.children[wrapped] as HTMLElement
+    slider.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    const slider = sliderRef.current
+    if (!slider) return
+    const onScroll = () => {
+      const index = Math.round(slider.scrollLeft / slider.offsetWidth)
+      setActive(index)
+    }
+    slider.addEventListener('scroll', onScroll, { passive: true })
+    return () => slider.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <section className="wrap" id="lab">
       <FadeUp>
@@ -37,17 +56,33 @@ export default function Lab() {
         </p>
       </FadeUp>
 
-      <div className="lab-grid">
-        {items.map((item, i) => (
-          <FadeUp key={item.title} delay={i * 0.08}>
-            <div className="lab-item" style={{ height: '100%' }}>
-              <h4>{item.title}</h4>
-              <p>{item.desc}</p>
-              <div className="lab-tags">
-                {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+      <div className="lab-slider-wrap">
+        <button className="lab-arrow lab-arrow--prev" onClick={() => goTo(active - 1)} aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+
+        <div className="lab-slider" ref={sliderRef}>
+          {items.map((item) => (
+            <div className="lab-slide" key={item.title}>
+              <div className="lab-item">
+                <h4>{item.title}</h4>
+                <p>{item.desc}</p>
+                <div className="lab-tags">
+                  {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
               </div>
             </div>
-          </FadeUp>
+          ))}
+        </div>
+
+        <button className="lab-arrow lab-arrow--next" onClick={() => goTo(active + 1)} aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div className="lab-dots">
+        {items.map((_, i) => (
+          <button key={i} className={`lab-dot${active === i ? ' active' : ''}`} onClick={() => goTo(i)} aria-label={`Go to slide ${i + 1}`} />
         ))}
       </div>
     </section>
