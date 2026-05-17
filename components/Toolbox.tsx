@@ -23,9 +23,9 @@ const tools = [
     uses: 'code generation · Google API · production inference · cross-model eval',
   },
   {
-    phase: 'Step 03', img: '/codex.svg', name: 'Codex', role: 'Code Reader',
-    desc: 'Walks the repo during analyze. Maps components → skills, flags untested files, drafts initial unit tests from function signatures.',
-    uses: 'repo walk · coverage map · scaffolding',
+    phase: 'Step 03', img: '/codex.svg', name: 'Codex', role: 'Code Generator · LLM',
+    desc: 'Code generation partner alongside Claude and Gemini. Also serves as the assigned LLM for specific agents inside Paperclip — each agent is configured to use whichever model fits: Claude, Gemini, or Codex.',
+    uses: 'code generation · agent LLM · Paperclip integration · repo scaffolding',
   },
   {
     phase: 'Steps 04–05', img: '/crewai.svg', name: 'CrewAI', role: 'Multi-Agent Runner',
