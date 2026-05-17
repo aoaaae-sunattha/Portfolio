@@ -3,14 +3,6 @@
 import { GitBranch, Layers, Mail, ArrowDown } from 'lucide-react'
 import { HeroFade } from './Animate'
 
-const tools = [
-  { name: 'Claude', role: 'orchestrator' },
-  { name: 'MCP', role: 'Notion · GitHub bridge' },
-  { name: 'CrewAI', role: 'agent workers' },
-  { name: 'Perplexity', role: 'upstream research' },
-]
-
-const artifacts = ['Plan', 'Skill manifest', 'Gap report', 'Generated skill', 'SHIP / HOLD']
 
 export default function Hero() {
   return (
@@ -69,93 +61,24 @@ export default function Hero() {
         </h1>
       </HeroFade>
 
-      {/* H2 */}
+      {/* Bio */}
       <HeroFade delay={0.2}>
-        <h2 style={{
+        <p style={{
           fontFamily: 'var(--font-sans)',
           fontWeight: 400,
-          fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
-          lineHeight: 1.5,
+          fontSize: 'clamp(1rem, 1.6vw, 1.15rem)',
+          lineHeight: 1.7,
           color: 'var(--grey)',
           marginBottom: '2.25rem',
-          maxWidth: '48ch',
-          letterSpacing: '-.2px',
+          maxWidth: '58ch',
+          letterSpacing: '-.1px',
         }}>
-          I test the things I build, and I build the things I want to test.{' '}
-          The pipeline below is the spine.
-        </h2>
-      </HeroFade>
-
-      {/* Pitch card */}
-      <HeroFade delay={0.3}>
-        <div className="hero-pitch" style={{
-          background: 'var(--card)',
-          border: '1px solid var(--line)',
-          borderRadius: 16,
-          padding: '1.5rem 1.75rem',
-          maxWidth: 720,
-          marginBottom: '2.25rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,.04)',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1.25rem 2rem',
-        }}>
-          {/* Left — tool chain */}
-          <div>
-            <p style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '.67rem',
-              letterSpacing: '.5px',
-              textTransform: 'uppercase' as const,
-              color: 'var(--coral)',
-              fontWeight: 500,
-              margin: '0 0 .85rem',
-            }}>
-              Pipeline stack
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '.55rem' }}>
-              {tools.map(({ name, role }) => (
-                <div key={name} style={{ display: 'flex', alignItems: 'baseline', gap: '.6rem' }}>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '.88rem', color: 'var(--ink)', minWidth: '7ch' }}>
-                    {name}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '.82rem', color: 'var(--grey)', lineHeight: 1.4 }}>
-                    {role}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right — artifacts */}
-          <div className="hero-pitch-right" style={{ borderLeft: '1px solid var(--line)', paddingLeft: '1.75rem' }}>
-            <p style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '.67rem',
-              letterSpacing: '.5px',
-              textTransform: 'uppercase' as const,
-              color: 'var(--coral)',
-              fontWeight: 500,
-              margin: '0 0 .85rem',
-            }}>
-              5 outputs, every run
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '.45rem' }}>
-              {artifacts.map((a, i) => (
-                <div key={a} style={{ display: 'flex', alignItems: 'center', gap: '.55rem' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '.65rem', color: 'var(--coral)', opacity: .6, minWidth: '1.4ch' }}>
-                    {i + 1}
-                  </span>
-                  <span style={{ fontSize: '.85rem', color: 'var(--ink-2)', lineHeight: 1.4 }}>{a}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+          I&apos;m a QA engineer who got curious about AI and started building things to understand how it actually works. Along the way I built Clotilde — a small AI travel assistant experiment that taught me how intent classification, policy enforcement, and approval workflows fit together in a real product. Seeing what Claire is building in the B2B travel space genuinely excited me — it&apos;s the kind of problem I&apos;ve been learning toward. I test everything I build, and I don&apos;t stop until I understand why something works.
+        </p>
       </HeroFade>
 
       {/* CTAs */}
-      <HeroFade delay={0.4}>
+      <HeroFade delay={0.3}>
         <div style={{ display: 'flex', gap: '.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <a href="#pipeline" className="btn fill"><GitBranch size={16} /> See the pipeline</a>
           <a href="#projects" className="btn ghost"><Layers size={16} /> Project deep dives</a>
@@ -163,35 +86,43 @@ export default function Hero() {
         </div>
       </HeroFade>
 
-      {/* Scroll indicator — absolute bottom right */}
-      <HeroFade delay={0.7} className="hero-scroll" style={{ position: 'absolute', bottom: '4.5rem', right: '0rem' }}>
+      {/* Scroll indicator — fixed bottom right */}
+      <HeroFade delay={0.7} className="hero-scroll" style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 50 }}>
         <a href="#pipeline" style={{
           display: 'inline-flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '.35rem',
+          gap: '.5rem',
           textDecoration: 'none',
-          opacity: .45,
+          opacity: .75,
           transition: 'opacity .2s',
         }}
-        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '0.8'}
-        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '0.45'}
+        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '1'}
+        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '0.75'}
         >
           <span style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '.75rem',
-            letterSpacing: '.5px',
+            fontSize: '.7rem',
+            letterSpacing: '.6px',
             textTransform: 'uppercase',
-            color: 'var(--ink-2)',
+            color: 'var(--coral)',
+            fontWeight: 600,
           }}>Scroll</span>
-          <span style={{ animation: 'scrollBounce 1.6s ease-in-out infinite', color: 'var(--ink-2)', display: 'flex' }}>
-            <ArrowDown size={15} strokeWidth={1.8} />
+          <span style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 36, height: 36, borderRadius: '50%',
+            border: '1.5px solid var(--coral-line)',
+            background: 'rgba(217,119,87,.07)',
+            animation: 'scrollBounce 1.6s ease-in-out infinite',
+            color: 'var(--coral)',
+          }}>
+            <ArrowDown size={16} strokeWidth={2} />
           </span>
         </a>
       </HeroFade>
 
       {/* Meta row */}
-      <HeroFade delay={0.5}>
+      <HeroFade delay={0.4}>
         <div className="hero-meta" style={{
           display: 'flex',
           gap: '0',
@@ -202,8 +133,8 @@ export default function Hero() {
         }}>
           {[
             { label: 'Currently', value: 'QA × AI tooling' },
-            { label: 'Based in', value: 'Bangkok, TH · UTC+7' },
-            { label: 'Stack', value: 'Claude · Playwright · TypeScript · Python' },
+            { label: 'Based in', value: 'Chiang Mai, TH · UTC+7' },
+            { label: 'AI stack', value: 'Claude · MCP · CrewAI · Gemini · Codex · Playwright' },
             { label: 'Open to', value: 'QA / GenAI engineering roles' },
           ].map(({ label, value }, i, arr) => (
             <div key={label} style={{
