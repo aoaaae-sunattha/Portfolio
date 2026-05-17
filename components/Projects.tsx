@@ -34,10 +34,9 @@ export default function Projects() {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
           Module 3 · Per-project deep dives
         </div>
-        <h2 className="sec-h">Five projects. One template.</h2>
+        <h2 className="sec-h">Project deep dives.<br />Case studies.</h2>
         <p className="sec-sub">
-          For each project — what I proposed → how I analyzed it → the QA process I applied → the AI stack I used.
-          Same structure every time, so reading one teaches you how to read the rest.
+          Projects I built to experiment with ideas — each one taken through analysis, planning, development, and a full QA cycle.
         </p>
       </FadeUp>
 
@@ -49,9 +48,8 @@ export default function Projects() {
             <div className="pcard-idx">01</div>
             <div>
               <div className="pcard-ttl">QA Forge — Agentic QA Pipeline</div>
-              <div className="pcard-tag">2026 · flagship · v3.0 · 20 Claude skills · 5 human gates</div>
+              <div className="pcard-tag">flagship · v3.0 · 20 Claude skills · 5 human gates</div>
             </div>
-            <div className="pcard-status live"><span className="status-dot" /> In production</div>
           </div>
           <div className="pcard-lede">
             <b>Premise.</b> Most QA engineers inherit a process. I&apos;m designing one — a repeatable, AI-augmented system that any QA engineer can run.
@@ -62,7 +60,7 @@ export default function Projects() {
               <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
               <ul>
                 <li>End-to-end pipeline: <b>CEO brief → BG-IDs → PM stories → BA review → QA plan → manual tests → Playwright → SHIP/HOLD → PR</b>.</li>
-                <li>4 phases, 5 hard-stop human gates — QA enters at the brief, not the test case.</li>
+                <li>5 hard-stop human gates — QA enters at the brief, not the test case.</li>
                 <li>Every test must trace to a BG-ID. Orphan ACs escalated, never silently passed.</li>
               </ul>
             </div>
@@ -82,26 +80,24 @@ export default function Projects() {
                 <li><b>Phase 0</b> CEO-BA-Dev — discovery, BG-IDs, GWT acceptance criteria.</li>
                 <li><b>Phase 1</b> BA-QA — 5-tab analysis + Master Plan.</li>
                 <li><b>Phase 2</b> Execution — manual cases → Playwright → <b>test healer</b> (4 failure types) → SHIP/HOLD verdict.</li>
-                <li>Applied on FinPay: <b>27 stories · 100% pass · verdict delivered</b>.</li>
               </ul>
             </div>
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="orchestrates 20 skills · plans · classifies" />
-                <AiEntry icon={<Plug size={14} />} name="MCP" forText="Notion + GitHub · skill manifest" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini" forText="code generation · cross-model eval" />
                 <AiEntry img="https://svgl.app/library/perplexity.svg" name="Perplexity" forText="research before brief decomposition" />
                 <AiEntry icon={<BookOpen size={14} />} name="NotebookLM" forText="PRD synthesis · Q&A" />
               </div>
             </div>
           </div>
           <div className="pcard-foot">
-            <div className="pcard-note">Phase docs on Notion · Skills repo on GitHub</div>
+            <div className="pcard-note">This pipeline runs across all projects in this portfolio · Phase docs on Notion</div>
             <div className="pcard-links">
               <a className="chip" href="https://www.notion.so/Phase-0-CEO-BA-Dev-Discovery-Requirements-362dee0fbb3e8046a3a4c22962b7fc39" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 0</a>
               <a className="chip" href="https://www.notion.so/Phase-1-BA-QA-Analysis-Planning-362dee0fbb3e807f8a41f706cdff6c02" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 1</a>
               <a className="chip" href="https://www.notion.so/Phase-2-Execution-Test-Deliver-362dee0fbb3e80ce9b00c5790d040a22" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 2</a>
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
             </div>
           </div>
         </article></FadeUp>
@@ -112,9 +108,8 @@ export default function Projects() {
             <div className="pcard-idx">02</div>
             <div>
               <div className="pcard-ttl">Clotilde — AI Corporate Travel Assistant</div>
-              <div className="pcard-tag">2025 · v3.0 · Telegram bot · live flights via Duffel</div>
+              <div className="pcard-tag">v3.0 · Telegram bot · live flights via Duffel</div>
             </div>
-            <div className="pcard-status"><span className="status-dot" /> Case study</div>
           </div>
           <div className="pcard-lede">
             <b>Premise.</b> A natural-language corporate travel assistant that searches live flights, enforces role-based company policy,
@@ -124,7 +119,7 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
               <ul>
-                <li><b>4 employee role tiers</b> (Ops · Staff · Director · VP) → cabin and hotel budget caps enforced per role.</li>
+                <li><b>4 employee role tiers</b> (Ops/Staff · Manager · Director · VP/C-Suite) → cabin class by role (Economy vs Business) + hotel budget caps by city.</li>
                 <li>Full out-of-policy approval workflow with live Approve/Reject buttons on Telegram.</li>
                 <li>17 traveler notifications across the entire travel lifecycle.</li>
               </ul>
@@ -133,7 +128,7 @@ export default function Projects() {
               <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
               <ul>
                 <li>Policy file as single source of truth — shared by agent, inventory, and compliance gate.</li>
-                <li>Intent classification = highest regression risk → built a <b>15-case golden dataset</b>.</li>
+                <li>Agentic tool dispatch = highest regression risk → built a <b>15-case golden dataset</b>.</li>
                 <li>Surface area: bot UI ↔ Duffel API ↔ policy engine ↔ approval workflow.</li>
               </ul>
             </div>
@@ -149,7 +144,7 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="intent classification · production" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="agentic decision-making · function calling · production" />
                 <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Flash" forText="admin NL → action resolver" />
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="build · test plan · golden dataset" />
                 <AiEntry img="https://svgl.app/library/telegram.svg" name="Telegram + Duffel" forText="runtime · live flight inventory" />
@@ -171,9 +166,8 @@ export default function Projects() {
             <div className="pcard-idx">03</div>
             <div>
               <div className="pcard-ttl">KODA — BNPL Fintech Build &amp; QA</div>
-              <div className="pcard-tag">2024 · 169 tests · 76 E2E specs · 3-gate CI</div>
+              <div className="pcard-tag">169 tests · 76 E2E specs · 3-gate CI</div>
             </div>
-            <div className="pcard-status"><span className="status-dot" /> Case study</div>
           </div>
           <div className="pcard-lede">
             <b>Premise.</b> A Buy Now Pay Later app, built from scratch, then put through a full QA lifecycle on real fintech business logic.
@@ -230,9 +224,8 @@ export default function Projects() {
             <div className="pcard-idx">04</div>
             <div>
               <div className="pcard-ttl">CrewAI QA Agent — Two Pipelines, Six Agents</div>
-              <div className="pcard-tag">2025 · OSS · qa-challenger + qa-retest · project-agnostic</div>
+              <div className="pcard-tag">OSS · qa-challenger + qa-retest · project-agnostic</div>
             </div>
-            <div className="pcard-status"><span className="status-dot" /> Case study</div>
           </div>
           <div className="pcard-lede">
             <b>Premise.</b> Two completely independent CrewAI pipelines. <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-challenger</code> turns a vague feature ticket
@@ -290,9 +283,8 @@ export default function Projects() {
             <div className="pcard-idx">05</div>
             <div>
               <div className="pcard-ttl">tp-exchanges — Schema-Contract API QA</div>
-              <div className="pcard-tag">2024 · API · 20–30 exchange backends · production</div>
+              <div className="pcard-tag">API · 20–30 exchange backends · production</div>
             </div>
-            <div className="pcard-status live"><span className="status-dot" /> In production</div>
           </div>
           <div className="pcard-lede">
             <b>Premise.</b> An exchange-aggregator API that fans out to 20–30 backends. The product breaks when one of them silently changes its response shape.
