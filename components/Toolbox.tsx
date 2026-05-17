@@ -67,7 +67,7 @@ export default function Toolbox() {
         {tools.map((tool, i) => (
           <FadeUp key={tool.name} delay={Math.min(i * 0.06, 0.3)}>
             <div className="tool" style={{ height: '100%' }}>
-              <span className="tool-phase">{tool.phase}</span>
+
               <div className="tool-head">
                 <div className="tool-logo">
                   {tool.img ? (
