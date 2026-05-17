@@ -161,7 +161,7 @@ export default function Hero() {
           gap: '0',
           marginTop: '3rem',
           flexWrap: 'wrap',
-          alignItems: 'flex-start',
+          alignItems: 'stretch',
           borderTop: '1px solid var(--line)',
           paddingTop: '1.5rem',
         }}>
@@ -177,6 +177,9 @@ export default function Hero() {
               borderRight: i < arr.length - 1 ? '1px solid var(--line)' : 'none',
               paddingTop: '.25rem',
               paddingBottom: '.25rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
               ...(flex ? { flex: 1, minWidth: 0 } : {}),
             }}>
               <span style={{
