@@ -39,7 +39,7 @@ const tools = [
   },
   {
     phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Self-Improving Agent',
-    desc: 'Powers the E.ON Signal project — fetches global market data (Wall Street, Oil, Gold, USD) and forecasts a crypto buy/sell/hold signal with a confidence % and reasoning. Connected to Obsidian as a knowledge wiki; evaluates its own forecast accuracy daily and learns why it was right or wrong.',
+    desc: 'Powers the AEON Signal project — fetches global market data (War, Oil, Gold, USD) and forecasts a crypto buy/sell/hold signal with a confidence % and reasoning. Connected to Obsidian as a knowledge wiki; evaluates its own forecast accuracy daily and learns why it was right or wrong.',
     uses: 'crypto signal · market analysis · forecast eval · Obsidian · self-improvement',
   },
   {
