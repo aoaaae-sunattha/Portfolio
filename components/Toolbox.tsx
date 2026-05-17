@@ -38,9 +38,9 @@ const tools = [
     uses: 'local automation · flight tracker · Telegram notifications · custom skills',
   },
   {
-    phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Open-Weight Model',
-    desc: 'Local / open-weight model used to evaluate prompts offline and stress-test new skills without burning Claude quota. Cheap iteration.',
-    uses: 'prompt eval · offline regression · cost control',
+    phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Self-Improving Agent',
+    desc: 'Powers the E.ON Signal project — fetches global market data (Wall Street, Oil, Gold, USD) and forecasts a crypto buy/sell/hold signal with a confidence % and reasoning. Connected to Obsidian as a knowledge wiki; evaluates its own forecast accuracy daily and learns why it was right or wrong.',
+    uses: 'crypto signal · market analysis · forecast eval · Obsidian · self-improvement',
   },
   {
     phase: 'Steps 02–05', icon: <Plug size={22} />, name: 'MCP', role: 'Tool Bridge',
