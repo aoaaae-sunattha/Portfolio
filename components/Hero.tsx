@@ -161,6 +161,7 @@ export default function Hero() {
           gap: '0',
           marginTop: '3rem',
           flexWrap: 'wrap',
+          alignItems: 'flex-start',
           borderTop: '1px solid var(--line)',
           paddingTop: '1.5rem',
         }}>
