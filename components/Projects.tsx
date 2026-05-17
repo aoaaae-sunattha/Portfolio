@@ -1,196 +1,341 @@
+import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, GitBranch as GithubIcon, PlayCircle, Search, BookOpen, Plug, Terminal, Users } from 'lucide-react'
+import ImageLightbox from '@/components/ImageLightbox'
+
+function AiEntry({ img, icon, name, forText }: { img?: string; icon?: React.ReactNode; name: string; forText: string }) {
+  return (
+    <div className="ai">
+      <div className="ai-ico">
+        {img ? <img src={img} alt={name} /> : icon}
+      </div>
+      <div>
+        <span className="ai-nm">{name}</span>
+        <span className="ai-for">{forText}</span>
+      </div>
+    </div>
+  )
+}
+
+function TpExchangesShots() {
+  return (
+    <div className="shot-row">
+      <ImageLightbox src="/tp-exchanges-demo.png" alt="tp-exchanges screenshot 1" />
+      <ImageLightbox src="/tp-exchanges-demo-2.png" alt="tp-exchanges screenshot 2" />
+    </div>
+  )
+}
+
 export default function Projects() {
   return (
-    <section id="projects" className="wrap">
-      <hr className="section-hr" style={{ marginBottom: '4rem' }} />
-      <div className="section-eye">Portfolio</div>
-      <h2 className="section-h">Projects</h2>
-      <p className="section-sub">Built from scratch. Tested end-to-end. Each one is a full PM → Design → Dev → QA cycle driven by AI.</p>
-
-      {/* ── Clotilde hero card ── */}
-      <div className="glass hover-lift" style={{ marginBottom: '1.5rem', overflow: 'hidden' }}>
-        <div className="stripe-violet" />
-        <div style={{ padding: '2.25rem 2.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.25rem' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
-              <span className="star-badge">⭐ Star Project</span>
-              <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Built with Claude</span>
-            </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.35rem', color: '#fff' }}>✈️ Clotilde</div>
-            <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.25rem' }}>AI Corporate Travel Assistant · Telegram Bot · v3.0</div>
-            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.78, marginBottom: '1.5rem' }}>
-              A natural-language corporate travel assistant that searches live flights, enforces role-based company policy, routes out-of-policy bookings through a real approval workflow, and keeps travelers notified across every step of their trip.
-            </p>
-            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-              {([['4', 'Role Levels', '#60a5fa'], ['17', 'Notifications', '#a78bfa'], ['15', 'Golden Tests', '#34d399'], ['5', 'AI Tools', '#fbbf24']] as [string, string, string][]).map(([num, label, color]) => (
-                <div key={label} className="metric-box">
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1, color, fontFamily: 'var(--font-mono)' }}>{num}</div>
-                  <div style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.25rem', letterSpacing: '0.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>{label}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.25rem' }}>
-              {['Built with Claude', 'Gemini 2.5 Pro', 'Gemini 2.5 Flash', 'Node.js', 'Duffel API (live)', 'Telegram Bot API', 'Golden Dataset', 'Regression Tests'].map((t) => (
-                <span key={t} className={t.includes('Claude') || t.includes('Gemini') ? 'tag-ai' : t.includes('Dataset') || t.includes('Regression') ? 'tag-qa' : 'tag-tech'}>{t}</span>
-              ))}
-            </div>
-            <video controls style={{ width: '100%', borderRadius: '10px' }} preload="none">
-              <source src="https://raw.githubusercontent.com/aoaaae-sunattha/Portfolio/main/Clotilde_presentation.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div>
-            <div style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>Key Features</div>
-            {[
-              { icon: '🛡️', title: 'Role-Based Policy Enforcement', desc: 'Cabin class and hotel budget caps enforced per employee level. Operations/Staff → Economy only. Directors and VP → up to Business Class.' },
-              { icon: '📋', title: 'Full Out-of-Policy Approval Workflow', desc: 'Traveler submits a business justification → manager gets Telegram message with Approve/Reject buttons → approval issues a PNR.' },
-              { icon: '🔔', title: '17 Real-Time Traveler Notifications', desc: 'Covers the full travel lifecycle — booking confirmed, flight delayed/rescheduled/cancelled, no seats, hotel overbooked, policy approved/rejected.' },
-              { icon: '🖥️', title: 'Natural Language Admin Console', desc: 'Travel managers type plain English and Gemini 2.5 Flash resolves it to the right action and notification automatically.' },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} style={{ display: 'flex', gap: '0.8rem', marginBottom: '1.1rem', alignItems: 'flex-start' }}>
-                <div className="feature-icon">{icon}</div>
-                <div>
-                  <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.15rem', color: '#fff' }}>{title}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{desc}</div>
-                </div>
-              </div>
-            ))}
-            <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-              <a href="https://www.notion.so/Clotilde-v3-0-360dee0fbb3e806b9fe0f677169a2e26" target="_blank" rel="noopener noreferrer" className="btn-glass" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>📋 QA Notion</a>
-              <a href="https://docs.google.com/presentation/d/1ZlNVMXSrT9uLDg-hExS_xZXgZrdCuot8XqvaqCFgCEQ/edit" target="_blank" rel="noopener noreferrer" className="btn-glass" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>🎞️ Slides</a>
-              <a href="https://github.com/aoaaae-sunattha/Clotilde_AI" target="_blank" rel="noopener noreferrer" className="btn-glass" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>🐙 GitHub</a>
-            </div>
-          </div>
-        </div>
-        <div className="card-footer">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-            Live Duffel API · Mock GDS fallback · PNR generation · 4 traveler profiles from YAML
-          </div>
-        </div>
+    <section className="wrap" id="projects">
+      <div className="eyebrow">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        Module 3 · Per-project deep dives
       </div>
+      <h2 className="sec-h">Five projects. One template.</h2>
+      <p className="sec-sub">
+        For each project — what I proposed → how I analyzed it → the QA process I applied → the AI stack I used.
+        Same structure every time, so reading one teaches you how to read the rest.
+      </p>
 
-      {/* ── 2-col project grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
-        {/* Flight Tracker */}
-        <div className="glass hover-lift" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div className="stripe-green" />
-          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🛫</div>
-              <div>
-                <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>Flight Tracker Bot</div>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>BKK → CDG · Built on OpenClaw · Python</div>
+      <div className="pdive">
+
+        {/* 01 QA FORGE */}
+        <article className="pcard">
+          <div className="pcard-head">
+            <div className="pcard-idx">01</div>
+            <div>
+              <div className="pcard-ttl">QA Forge — Agentic QA Pipeline</div>
+              <div className="pcard-tag">2026 · flagship · v3.0 · 20 Claude skills · 5 human gates</div>
+            </div>
+            <div className="pcard-status live"><span className="status-dot" /> In production</div>
+          </div>
+          <div className="pcard-lede">
+            <b>Premise.</b> Most QA engineers inherit a process. I&apos;m designing one — a repeatable, AI-augmented system that any QA engineer can run.
+            The pipeline writes the test plan, the healer fixes broken selectors, the report writes itself. The QA engineer owns the strategy, edge cases, and acceptance criteria. That part doesn&apos;t automate.
+          </div>
+          <div className="pcard-cols-2">
+            <div className="pcol">
+              <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
+              <ul>
+                <li>End-to-end pipeline: <b>CEO brief → BG-IDs → PM stories → BA review → QA plan → manual tests → Playwright → SHIP/HOLD → PR</b>.</li>
+                <li>4 phases, 5 hard-stop human gates — QA enters at the brief, not the test case.</li>
+                <li>Every test must trace to a BG-ID. Orphan ACs escalated, never silently passed.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
+              <ul>
+                <li><b>5-tab live widget</b> — Architecture · Data Flow · Skills · QA Gaps (Critical → Low) · Test Plan.</li>
+                <li>Maps every component to a Claude skill; flags missing skills.</li>
+                <li>Quality gate: 5 yes/no questions, all must be YES before any test is written.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="pcard-cols-2">
+            <div className="pcol">
+              <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
+              <ul>
+                <li><b>Phase 0</b> CEO-BA-Dev — discovery, BG-IDs, GWT acceptance criteria.</li>
+                <li><b>Phase 1</b> BA-QA — 5-tab analysis + Master Plan.</li>
+                <li><b>Phase 2</b> Execution — manual cases → Playwright → <b>test healer</b> (4 failure types) → SHIP/HOLD verdict.</li>
+                <li>Applied on FinPay: <b>27 stories · 100% pass · verdict delivered</b>.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
+              <div className="ai-list">
+                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="orchestrates 20 skills · plans · classifies" />
+                <AiEntry icon={<Plug size={14} />} name="MCP" forText="Notion + GitHub · skill manifest" />
+                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="research before brief decomposition" />
+                <AiEntry icon={<BookOpen size={14} />} name="NotebookLM" forText="PRD synthesis · Q&A" />
               </div>
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.72 }}>
-              Two-agent pipeline that finds cheapest Bangkok→Paris flights within strict 81–89 day return windows. Agent 1 queries Travelpayouts API; Agent 2 filters, ranks, and formats output as a daily Telegram report.
-            </p>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              {([['2', 'Agents', '#60a5fa'], ['14', 'QA Cases', '#34d399'], ['3', 'Phases', '#fbbf24']] as [string, string, string][]).map(([num, label, color]) => (
-                <div key={label} className="metric-box">
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color, fontFamily: 'var(--font-mono)' }}>{num}</div>
-                  <div style={{ fontSize: '0.57rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-mono)' }}>{label}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-              {['OpenClaw', 'Multi-Agent Pipeline', 'Python 3.13', 'Travelpayouts API', '14 QA Test Cases'].map((t) => (
-                <span key={t} className={t === 'OpenClaw' || t.includes('Multi') ? 'tag-ai' : t.includes('QA') ? 'tag-qa' : 'tag-tech'}>{t}</span>
-              ))}
-            </div>
-            <div className="demo-slot">▶ Demo clip placeholder</div>
           </div>
-          <div className="card-footer">
-            <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)' }}>QA: <strong style={{ color: '#34d399' }}>TC-01→TC-14 · API retry · date safety</strong></div>
-            <a href="https://github.com/aoaaae-sunattha" className="chip" target="_blank" rel="noopener noreferrer">GitHub →</a>
+          <div className="pcard-foot">
+            <div className="pcard-note">Phase docs on Notion · Skills repo on GitHub</div>
+            <div className="pcard-links">
+              <a className="chip" href="https://www.notion.so/Phase-0-CEO-BA-Dev-Discovery-Requirements-362dee0fbb3e8046a3a4c22962b7fc39" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 0</a>
+              <a className="chip" href="https://www.notion.so/Phase-1-BA-QA-Analysis-Planning-362dee0fbb3e807f8a41f706cdff6c02" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 1</a>
+              <a className="chip" href="https://www.notion.so/Phase-2-Execution-Test-Deliver-362dee0fbb3e80ce9b00c5790d040a22" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 2</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+            </div>
           </div>
-        </div>
+        </article>
 
-        {/* AEON */}
-        <div className="glass hover-lift" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div className="stripe-purple" />
-          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🧠</div>
-              <div>
-                <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>AEON — Multi-Agent AI System</div>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Hermes orchestration · Obsidian memory · Claude + Gemini</div>
+        {/* 02 CLOTILDE */}
+        <article className="pcard">
+          <div className="pcard-head">
+            <div className="pcard-idx">02</div>
+            <div>
+              <div className="pcard-ttl">Clotilde — AI Corporate Travel Assistant</div>
+              <div className="pcard-tag">2025 · v3.0 · Telegram bot · live flights via Duffel</div>
+            </div>
+            <div className="pcard-status"><span className="status-dot" /> Case study</div>
+          </div>
+          <div className="pcard-lede">
+            <b>Premise.</b> A natural-language corporate travel assistant that searches live flights, enforces role-based company policy,
+            routes out-of-policy bookings through a real approval workflow, and notifies travelers at every step.
+          </div>
+          <div className="pcard-cols">
+            <div className="pcol">
+              <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
+              <ul>
+                <li><b>4 employee role tiers</b> (Ops · Staff · Director · VP) → cabin and hotel budget caps enforced per role.</li>
+                <li>Full out-of-policy approval workflow with live Approve/Reject buttons on Telegram.</li>
+                <li>17 traveler notifications across the entire travel lifecycle.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
+              <ul>
+                <li>Policy file as single source of truth — shared by agent, inventory, and compliance gate.</li>
+                <li>Intent classification = highest regression risk → built a <b>15-case golden dataset</b>.</li>
+                <li>Surface area: bot UI ↔ Duffel API ↔ policy engine ↔ approval workflow.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
+              <ul>
+                <li>Golden-dataset regression on intent — 15 cases, 100% pass.</li>
+                <li>End-to-end: search → policy check → OOP justification → manager approval → PNR.</li>
+                <li>Natural-language admin console tested on real instructions.</li>
+                <li>5 AI tools · 4 role levels · 17 notifications — every path covered.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
+              <div className="ai-list">
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="intent classification · production" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Flash" forText="admin NL → action resolver" />
+                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="build · test plan · golden dataset" />
+                <AiEntry img="https://svgl.app/library/telegram.svg" name="Telegram + Duffel" forText="runtime · live flight inventory" />
               </div>
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.72 }}>
-              7 specialised AI agents orchestrated by Hermes. Uses Tavily API for real-time market context. Obsidian vault acts as a persistent AI brain. A QA Auditor agent evaluates each prediction against real Binance data 6 hours later.
-            </p>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              {([['7', 'Agents', '#a78bfa'], ['4', 'Hermes Skills', '#60a5fa'], ['59', 'Tests Pass', '#34d399']] as [string, string, string][]).map(([num, label, color]) => (
-                <div key={label} className="metric-box">
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color, fontFamily: 'var(--font-mono)' }}>{num}</div>
-                  <div style={{ fontSize: '0.57rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-mono)' }}>{label}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-              {['Hermes (orchestrator)', 'Claude 3.5 Sonnet', 'Gemini 2.5 Flash', 'Tavily API', 'SQLite', 'Self-Auditing Agent'].map((t) => (
-                <span key={t} className={t.includes('Hermes') || t.includes('Claude') || t.includes('Gemini') ? 'tag-ai' : t.includes('Audit') ? 'tag-qa' : 'tag-tech'}>{t}</span>
-              ))}
-            </div>
-            <div className="demo-slot">▶ Demo clip placeholder</div>
           </div>
-          <div className="card-footer">
-            <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)' }}>QA: <strong style={{ color: '#34d399' }}>Built-in QA Auditor · WIN/LOSS eval · Root Cause Analysis</strong></div>
-            <a href="https://github.com/aoaaae-sunattha" className="chip" target="_blank" rel="noopener noreferrer">GitHub →</a>
+          <div className="pcard-foot">
+            <div className="pcard-note">Demo video and QA notion available on request</div>
+            <div className="pcard-links">
+              <a className="chip" href="https://www.notion.so/Clotilde-v3-0-360dee0fbb3e806b9fe0f677169a2e26" target="_blank" rel="noopener noreferrer"><FileText size={14} /> QA Notion</a>
+              <a className="chip" href="#"><PlayCircle size={14} /> Demo</a>
+            </div>
           </div>
-        </div>
-      </div>
+        </article>
 
-      {/* ── tp-exchanges ── */}
-      <div className="glass hover-lift" style={{ overflow: 'hidden' }}>
-        <div className="stripe-multi" />
-        <div style={{ padding: '2.25rem 2.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.25rem' }}>
-          <div>
-            <div style={{ marginBottom: '0.85rem' }}>
-              <span className="star-badge" style={{ background: 'rgba(245,158,11,0.12)', borderColor: 'rgba(245,158,11,0.3)', color: '#fbbf24' }}>🏢 Professional · Current Employer</span>
+        {/* 03 KODA */}
+        <article className="pcard">
+          <div className="pcard-head">
+            <div className="pcard-idx">03</div>
+            <div>
+              <div className="pcard-ttl">KODA — BNPL Fintech Build &amp; QA</div>
+              <div className="pcard-tag">2024 · 169 tests · 76 E2E specs · 3-gate CI</div>
             </div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.35rem', color: '#fff' }}>tp-exchanges — Multi-Exchange Integration Library</div>
-            <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1rem' }}>Unified API abstraction layer across CEX + DEX · Binance as canonical template</div>
-            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.78, marginBottom: '1.5rem' }}>
-              A production monorepo library that normalises the APIs of 20–30 active crypto exchanges into a single unified interface. Binance is the canonical template; every exchange inherits the base class and implements the same public and private API contract.
-            </p>
-            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-              {([['20–30', 'Exchanges', '#fbbf24'], ['REST', 'Protocol', '#fbbf24'], ['CEX+DEX', 'Coverage', '#fbbf24'], ['v0.48', 'Production', '#fbbf24']] as [string, string, string][]).map(([num, label, color]) => (
-                <div key={label} className="metric-box">
-                  <div style={{ fontSize: '1.1rem', fontWeight: 800, lineHeight: 1, color, fontFamily: 'var(--font-mono)' }}>{num}</div>
-                  <div style={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.25rem', letterSpacing: '0.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>{label}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              {['Node.js', 'REST API', 'Lerna Monorepo', 'Integration Tests', 'Schema Validation', 'GitHub Actions CI'].map((t) => (
-                <span key={t} className={t.includes('Tests') || t.includes('Validation') ? 'tag-qa' : 'tag-tech'}>{t}</span>
-              ))}
-            </div>
+            <div className="pcard-status"><span className="status-dot" /> Case study</div>
           </div>
-          <div>
-            <div style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '2px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>What the API layer covers</div>
-            {[
-              { icon: '📊', title: 'Public Market Data (REST)', desc: 'Order Book, 24h Exchange Volume, Latest Trades, Last Rate, Trading Pairs list. Same method signature across every exchange.' },
-              { icon: '🔐', title: 'Private Account API (Authenticated)', desc: 'Account Balances, Open Orders, Place/Cancel Order, Trade History, Deposits & Withdrawals. All authenticated via API key + secret.' },
-              { icon: '🧪', title: 'QA Approach — Node Scripts → Postman', desc: 'Each exchange validated through Node.js integration scripts. Tests create-and-cancel-order flows, schema contract parity, and edge cases per trading pair.' },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.75rem', alignItems: 'flex-start' }}>
-                <div className="feature-icon">{icon}</div>
-                <div>
-                  <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.15rem', color: '#fff' }}>{title}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{desc}</div>
-                </div>
+          <div className="pcard-lede">
+            <b>Premise.</b> A Buy Now Pay Later app, built from scratch, then put through a full QA lifecycle on real fintech business logic.
+            Fees 0%–23.38% across 4–24 month terms. 2.5% merchant commission. Bugs here aren&apos;t UX issues — they&apos;re financial and compliance risks.
+          </div>
+          <div className="pcard-cols">
+            <div className="pcol">
+              <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
+              <ul>
+                <li>Build working BNPL: cards, KYC, credit limit, fee formula, refund engine, merchant payout.</li>
+                <li>Design QA around <b>real business risk</b>, not feature coverage.</li>
+                <li>Atomic test design — 1 test per file — for fast failure isolation.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
+              <ul>
+                <li><b>8 personas</b>: active · pre-KYC · overdue-locked · declined card · credit-maxed · power user · merchant.</li>
+                <li>P0 surfaces: auth · checkout · KYC gate · credit limit · refund engine.</li>
+                <li>Fee formula verified across all 7 term configurations.</li>
+                <li>Backward refund allocation rule (last installment first).</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
+              <ul>
+                <li><b>76 Playwright E2E specs</b> across Auth · Checkout · Risk · Refund · Payments · Credit.</li>
+                <li><b>93 unit tests</b> for store, fee formula, guards, refund, merchant payout.</li>
+                <li>Page Object Model · tagged @smoke @regression @auth @checkout @risk @credit.</li>
+                <li><b>3-gate CI</b>: ESLint+TS → Vitest → Playwright → PR comment + report.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
+              <div className="ai-list">
+                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="BNPL regulation · fee disclosure" />
+                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="test design · personas · healer" />
+                <AiEntry icon={<Terminal size={14} />} name="Codex" forText="component scan · unit scaffolding" />
+                <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="Actions wiring · PR posts" />
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-        <div className="card-footer">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-            Production library · v0.48.0 · 20–30 active exchange integrations
+          <div className="pcard-foot">
+            <div className="pcard-note">Latest CI run: 172 parallel executions · 453s duration</div>
+            <div className="pcard-links">
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+            </div>
           </div>
-        </div>
+        </article>
+
+        {/* 04 CREWAI QA AGENT */}
+        <article className="pcard">
+          <div className="pcard-head">
+            <div className="pcard-idx">04</div>
+            <div>
+              <div className="pcard-ttl">CrewAI QA Agent — Two Pipelines, Six Agents</div>
+              <div className="pcard-tag">2025 · OSS · qa-challenger + qa-retest · project-agnostic</div>
+            </div>
+            <div className="pcard-status"><span className="status-dot" /> Case study</div>
+          </div>
+          <div className="pcard-lede">
+            <b>Premise.</b> Two completely independent CrewAI pipelines. <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-challenger</code> turns a vague feature ticket
+            into a user story, test plan, manual cases, and Playwright scripts. <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-retest</code> reads a real GitHub PR diff
+            and generates targeted retest cases. Runs on any codebase via shell alias.
+          </div>
+          <div className="pcard-cols">
+            <div className="pcol">
+              <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
+              <ul>
+                <li>Two flows, two agent topologies — don&apos;t try to make one pipeline do both.</li>
+                <li>Pipeline 1 (challenger): ticket → story → plan → cases → <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.85em' }}>.spec.ts</code>.</li>
+                <li>Pipeline 2 (retest): bug + PR diff → targeted retest cases.</li>
+                <li>Human review gates between every agent handoff.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
+              <ul>
+                <li>PR-diff reading: file context + change classification + risk scoring.</li>
+                <li>Ticket-to-spec: requirements analysis + GWT generation + scenario coverage.</li>
+                <li>Project-agnostic: agents must not assume a specific codebase shape.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
+              <ul>
+                <li><b>6 agents</b> total · 3 per pipeline.</li>
+                <li>Outputs: user stories · test plans · manual cases · Playwright specs.</li>
+                <li>Self-auditing: each agent&apos;s output is reviewed by the next.</li>
+                <li>Drop-in via shell alias on any repo.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
+              <div className="ai-list">
+                <AiEntry icon={<Users size={14} />} name="CrewAI" forText="multi-agent · both pipelines" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="primary model · all 6 agents" />
+                <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="PR diff · file context" />
+                <AiEntry img="https://svgl.app/library/python.svg" name="Python + Playwright" forText="generated spec runtime" />
+              </div>
+            </div>
+          </div>
+          <div className="pcard-foot">
+            <div className="pcard-note">Open source · drop-in on any codebase</div>
+            <div className="pcard-links">
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        {/* 05 TP-EXCHANGES */}
+        <article className="pcard">
+          <div className="pcard-head">
+            <div className="pcard-idx">05</div>
+            <div>
+              <div className="pcard-ttl">tp-exchanges — Schema-Contract API QA</div>
+              <div className="pcard-tag">2024 · API · 20–30 exchange backends · production</div>
+            </div>
+            <div className="pcard-status live"><span className="status-dot" /> In production</div>
+          </div>
+          <div className="pcard-lede">
+            <b>Premise.</b> An exchange-aggregator API that fans out to 20–30 backends. The product breaks when one of them silently changes its response shape.
+            The QA challenge is detecting subtle schema drift — not testing features.
+          </div>
+          <div className="pcard-cols">
+            <div className="pcol">
+              <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
+              <ul>
+                <li>Schema-contract validation across every exchange backend, on every push.</li>
+                <li>Treat upstream APIs as untrusted — fields disappear, types flip.</li>
+                <li>Production-environment exposure on every CI run.</li>
+              </ul>
+              <TpExchangesShots />
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
+              <ul>
+                <li>Identified schema parity as the highest-risk failure mode.</li>
+                <li>Catalogued response structures; flagged inconsistencies.</li>
+                <li>Risk surfaces: timestamp formats · currency precision · optional vs required fields.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
+              <ul>
+                <li>REST contract tests across all 20–30 exchanges in parallel.</li>
+                <li>Schema validators check structure + data types — not just presence.</li>
+                <li>Drift detector compares to last known-good baseline.</li>
+                <li>Real production environment exercised on every push.</li>
+              </ul>
+            </div>
+            <div className="pcol">
+              <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
+              <div className="ai-list">
+                <AiEntry icon={<Terminal size={14} />} name="Codex" forText="REST client scaffolding · schema gen" />
+                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="API docs · undocumented quirks" />
+                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="test design · drift detector" />
+                <AiEntry icon={<Plug size={14} />} name="MCP" forText="CI access · reporting" />
+              </div>
+            </div>
+          </div>
+          <div className="pcard-foot">
+            <div className="pcard-note">Production system · 20–30 backends validated on every push</div>
+          </div>
+        </article>
+
       </div>
     </section>
   )

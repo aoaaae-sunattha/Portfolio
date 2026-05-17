@@ -1,81 +1,45 @@
-const experiments = [
+const items = [
   {
-    title: 'AgentViz — Agentic Economy Dashboard',
-    badge: 'Visualisation Layer',
-    badgeColor: 'rgba(245,158,11,0.3)',
-    badgeText: '#fbbf24',
-    desc: 'Three autonomous agents (Alpha, Beta, Gamma) transact in real-time through a live visual dashboard — SVG curved arcs trace every fund flow. Simulates micropayments, bidirectional transfers, and conditional transactions. Built as a pure Vanilla JS prototype with 55 manual test cases documented.',
-    tags: ['Micropayments', 'Bidirectional Transfers', 'Conditional Transactions', 'Real-time Ledger', 'SVG Arcs', '55 Test Cases', 'Vanilla JS'],
+    title: 'AEON — Multi-agent forecast system',
+    desc: '7-agent CrewAI system that fetches Binance market data, generates 24-hour forecasts, and runs a built-in QA Auditor that compares predictions against real outcomes. Self-evaluating loop.',
+    tags: ['CrewAI', 'Gemini 2.5', 'Python', 'Binance API', 'Self-audit'],
   },
   {
-    title: 'AgentSim — Agent-vs-Agent Economy',
-    badge: 'Decision Layer',
-    badgeColor: 'rgba(99,102,246,0.3)',
-    badgeText: '#a78bfa',
-    desc: 'Two autonomous Gemini 2.0 agents operate as economic actors. Each evaluates counterpart offers using persona logic and decides autonomously to ACCEPT / REJECT / COUNTER. Covers 5 real-world scenarios: direct asset purchase, micropayment, price haggling, atomic swap, competitive auction.',
-    tags: ['Gemini 2.0 Flash', 'React 18 + TypeScript', 'Atomic Swap', 'Micropayments', 'Bid / Ask / Counter-offer', 'Agentic QA Pipeline'],
+    title: 'Flight Tracker — API resilience QA',
+    desc: 'Self-directed QA exercise: 14 test cases covering API retry behavior, date-safety edge cases, and error reporting. Documented as TC-01 → TC-14 with reproducible test data.',
+    tags: ['API testing', 'Retry logic', 'Error states', 'Test cases'],
   },
   {
-    title: 'TrustlessSim — Cryptographic Settlement Layer',
-    badge: 'Settlement Layer',
-    badgeColor: 'rgba(6,182,212,0.3)',
-    badgeText: '#22d3ee',
-    desc: 'Proves AI agents can negotiate safely in a trustless environment. Implements a Commit-Reveal Protocol using SHA-256 cryptography. Simulates 5 attack vectors: honest deal, cheating agent, data corruption, ghost agent, replay attack.',
-    tags: ['Commit-Reveal Protocol', 'SHA-256 Cryptography', 'Front-running Prevention', 'Off-chain Settlement', 'Web Crypto API', 'React 18 + TypeScript'],
+    title: 'Prompt Compiler — Modular LLM prompt builder',
+    desc: 'Node.js ESM CLI that assembles, validates, and outputs system prompts for multiple LLM targets from a single source of truth. Modular blocks compiled per target.',
+    tags: ['Node.js ESM', 'Prompt eng', 'CLI', 'Multi-target'],
   },
   {
-    title: 'Paperclip Trading Bot',
-    badge: null,
-    badgeColor: '',
-    badgeText: '',
-    desc: "A deterministic BTC/USDT paper-trading bot built on rule-based signal logic — no AI, no ML, no black box. Uses EMA crossover, RSI, and configurable stop-loss. Built primarily as a QA exercise: 131/131 tests passing, 96% coverage.",
-    tags: ['Node.js', 'EMA Crossover', 'RSI', 'Stop-Loss', 'Paper Trading', '131 Tests', '96% Coverage'],
-  },
-  {
-    title: 'Prompt Compiler CLI',
-    badge: null,
-    badgeColor: '',
-    badgeText: '',
-    desc: 'A Node.js ESM CLI that assembles, validates, and outputs system prompts for multiple LLM targets from a single source. Reads modular prompt blocks and assembles them per target. Validates required fields, flags missing sections, warns on token budget overruns.',
-    tags: ['Node.js ESM', 'CLI', 'Prompt Engineering', 'Multi-LLM', 'Token Validation', 'Claude', 'Gemini', 'OpenRouter'],
-  },
-  {
-    title: 'AkiClaw Agent Framework',
-    badge: null,
-    badgeColor: '',
-    badgeText: '',
-    desc: 'A fork and personal extension of SubZeroClaw — a persistent background agent. Identity, personality, skills, and behavioral rules defined in plain .md files. Runs in Docker with a credential proxy. Telegram interface is the primary interaction layer.',
-    tags: ['SubZeroClaw', 'Python', 'Docker', 'Claude API', 'OpenRouter', 'Telegram', 'Markdown Memory'],
+    title: 'Golden Dataset Toolkit',
+    desc: "Small framework I use to manage golden test datasets for LLM features. Pulls from Clotilde's intent regression suite. Negation + anaphora cases included as policy.",
+    tags: ['Regression', 'Eval', 'Negation tests', 'Anaphora'],
   },
 ]
 
 export default function Lab() {
   return (
-    <section className="wrap">
-      <hr className="section-hr" style={{ marginBottom: '4rem' }} />
-      <div className="section-eye">Lab</div>
-      <h2 className="section-h">Experiments</h2>
-      <p className="section-sub">Self-directed projects exploring AI agent patterns, fintech logic, and automation.</p>
+    <section className="wrap" id="lab">
+      <div className="eyebrow">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0-3 3m3-3 3 3m5-14v11m0 0-3 3m3-3 3 3M3 9h18"/></svg>
+        Lab · Experiments
+      </div>
+      <h2 className="sec-h">Self-directed work</h2>
+      <p className="sec-sub">
+        Smaller projects exploring AI agent patterns, fintech logic, and automation. Not flagship work — but each one fed a skill into the manifest.
+      </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-        {experiments.map((exp) => (
-          <div key={exp.title} className="lab-card hover-lift">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff' }}>{exp.title}</div>
-              {exp.badge && (
-                <span style={{ fontSize: '0.6rem', padding: '0.15rem 0.45rem', background: exp.badgeColor.replace('0.3', '0.12'), border: `1px solid ${exp.badgeColor}`, borderRadius: '4px', color: exp.badgeText, letterSpacing: '0.4px', whiteSpace: 'nowrap' }}>
-                  {exp.badge.toUpperCase()}
-                </span>
-              )}
-            </div>
-            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, flex: 1 }}>{exp.desc}</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.75rem' }}>
-              {exp.tags.map((tag) => (
-                <span key={tag} className="lab-tag">{tag}</span>
-              ))}
-            </div>
-            <div style={{ marginTop: 'auto', paddingTop: '0.65rem' }}>
-              <a href="#" className="chip">Explore more →</a>
+      <div className="lab-grid">
+        {items.map((item) => (
+          <div key={item.title} className="lab-item">
+            <h4>{item.title}</h4>
+            <p>{item.desc}</p>
+            <div className="lab-tags">
+              {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
           </div>
         ))}

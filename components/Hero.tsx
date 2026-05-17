@@ -1,137 +1,138 @@
+import { GitBranch, Layers, Mail, Zap } from 'lucide-react'
+
 export default function Hero() {
   return (
-    <section
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '7rem 1.5rem 5rem',
-        position: 'relative',
-        zIndex: 1,
-      }}
-    >
+    <section id="top" style={{
+      padding: '9rem 2rem 5rem',
+      maxWidth: 1180,
+      margin: '0 auto',
+      position: 'relative',
+    }}>
       {/* Badge */}
-      <div
-        className="fade-up"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          background: 'rgba(124,58,237,0.12)',
-          border: '1px solid rgba(124,58,237,0.35)',
-          borderRadius: '100px',
-          padding: '0.3rem 1rem',
-          fontSize: '0.72rem',
-          fontWeight: 600,
-          color: '#c4b5fd',
-          letterSpacing: '0.5px',
-          marginBottom: '2rem',
-        }}
-      >
-        <span
-          className="blink"
-          style={{ width: 6, height: 6, background: '#a78bfa', borderRadius: '50%', display: 'inline-block' }}
-        />
-        QA Engineer × AI Builder &nbsp;·&nbsp; Open to Work
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '.55rem',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '.72rem',
+        letterSpacing: '.5px',
+        color: 'var(--green)',
+        background: 'rgba(79,122,79,.08)',
+        border: '1px solid rgba(79,122,79,.25)',
+        padding: '.42rem 1rem',
+        borderRadius: 99,
+        fontWeight: 500,
+        textTransform: 'uppercase',
+      }}>
+        <span style={{ position: 'relative', width: 7, height: 7, borderRadius: '50%', background: 'var(--green)', display: 'inline-block' }}>
+          <span style={{
+            position: 'absolute',
+            inset: -3,
+            borderRadius: '50%',
+            background: 'var(--green)',
+            opacity: .3,
+            animation: 'pulse 2.4s ease-in-out infinite',
+          }} />
+        </span>
+        Available · Open to roles · Jun 2026
       </div>
 
       {/* H1 */}
-      <h1
-        className="fade-up-2"
-        style={{
-          fontSize: 'clamp(2.8rem, 7vw, 5rem)',
-          fontWeight: 900,
-          letterSpacing: '-2px',
-          lineHeight: 1.05,
-          color: '#fff',
-          margin: '0 0 0.5rem',
-        }}
-      >
-        Sunattha Saeheng
-        <br />
-        <span className="grad-text">QA who builds with AI</span>
+      <h1 style={{
+        fontFamily: 'var(--font-serif)',
+        fontSize: 'clamp(2.8rem, 6vw, 4.6rem)',
+        fontWeight: 500,
+        lineHeight: 1.02,
+        letterSpacing: '-2.5px',
+        color: 'var(--ink)',
+        margin: '1.75rem 0 1rem',
+        maxWidth: '18ch',
+      }}>
+        QA engineer who{' '}
+        <span style={{ color: 'var(--coral)', fontStyle: 'italic', fontWeight: 400 }}>builds</span>
+        {' '}with AI.
       </h1>
 
-      {/* Tagline */}
-      <p
-        className="fade-up-3"
-        style={{
-          fontSize: '1.05rem',
-          color: 'rgba(255,255,255,0.5)',
-          margin: '1.5rem auto 2.5rem',
-          maxWidth: '480px',
-          lineHeight: 1.75,
-        }}
-      >
-        I don&apos;t just test software — I use AI to design, build, and validate real products from the ground up.
-      </p>
+      {/* H2 */}
+      <h2 style={{
+        fontFamily: 'var(--font-sans)',
+        fontWeight: 400,
+        fontSize: 'clamp(1.2rem, 2.2vw, 1.5rem)',
+        lineHeight: 1.45,
+        color: 'var(--grey)',
+        marginBottom: '2rem',
+        maxWidth: '46ch',
+        letterSpacing: '-.3px',
+      }}>
+        I test the things I build, and I build the things I want to test. The pipeline below is the spine.
+      </h2>
 
       {/* Pitch card */}
-      <div
-        className="glass fade-up-4"
-        style={{
-          maxWidth: '640px',
-          width: '100%',
-          textAlign: 'left',
-          marginBottom: '2.5rem',
-          overflow: 'hidden',
-        }}
-      >
-        <div className="stripe-violet" />
-        <div style={{ padding: '1.75rem 2.25rem' }}>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.68rem',
-              fontWeight: 700,
-              letterSpacing: '1.5px',
-              color: '#fbbf24',
-              textTransform: 'uppercase',
-              marginBottom: '0.8rem',
-            }}
-          >
-            ⚡ 30-Second Pitch
-          </div>
-          <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.82, margin: 0 }}>
-            I&apos;m a QA engineer who got curious about AI and started building things to understand how it actually works.
-            Along the way I built <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Clotilde</strong> — a small AI travel
-            assistant experiment that taught me how intent classification, policy enforcement, and approval workflows fit
-            together in a real product. Seeing what <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Claire</strong> is
-            building in the B2B travel space genuinely excited me — it&apos;s the kind of problem I&apos;ve been learning toward.
-            I test everything I build, and I don&apos;t stop until I understand <em>why</em> something works.
-          </p>
+      <div style={{
+        background: 'var(--card)',
+        border: '1px solid var(--line)',
+        borderRadius: 14,
+        padding: '1.5rem 1.75rem',
+        maxWidth: 680,
+        marginBottom: '2.25rem',
+        boxShadow: '0 1px 2px rgba(0,0,0,.025)',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '.68rem',
+          letterSpacing: '.5px',
+          textTransform: 'uppercase' as const,
+          color: 'var(--coral)',
+          marginBottom: '.65rem',
+          fontWeight: 500,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '.45rem',
+        }}>
+          <Zap size={12} /> The three-sentence pitch
         </div>
+        <p style={{ fontSize: '.97rem', lineHeight: 1.65, color: 'var(--ink-2)', margin: 0 }}>
+          I&apos;m a QA engineer who got tired of inheriting test plans, so I built a pipeline that writes its
+          own — <strong style={{ color: 'var(--ink)' }}>Claude</strong> as the orchestrator,{' '}
+          <strong style={{ color: 'var(--ink)' }}>MCP</strong> to reach Notion and GitHub,{' '}
+          <strong style={{ color: 'var(--ink)' }}>CrewAI</strong> for the agents that do the work, and{' '}
+          <strong style={{ color: 'var(--ink)' }}>Perplexity + NotebookLM</strong> upstream so the pipeline is asking
+          the right questions before it writes the first test case.
+        </p>
+        <p style={{ fontSize: '.97rem', lineHeight: 1.65, color: 'var(--ink-2)', margin: '.7rem 0 0' }}>
+          Each project below was built and tested with this toolchain. The pipeline produces the same five artifacts
+          every time — a plan, a skill manifest, a gap report, a generated skill, and a SHIP/HOLD verdict.
+        </p>
       </div>
 
       {/* CTAs */}
-      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <a href="#projects" className="btn-violet">View Projects</a>
-        <a href="#contact" className="btn-glass">Contact Me</a>
+      <div style={{ display: 'flex', gap: '.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <a href="#pipeline" className="btn fill"><GitBranch size={16} /> See the pipeline</a>
+        <a href="#projects" className="btn ghost"><Layers size={16} /> Project deep dives</a>
+        <a href="#contact" className="btn ghost"><Mail size={16} /> Get in touch</a>
       </div>
 
-      {/* QA Forge pill */}
-      <a
-        href="#qa-forge"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          marginTop: '1.25rem',
-          fontSize: '0.82rem',
-          color: '#34d399',
-          textDecoration: 'none',
-          border: '1px solid rgba(52,211,153,0.3)',
-          background: 'rgba(52,211,153,0.07)',
-          padding: '0.35rem 0.85rem',
-          borderRadius: '99px',
-          transition: 'background 200ms ease',
-        }}
-      >
-        🔬 QA Forge — 59 tests · 20 Claude skills · v3.0 →
-      </a>
+      {/* Meta row */}
+      <div style={{
+        display: 'flex',
+        gap: '2.5rem',
+        marginTop: '3rem',
+        fontSize: '.82rem',
+        color: 'var(--grey)',
+        flexWrap: 'wrap',
+      }}>
+        {[
+          { label: 'Currently', value: 'QA × AI tooling' },
+          { label: 'Based in', value: 'Bangkok, TH · UTC+7' },
+          { label: 'Stack', value: 'Claude · Playwright · TypeScript · Python' },
+          { label: 'Open to', value: 'QA / GenAI engineering roles' },
+        ].map(({ label, value }) => (
+          <div key={label}>
+            <b style={{ display: 'block', color: 'var(--ink)', fontWeight: 600, marginBottom: '.2rem', fontSize: '.78rem' }}>{label}</b>
+            {value}
+          </div>
+        ))}
+      </div>
     </section>
   )
 }

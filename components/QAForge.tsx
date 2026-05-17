@@ -1,8 +1,11 @@
+import { Settings, Ban, ClipboardList, BarChart2, Shield, Zap } from 'lucide-react'
 import { resolveLogo } from '@/lib/svgl'
 import type { Svg } from '@/lib/svgl'
 
 function resolveUrl(name: string, svgs: Svg[]): string | null {
   const aliases: Record<string, string[]> = {
+    'Claude': ['Claude', 'Anthropic'],
+    'Claude AI': ['Claude', 'Anthropic'],
     'Anthropic': ['Anthropic', 'Claude'],
     'Gemini': ['Gemini', 'Google Gemini'],
     'TypeScript': ['TypeScript'],
@@ -31,7 +34,7 @@ function StackedLogos({ names, svgs, size = 32 }: { names: string[]; svgs: Svg[]
               height: size,
               borderRadius: '50%',
               border: '2px solid rgba(10,10,26,0.9)',
-              background: 'rgba(255,255,255,0.08)',
+              background: '#1a1a2e',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -80,17 +83,17 @@ export default function QAForge({ svgs }: Props) {
       {/* ── Flagship card ── */}
       <div className="glass hover-lift" style={{ marginBottom: '1.5rem', overflow: 'hidden' }}>
         <div className="stripe-emerald" />
-        <div style={{ padding: '2.25rem 2.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.25rem' }}>
+        <div className="card-2col card-2col-pad" style={{ gap: '2.25rem' }}>
           {/* Left */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
               <span className="star-badge" style={{ background: 'rgba(52,211,153,0.12)', borderColor: 'rgba(52,211,153,0.3)', color: '#34d399' }}>
-                ⚙️ QA Forge · Flagship
+                <Settings size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '0.3rem' }} /> QA Forge · Flagship
               </span>
               <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Built with Claude · 20 Claude skills · v3.0</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.35rem', color: '#fff' }}>
-              <AILogo name="Anthropic" svgs={svgs} size={28} />
+              <AILogo name="Claude AI" svgs={svgs} size={28} />
               Agentic QA Pipeline
             </div>
             <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.25rem' }}>
@@ -126,7 +129,7 @@ export default function QAForge({ svgs }: Props) {
                 ))}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.3rem 0.85rem', background: 'rgba(245,158,11,0.06)', borderTop: '1px solid rgba(245,158,11,0.15)', borderBottom: '1px solid rgba(245,158,11,0.15)', fontSize: '0.68rem', color: '#f59e0b' }}>
-                <span>⛔</span><span style={{ fontWeight: 600 }}>Human gate —</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>QA confirms stories are QA-ready before continuing</span>
+                <Ban size={13} /><span style={{ fontWeight: 600 }}>Human gate —</span><span style={{ color: 'rgba(255,255,255,0.4)' }}>QA confirms stories are QA-ready before continuing</span>
               </div>
               <div style={{ padding: '0.35rem 0.85rem', background: 'rgba(139,92,246,0.08)', borderBottom: '1px solid rgba(139,92,246,0.15)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: '#c4b5fd', fontFamily: 'var(--font-mono)' }}>Phase 2</span>
@@ -155,10 +158,10 @@ export default function QAForge({ svgs }: Props) {
               What makes this different
             </div>
             {[
-              { icon: '📋', title: 'Covers PM → BA → QA — not just QA', desc: "Business goals decomposed into traceable BG-IDs. Every test case must map to a BG-ID — no orphan tests. QA doesn't start until the story is QA-ready.", highlight: false },
-              { icon: '📊', title: 'Live Project Analysis Widget — Skill 06', desc: 'Before any test is written, the pipeline generates a live 5-tab widget. Maps every component to a skill, rates every QA gap (Critical → Low), flags missing skills.', highlight: true },
-              { icon: '🛡️', title: '5 hard-stop human gates', desc: 'Business goals → stories → QA widget → QA plan → manifest. Each gate requires explicit QA sign-off. No gate = no next step, no exceptions.', highlight: false },
-              { icon: '⚡', title: 'Smart test healer — 4 failure types', desc: 'Type A: selector drift → auto-fix. Type B/C: timing or data → reported to dev. Type D: real bug → failing test preserved as defect report.', highlight: false },
+              { icon: <ClipboardList size={16} />, title: 'Covers PM → BA → QA — not just QA', desc: "Business goals decomposed into traceable BG-IDs. Every test case must map to a BG-ID — no orphan tests. QA doesn't start until the story is QA-ready.", highlight: false },
+              { icon: <BarChart2 size={16} />, title: 'Live Project Analysis Widget — Skill 06', desc: 'Before any test is written, the pipeline generates a live 5-tab widget. Maps every component to a skill, rates every QA gap (Critical → Low), flags missing skills.', highlight: true },
+              { icon: <Shield size={16} />, title: '5 hard-stop human gates', desc: 'Business goals → stories → QA widget → QA plan → manifest. Each gate requires explicit QA sign-off. No gate = no next step, no exceptions.', highlight: false },
+              { icon: <Zap size={16} />, title: 'Smart test healer — 4 failure types', desc: 'Type A: selector drift → auto-fix. Type B/C: timing or data → reported to dev. Type D: real bug → failing test preserved as defect report.', highlight: false },
             ].map(({ icon, title, desc, highlight }) => (
               <div key={title} style={{ display: 'flex', gap: '0.8rem', marginBottom: '1.1rem', alignItems: 'flex-start', ...(highlight ? { background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.25)', borderRadius: '8px', padding: '0.75rem' } : {}) }}>
                 <div className="feature-icon">{icon}</div>
@@ -183,9 +186,9 @@ export default function QAForge({ svgs }: Props) {
         {/* KODA */}
         <div className="glass hover-lift" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div className="stripe-amber" />
-          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="card-pad" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-              <StackedLogos names={['Gemini', 'Anthropic']} svgs={svgs} size={32} />
+              <StackedLogos names={['Gemini', 'Claude']} svgs={svgs} size={32} />
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>KODA — QA on a Fintech BNPL Product</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.15rem' }}>Built the product. Then tested every edge case that matters in fintech.</div>
@@ -218,7 +221,7 @@ export default function QAForge({ svgs }: Props) {
         {/* CrewAI QA Agent */}
         <div className="glass hover-lift" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div className="stripe-green" />
-          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="card-pad" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <div style={{ flexShrink: 0 }}><AILogo name="Gemini" svgs={svgs} size={32} /></div>
               <div>
@@ -256,10 +259,10 @@ export default function QAForge({ svgs }: Props) {
       {/* ── Philosophy card ── */}
       <div className="glass hover-lift" style={{ overflow: 'hidden' }}>
         <div className="stripe-slate" />
-        <div style={{ padding: '1.5rem 2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
+        <div className="card-2col" style={{ padding: '1.5rem 2rem', gap: '2rem', alignItems: 'center' }}>
           <div>
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.85rem', alignItems: 'center' }}>
-              <AILogo name="Anthropic" svgs={svgs} size={28} />
+              <AILogo name="Claude AI" svgs={svgs} size={28} />
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>The QA Forge Approach</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Why I build the process, not just run it</div>

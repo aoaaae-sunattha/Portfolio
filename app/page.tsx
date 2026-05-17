@@ -1,28 +1,38 @@
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
-import QAForge from '@/components/QAForge'
+import Pipeline from '@/components/Pipeline'
+import Toolbox from '@/components/Toolbox'
 import Projects from '@/components/Projects'
 import Lab from '@/components/Lab'
 import Skills from '@/components/Skills'
 import Workflow from '@/components/Workflow'
 import QAForAI from '@/components/QAForAI'
 import Contact from '@/components/Contact'
-import { fetchSvgs } from '@/lib/svgl'
 
-export default async function Home() {
-  const svgs = await fetchSvgs()
-
+export default function Home() {
   return (
     <main>
       <Nav />
       <Hero />
-      <QAForge svgs={svgs} />
+      <div className="divider" />
+      <Pipeline />
+      <div className="divider" />
+      <Toolbox />
+      <div className="divider" />
       <Projects />
+      <div className="divider" />
       <Lab />
-      <Skills svgs={svgs} />
+      <div className="divider" />
+      <Skills />
+      <div className="divider" />
       <Workflow />
-      <QAForAI svgs={svgs} />
+      <div className="divider" />
+      <QAForAI />
+      <div className="divider" />
       <Contact />
+      <footer className="site-footer">
+        Sunattha Saeheng · QA × AI Builder · Bangkok · UTC+7 · <span className="accent">built with the pipeline above</span>
+      </footer>
     </main>
   )
 }
