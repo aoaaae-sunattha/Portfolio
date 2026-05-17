@@ -14,8 +14,8 @@ const tools = [
   },
   {
     phase: 'Steps 02–05', img: 'https://svgl.app/library/claude-ai-icon.svg', name: 'Claude', role: 'Orchestrator · Primary',
-    desc: 'Runs the 20-skill pipeline. Writes test plans, generates Playwright specs, classifies test failures, drafts the SHIP/HOLD report. Owns the manifest.',
-    uses: 'orchestration · skill execution · code generation',
+    desc: 'My main tool for application planning and QA. Drives the full pipeline — writes test plans, generates Playwright specs, classifies test failures, and drafts the SHIP/HOLD report. The primary brain behind every project.',
+    uses: 'app planning · QA pipeline · skill execution · code generation',
   },
   {
     phase: 'Runtime + Eval', img: 'https://svgl.app/library/gemini.svg', name: 'Gemini 2.5', role: 'Production Model',
