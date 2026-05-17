@@ -1,10 +1,38 @@
 'use client'
 
 import { GitBranch, Layers, Mail, ArrowDown } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import { HeroFade } from './Animate'
 
+const SECTIONS = ['top', 'pipeline', 'toolbox', 'projects', 'lab', 'skills', 'workflow', 'qa-for-ai', 'contact']
 
 export default function Hero() {
+  const [hidden, setHidden] = useState(false)
+
+  const getCurrentIndex = useCallback(() => {
+    let current = 0
+    for (let i = 0; i < SECTIONS.length; i++) {
+      const el = document.getElementById(SECTIONS[i])
+      if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) {
+        current = i
+      }
+    }
+    return current
+  }, [])
+
+  useEffect(() => {
+    const onScroll = () => {
+      setHidden(getCurrentIndex() >= SECTIONS.length - 1)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [getCurrentIndex])
+
+  const scrollToNext = useCallback(() => {
+    const next = SECTIONS[getCurrentIndex() + 1]
+    if (next) document.getElementById(next)?.scrollIntoView({ behavior: 'smooth' })
+  }, [getCurrentIndex])
+
   return (
     <section id="top" className="hero-section" style={{
       padding: '9rem 2rem 5rem',
@@ -87,39 +115,44 @@ export default function Hero() {
       </HeroFade>
 
       {/* Scroll indicator — fixed bottom right */}
-      <HeroFade delay={0.7} className="hero-scroll" style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 50 }}>
-        <a href="#pipeline" style={{
-          display: 'inline-flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '.5rem',
-          textDecoration: 'none',
-          opacity: .75,
-          transition: 'opacity .2s',
-        }}
-        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '1'}
-        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.opacity = '0.75'}
-        >
-          <span style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '.7rem',
-            letterSpacing: '.6px',
-            textTransform: 'uppercase',
-            color: 'var(--coral)',
-            fontWeight: 600,
-          }}>Scroll</span>
-          <span style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: 36, height: 36, borderRadius: '50%',
-            border: '1.5px solid var(--coral-line)',
-            background: 'rgba(217,119,87,.07)',
-            animation: 'scrollBounce 1.6s ease-in-out infinite',
-            color: 'var(--coral)',
-          }}>
-            <ArrowDown size={16} strokeWidth={2} />
-          </span>
-        </a>
-      </HeroFade>
+      {!hidden && (
+        <HeroFade delay={0.7} className="hero-scroll" style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 50 }}>
+          <button onClick={scrollToNext} style={{
+            display: 'inline-flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '.5rem',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            opacity: .75,
+            transition: 'opacity .2s',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.opacity = '1'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.opacity = '0.75'}
+          >
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '.7rem',
+              letterSpacing: '.6px',
+              textTransform: 'uppercase',
+              color: 'var(--coral)',
+              fontWeight: 600,
+            }}>Scroll</span>
+            <span style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 36, height: 36, borderRadius: '50%',
+              border: '1.5px solid var(--coral-line)',
+              background: 'rgba(217,119,87,.07)',
+              animation: 'scrollBounce 1.6s ease-in-out infinite',
+              color: 'var(--coral)',
+            }}>
+              <ArrowDown size={16} strokeWidth={2} />
+            </span>
+          </button>
+        </HeroFade>
+      )}
 
       {/* Meta row */}
       <HeroFade delay={0.4}>
@@ -134,7 +167,7 @@ export default function Hero() {
           {[
             { label: 'Currently', value: 'QA × AI tooling' },
             { label: 'Based in', value: 'Chiang Mai, TH · UTC+7' },
-            { label: 'AI stack', value: 'Claude · MCP · CrewAI · Gemini · Codex · Playwright' },
+            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI' },
             { label: 'Open to', value: 'QA / GenAI engineering roles' },
           ].map(({ label, value }, i, arr) => (
             <div key={label} style={{
