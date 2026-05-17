@@ -121,34 +121,34 @@ export default function Hero() {
             display: 'inline-flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '.5rem',
+            gap: '.4rem',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
             padding: 0,
-            opacity: .75,
-            transition: 'opacity .2s',
+            transition: 'transform .2s',
           }}
-          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.opacity = '1'}
-          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.opacity = '0.75'}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'}
           >
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '.7rem',
+              fontSize: '.65rem',
               letterSpacing: '.6px',
               textTransform: 'uppercase',
               color: 'var(--coral)',
-              fontWeight: 600,
+              fontWeight: 700,
+              textShadow: '0 1px 4px rgba(255,255,255,.9)',
             }}>Scroll</span>
             <span style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 36, height: 36, borderRadius: '50%',
-              border: '1.5px solid var(--coral-line)',
-              background: 'rgba(217,119,87,.07)',
+              width: 44, height: 44, borderRadius: '50%',
+              background: 'var(--coral)',
+              boxShadow: '0 4px 16px rgba(217,119,87,.45), 0 1px 4px rgba(0,0,0,.12)',
               animation: 'scrollBounce 1.6s ease-in-out infinite',
-              color: 'var(--coral)',
+              color: '#fff',
             }}>
-              <ArrowDown size={16} strokeWidth={2} />
+              <ArrowDown size={18} strokeWidth={2.5} />
             </span>
           </button>
         </HeroFade>
