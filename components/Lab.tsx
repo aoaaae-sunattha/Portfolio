@@ -20,24 +20,27 @@ const items = [
   },
 ]
 
+// Pad to even count so 2-column pages are always full
+const displayItems = items.length % 2 !== 0 ? [...items, items[0]] : items
+const pageCount = displayItems.length / 2
+
 export default function Lab() {
   const sliderRef = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(0)
+  const [activePage, setActivePage] = useState(0)
 
-  function goTo(index: number) {
+  function goTo(page: number) {
     const slider = sliderRef.current
     if (!slider) return
-    const wrapped = (index + items.length) % items.length
-    const slide = slider.children[wrapped] as HTMLElement
-    slider.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' })
+    const wrapped = ((page % pageCount) + pageCount) % pageCount
+    slider.scrollTo({ left: wrapped * slider.offsetWidth, behavior: 'smooth' })
   }
 
   useEffect(() => {
     const slider = sliderRef.current
     if (!slider) return
     const onScroll = () => {
-      const index = Math.round(slider.scrollLeft / slider.offsetWidth)
-      setActive(index)
+      const page = Math.round(slider.scrollLeft / slider.offsetWidth)
+      setActivePage(page)
     }
     slider.addEventListener('scroll', onScroll, { passive: true })
     return () => slider.removeEventListener('scroll', onScroll)
@@ -57,13 +60,13 @@ export default function Lab() {
       </FadeUp>
 
       <div className="lab-slider-wrap">
-        <button className="lab-arrow lab-arrow--prev" onClick={() => goTo(active - 1)} aria-label="Previous">
+        <button className="lab-arrow lab-arrow--prev" onClick={() => goTo(activePage - 1)} aria-label="Previous">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
 
         <div className="lab-slider" ref={sliderRef}>
-          {items.map((item) => (
-            <div className="lab-slide" key={item.title}>
+          {displayItems.map((item, i) => (
+            <div className="lab-slide" key={`${item.title}-${i}`}>
               <div className="lab-item">
                 <h4>{item.title}</h4>
                 <p>{item.desc}</p>
@@ -75,14 +78,14 @@ export default function Lab() {
           ))}
         </div>
 
-        <button className="lab-arrow lab-arrow--next" onClick={() => goTo(active + 1)} aria-label="Next">
+        <button className="lab-arrow lab-arrow--next" onClick={() => goTo(activePage + 1)} aria-label="Next">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>
 
       <div className="lab-dots">
-        {items.map((_, i) => (
-          <button key={i} className={`lab-dot${active === i ? ' active' : ''}`} onClick={() => goTo(i)} aria-label={`Go to slide ${i + 1}`} />
+        {Array.from({ length: pageCount }).map((_, i) => (
+          <button key={i} className={`lab-dot${activePage === i ? ' active' : ''}`} onClick={() => goTo(i)} aria-label={`Go to page ${i + 1}`} />
         ))}
       </div>
     </section>
