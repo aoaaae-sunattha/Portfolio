@@ -39,10 +39,12 @@ export function HeroFade({
   children,
   delay = 0,
   style,
+  className,
 }: {
   children: React.ReactNode
   delay?: number
   style?: React.CSSProperties
+  className?: string
 }) {
   return (
     <motion.div
@@ -50,6 +52,7 @@ export function HeroFade({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay, ease }}
       style={style}
+      className={className}
     >
       {children}
     </motion.div>

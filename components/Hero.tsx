@@ -14,7 +14,7 @@ const artifacts = ['Plan', 'Skill manifest', 'Gap report', 'Generated skill', 'S
 
 export default function Hero() {
   return (
-    <section id="top" style={{
+    <section id="top" className="hero-section" style={{
       padding: '9rem 2rem 5rem',
       maxWidth: 1180,
       margin: '0 auto',
@@ -88,7 +88,7 @@ export default function Hero() {
 
       {/* Pitch card */}
       <HeroFade delay={0.3}>
-        <div style={{
+        <div className="hero-pitch" style={{
           background: 'var(--card)',
           border: '1px solid var(--line)',
           borderRadius: 16,
@@ -128,7 +128,7 @@ export default function Hero() {
           </div>
 
           {/* Right — artifacts */}
-          <div style={{ borderLeft: '1px solid var(--line)', paddingLeft: '1.75rem' }}>
+          <div className="hero-pitch-right" style={{ borderLeft: '1px solid var(--line)', paddingLeft: '1.75rem' }}>
             <p style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '.67rem',
@@ -164,7 +164,7 @@ export default function Hero() {
       </HeroFade>
 
       {/* Scroll indicator — absolute bottom right */}
-      <HeroFade delay={0.7} style={{ position: 'absolute', bottom: '4.5rem', right: '0rem' }}>
+      <HeroFade delay={0.7} className="hero-scroll" style={{ position: 'absolute', bottom: '4.5rem', right: '0rem' }}>
         <a href="#pipeline" style={{
           display: 'inline-flex',
           flexDirection: 'column',
@@ -192,7 +192,7 @@ export default function Hero() {
 
       {/* Meta row */}
       <HeroFade delay={0.5}>
-        <div style={{
+        <div className="hero-meta" style={{
           display: 'flex',
           gap: '0',
           marginTop: '3rem',

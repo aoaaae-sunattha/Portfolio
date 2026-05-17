@@ -1,6 +1,7 @@
-import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, GitBranch as GithubIcon, Search, BookOpen, Plug, Terminal, Users } from 'lucide-react'
+import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, BookOpen, Plug } from 'lucide-react'
 import { VideoModalTrigger } from '@/components/VideoModal'
 import ImageLightbox from '@/components/ImageLightbox'
+import { FadeUp } from './Animate'
 
 function AiEntry({ img, icon, name, forText }: { img?: string; icon?: React.ReactNode; name: string; forText: string }) {
   return (
@@ -28,20 +29,22 @@ function TpExchangesShots() {
 export default function Projects() {
   return (
     <section className="wrap" id="projects">
-      <div className="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-        Module 3 · Per-project deep dives
-      </div>
-      <h2 className="sec-h">Five projects. One template.</h2>
-      <p className="sec-sub">
-        For each project — what I proposed → how I analyzed it → the QA process I applied → the AI stack I used.
-        Same structure every time, so reading one teaches you how to read the rest.
-      </p>
+      <FadeUp>
+        <div className="eyebrow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          Module 3 · Per-project deep dives
+        </div>
+        <h2 className="sec-h">Five projects. One template.</h2>
+        <p className="sec-sub">
+          For each project — what I proposed → how I analyzed it → the QA process I applied → the AI stack I used.
+          Same structure every time, so reading one teaches you how to read the rest.
+        </p>
+      </FadeUp>
 
       <div className="pdive">
 
         {/* 01 QA FORGE */}
-        <article className="pcard">
+        <FadeUp><article className="pcard">
           <div className="pcard-head">
             <div className="pcard-idx">01</div>
             <div>
@@ -87,7 +90,7 @@ export default function Projects() {
               <div className="ai-list">
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="orchestrates 20 skills · plans · classifies" />
                 <AiEntry icon={<Plug size={14} />} name="MCP" forText="Notion + GitHub · skill manifest" />
-                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="research before brief decomposition" />
+                <AiEntry img="https://svgl.app/library/perplexity.svg" name="Perplexity" forText="research before brief decomposition" />
                 <AiEntry icon={<BookOpen size={14} />} name="NotebookLM" forText="PRD synthesis · Q&A" />
               </div>
             </div>
@@ -98,13 +101,13 @@ export default function Projects() {
               <a className="chip" href="https://www.notion.so/Phase-0-CEO-BA-Dev-Discovery-Requirements-362dee0fbb3e8046a3a4c22962b7fc39" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 0</a>
               <a className="chip" href="https://www.notion.so/Phase-1-BA-QA-Analysis-Planning-362dee0fbb3e807f8a41f706cdff6c02" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 1</a>
               <a className="chip" href="https://www.notion.so/Phase-2-Execution-Test-Deliver-362dee0fbb3e80ce9b00c5790d040a22" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 2</a>
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
             </div>
           </div>
-        </article>
+        </article></FadeUp>
 
         {/* 02 CLOTILDE */}
-        <article className="pcard">
+        <FadeUp delay={0.05}><article className="pcard">
           <div className="pcard-head">
             <div className="pcard-idx">02</div>
             <div>
@@ -160,10 +163,10 @@ export default function Projects() {
               <VideoModalTrigger src="/clotilde-demo.mp4" label="Demo" />
             </div>
           </div>
-        </article>
+        </article></FadeUp>
 
         {/* 03 KODA */}
-        <article className="pcard">
+        <FadeUp delay={0.05}><article className="pcard">
           <div className="pcard-head">
             <div className="pcard-idx">03</div>
             <div>
@@ -206,9 +209,9 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="BNPL regulation · fee disclosure" />
+                <AiEntry img="https://svgl.app/library/perplexity.svg" name="Perplexity" forText="BNPL regulation · fee disclosure" />
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="test design · personas · healer" />
-                <AiEntry icon={<Terminal size={14} />} name="Codex" forText="component scan · unit scaffolding" />
+                <AiEntry img="/codex.svg" name="Codex" forText="component scan · unit scaffolding" />
                 <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="Actions wiring · PR posts" />
               </div>
             </div>
@@ -216,13 +219,13 @@ export default function Projects() {
           <div className="pcard-foot">
             <div className="pcard-note">Latest CI run: 172 parallel executions · 453s duration</div>
             <div className="pcard-links">
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
             </div>
           </div>
-        </article>
+        </article></FadeUp>
 
         {/* 04 CREWAI QA AGENT */}
-        <article className="pcard">
+        <FadeUp delay={0.05}><article className="pcard">
           <div className="pcard-head">
             <div className="pcard-idx">04</div>
             <div>
@@ -266,7 +269,7 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry icon={<Users size={14} />} name="CrewAI" forText="multi-agent · both pipelines" />
+                <AiEntry img="/crewai.svg" name="CrewAI" forText="multi-agent · both pipelines" />
                 <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="primary model · all 6 agents" />
                 <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="PR diff · file context" />
                 <AiEntry img="https://svgl.app/library/python.svg" name="Python + Playwright" forText="generated spec runtime" />
@@ -276,13 +279,13 @@ export default function Projects() {
           <div className="pcard-foot">
             <div className="pcard-note">Open source · drop-in on any codebase</div>
             <div className="pcard-links">
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><GithubIcon size={14} /> GitHub</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
             </div>
           </div>
-        </article>
+        </article></FadeUp>
 
         {/* 05 TP-EXCHANGES */}
-        <article className="pcard">
+        <FadeUp delay={0.05}><article className="pcard">
           <div className="pcard-head">
             <div className="pcard-idx">05</div>
             <div>
@@ -325,8 +328,8 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry icon={<Terminal size={14} />} name="Codex" forText="REST client scaffolding · schema gen" />
-                <AiEntry icon={<Search size={14} />} name="Perplexity" forText="API docs · undocumented quirks" />
+                <AiEntry img="/codex.svg" name="Codex" forText="REST client scaffolding · schema gen" />
+                <AiEntry img="https://svgl.app/library/perplexity.svg" name="Perplexity" forText="API docs · undocumented quirks" />
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="test design · drift detector" />
                 <AiEntry icon={<Plug size={14} />} name="MCP" forText="CI access · reporting" />
               </div>
@@ -335,7 +338,7 @@ export default function Projects() {
           <div className="pcard-foot">
             <div className="pcard-note">Production system · 20–30 backends validated on every push</div>
           </div>
-        </article>
+        </article></FadeUp>
 
       </div>
     </section>

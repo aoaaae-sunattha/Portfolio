@@ -1,9 +1,9 @@
-import { Search, BookOpen, Terminal, Users, Boxes, Atom, Plug } from 'lucide-react'
+import { BookOpen, Boxes, Plug } from 'lucide-react'
 import { FadeUp } from './Animate'
 
 const tools = [
   {
-    phase: 'Step 01', icon: <Search size={22} />, name: 'Perplexity', role: 'Research',
+    phase: 'Step 01', img: 'https://svgl.app/library/perplexity.svg', name: 'Perplexity', role: 'Research',
     desc: 'First stop for any unfamiliar domain. Pulls docs, regulations, fintech edge cases, and recent CVEs into the brief before BG-IDs are written.',
     uses: 'domain research · regulation · prior art',
   },
@@ -23,12 +23,12 @@ const tools = [
     uses: 'production inference · cross-model eval',
   },
   {
-    phase: 'Step 03', icon: <Terminal size={22} />, name: 'Codex', role: 'Code Reader',
+    phase: 'Step 03', img: '/codex.svg', name: 'Codex', role: 'Code Reader',
     desc: 'Walks the repo during analyze. Maps components → skills, flags untested files, drafts initial unit tests from function signatures.',
     uses: 'repo walk · coverage map · scaffolding',
   },
   {
-    phase: 'Steps 04–05', icon: <Users size={22} />, name: 'CrewAI', role: 'Multi-Agent Runner',
+    phase: 'Steps 04–05', img: '/crewai.svg', name: 'CrewAI', role: 'Multi-Agent Runner',
     desc: 'Two pipelines: qa-challenger writes specs from a ticket; qa-retest reads a PR diff and targets the exact code that changed.',
     uses: 'agent orchestration · PR-diff retesting',
   },
@@ -38,7 +38,7 @@ const tools = [
     uses: 'rapid agent prototyping · throwaway skills',
   },
   {
-    phase: 'Step 04 · Eval', icon: <Atom size={22} />, name: 'Hermes', role: 'Open-Weight Model',
+    phase: 'Step 04 · Eval', img: '/hermes.svg', name: 'Hermes', role: 'Open-Weight Model',
     desc: 'Local / open-weight model used to evaluate prompts offline and stress-test new skills without burning Claude quota. Cheap iteration.',
     uses: 'prompt eval · offline regression · cost control',
   },

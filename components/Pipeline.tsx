@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { Map, LayoutGrid, Microscope, Hammer, ShieldCheck, Lock, Search, BookOpen, Plug, Terminal, Users, Boxes, Atom, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Map, LayoutGrid, Microscope, Hammer, ShieldCheck, Lock, BookOpen, Plug, Users, Boxes, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
@@ -14,7 +14,7 @@ const steps = [
     desc: 'Read the brief. Decompose into business-goal IDs. Draft user stories. Write Given/When/Then acceptance criteria.',
     artifact: 'BG-ID register + GWT stories', gate: 'BA sign-off',
     tools: [
-      { icon: <Search size={11} />, label: 'Perplexity' },
+      { img: 'https://svgl.app/library/perplexity.svg', label: 'Perplexity' },
       { icon: <BookOpen size={11} />, label: 'NotebookLM' },
       { img: 'https://svgl.app/library/claude-ai-icon.svg', label: 'Claude' },
     ],
@@ -26,7 +26,7 @@ const steps = [
     tools: [
       { img: 'https://svgl.app/library/claude-ai-icon.svg', label: 'Claude' },
       { icon: <Plug size={11} />, label: 'MCP · Notion' },
-      { img: 'https://cdn.simpleicons.org/github/6b6862', label: 'GitHub' },
+      { img: '/github.svg', label: 'GitHub' },
     ],
   },
   {
@@ -35,7 +35,7 @@ const steps = [
     artifact: 'Gap report · Critical → Low', gate: 'Plan approval',
     tools: [
       { img: 'https://svgl.app/library/claude-ai-icon.svg', label: 'Claude' },
-      { icon: <Terminal size={11} />, label: 'Codex' },
+      { img: '/codex.svg', label: 'Codex' },
       { img: 'https://svgl.app/library/gemini.svg', label: 'Gemini' },
     ],
   },
@@ -45,9 +45,9 @@ const steps = [
     artifact: 'New Claude skill', gate: 'Skill accepted',
     tools: [
       { img: 'https://svgl.app/library/claude-ai-icon.svg', label: 'Claude' },
-      { icon: <Users size={11} />, label: 'CrewAI' },
+      { img: '/crewai.svg', label: 'CrewAI' },
       { icon: <Boxes size={11} />, label: 'OpenCrew' },
-      { icon: <Atom size={11} />, label: 'Hermes' },
+      { img: '/hermes.svg', label: 'Hermes' },
     ],
   },
   {
@@ -64,6 +64,13 @@ const steps = [
 
 export default function Pipeline() {
   const swiperRef = useRef<SwiperType | null>(null)
+  const [isBeginning, setIsBeginning] = useState(true)
+  const [isEnd, setIsEnd] = useState(false)
+
+  function syncEdges(swiper: SwiperType) {
+    setIsBeginning(swiper.isBeginning)
+    setIsEnd(swiper.isEnd)
+  }
 
   return (
     <section className="wrap" id="pipeline">
@@ -119,16 +126,20 @@ export default function Pipeline() {
       <FadeUp delay={0.15}>
         <div style={{ position: 'relative' }}>
           {/* Left fade */}
-          <div style={{
-            position: 'absolute', left: 0, top: 0, bottom: 0, width: 64,
+          <div className="carousel-fade-left" style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: 80,
             background: 'linear-gradient(to right, var(--bg), transparent)',
             zIndex: 10, pointerEvents: 'none',
+            opacity: isBeginning ? 0 : 1,
+            transition: 'opacity .3s ease',
           }} />
           {/* Right fade */}
-          <div style={{
-            position: 'absolute', right: 0, top: 0, bottom: 0, width: 64,
+          <div className="carousel-fade-right" style={{
+            position: 'absolute', right: 0, top: 0, bottom: 0, width: 80,
             background: 'linear-gradient(to left, var(--bg), transparent)',
             zIndex: 10, pointerEvents: 'none',
+            opacity: isEnd ? 0 : 1,
+            transition: 'opacity .3s ease',
           }} />
           {/* Left arrow */}
           <button
@@ -169,17 +180,17 @@ export default function Pipeline() {
 
           <Swiper
             modules={[Autoplay]}
-            onSwiper={(swiper) => { swiperRef.current = swiper }}
-            slidesPerView={1.3}
+            onSwiper={(swiper) => { swiperRef.current = swiper; syncEdges(swiper) }}
+            onSlideChange={(swiper) => syncEdges(swiper)}
+            slidesPerView={1}
             spaceBetween={16}
-            loop
+            centeredSlides
             autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }}
             style={{ alignItems: 'stretch' }}
             breakpoints={{
-              520:  { slidesPerView: 1.8 },
-              720:  { slidesPerView: 2.5 },
-              960:  { slidesPerView: 3.5 },
-              1100: { slidesPerView: 4.5 },
+              520:  { slidesPerView: 1,   centeredSlides: true  },
+              768:  { slidesPerView: 2,   centeredSlides: false, spaceBetween: 20 },
+              1100: { slidesPerView: 2,   centeredSlides: false, spaceBetween: 24 },
             }}
           >
             {steps.map((step) => (
@@ -201,7 +212,7 @@ export default function Pipeline() {
                   <div className="step-tools">
                     {step.tools.map((t, i) => (
                       <span key={i}>
-                        {t.img ? <img src={t.img} alt={t.label} style={{ width: 11, height: 11 }} /> : t.icon}
+                        {t.img ? <img src={t.img} alt={t.label} style={{ width: 11, height: 11, filter: t.img.includes('github') ? 'brightness(0)' : undefined }} /> : t.icon}
                         {t.label}
                       </span>
                     ))}
