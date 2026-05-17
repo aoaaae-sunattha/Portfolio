@@ -44,8 +44,8 @@ const tools = [
   },
   {
     phase: 'Steps 02–05', icon: <Plug size={22} />, name: 'MCP', role: 'Tool Bridge',
-    desc: 'How Claude reaches the outside world — Notion (PM/BA artifacts), GitHub (PRs and diffs), filesystem (skill manifest). The connective tissue.',
-    uses: 'Notion · GitHub · FS connectors',
+    desc: 'How Claude reaches the outside world — Notion (PM/BA artifacts), GitHub (PRs and diffs), filesystem (skill manifest), Playwright (browser automation), and Vercel (deployments). The connective tissue.',
+    uses: 'Notion · GitHub · Playwright · Vercel · FS connectors',
   },
 ]
 
