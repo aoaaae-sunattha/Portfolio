@@ -176,7 +176,7 @@ export default function QAForge({ svgs }: Props) {
         <div className="card-footer">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-            Applied on FinPay — 27 user stories · 100% pass rate on active QA · SHIP/HOLD verdict delivered
+            Applied on FinPay — 27 user stories · all active QA cases pass · SHIP/HOLD verdict delivered
           </div>
         </div>
       </div>

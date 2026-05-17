@@ -135,7 +135,7 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
               <ul>
-                <li>Golden-dataset regression on intent — 15 cases, 100% pass.</li>
+                <li>Golden-dataset regression on agentic tool dispatch — 15 cases, all pass.</li>
                 <li>End-to-end: search → policy check → OOP justification → manager approval → PNR.</li>
                 <li>Natural-language admin console tested on real instructions.</li>
                 <li>5 AI tools · 4 role levels · 17 notifications — every path covered.</li>
@@ -152,9 +152,10 @@ export default function Projects() {
             </div>
           </div>
           <div className="pcard-foot">
-            <div className="pcard-note">30-sec demo · QA Notion available</div>
+            <div className="pcard-note">30-sec demo · QA Notion · slide presentation available</div>
             <div className="pcard-links">
               <a className="chip" href="https://www.notion.so/Clotilde-v3-0-360dee0fbb3e806b9fe0f677169a2e26" target="_blank" rel="noopener noreferrer"><FileText size={14} /> QA Notion</a>
+              <a className="chip" href="https://docs.google.com/presentation/d/1ZlNVMXSrT9uLDg-hExS_xZXgZrdCuot8XqvaqCFgCEQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Slides</a>
               <VideoModalTrigger src="/clotilde-demo.mp4" label="Demo" />
             </div>
           </div>
