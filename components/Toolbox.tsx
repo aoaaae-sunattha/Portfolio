@@ -28,9 +28,9 @@ const tools = [
     uses: 'code generation · agent LLM · Paperclip integration · repo scaffolding',
   },
   {
-    phase: 'Steps 04–05', img: '/crewai.svg', name: 'CrewAI', role: 'Multi-Agent Runner',
-    desc: 'Two pipelines: qa-challenger writes specs from a ticket; qa-retest reads a PR diff and targets the exact code that changed.',
-    uses: 'agent orchestration · PR-diff retesting',
+    phase: 'Steps 04–05', img: '/crewai.svg', name: 'CrewAI', role: 'Agent Orchestration',
+    desc: 'Powers the agentic QA flow — autonomous agents run the pipeline end-to-end with human-gate checkpoints at steps that need review before proceeding. Orchestrates multi-agent coordination so each agent knows its role and when to hand off.',
+    uses: 'agent orchestration · agentic flow · human-in-the-loop · PR-diff retesting',
   },
   {
     phase: 'Experiment', img: '/openclaw.svg', name: 'OpenClaw', role: 'Local AI Assistant',
