@@ -167,7 +167,7 @@ export default function Hero() {
           {[
             { label: 'Currently', value: 'QA × AI tooling', flex: false },
             { label: 'Based in', value: 'Chiang Mai, TH · UTC+7', flex: false },
-            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP · CrewAI · OpenClaw · Hermes · Paperclip', flex: true },
+            { label: 'AI stack', value: 'Claude · Gemini · Codex · MCP\nCrewAI · OpenClaw · Hermes · Paperclip', flex: true },
             { label: 'Open to', value: 'QA / GenAI engineering roles', flex: false },
           ].map(({ label, value, flex }, i, arr) => (
             <div key={label} style={{
@@ -190,7 +190,11 @@ export default function Hero() {
               }}>
                 {label}
               </span>
-              <span style={{ fontSize: flex ? '.78rem' : '.84rem', color: 'var(--ink-2)', fontWeight: 500, lineHeight: 1.5 }}>{value}</span>
+              <span style={{ fontSize: flex ? '.78rem' : '.84rem', color: 'var(--ink-2)', fontWeight: 500, lineHeight: 1.6 }}>
+                {value.split('\n').map((line, i) => (
+                  <span key={i} style={{ display: 'block' }}>{line}</span>
+                ))}
+              </span>
             </div>
           ))}
         </div>
