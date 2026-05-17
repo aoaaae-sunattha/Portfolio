@@ -16,7 +16,7 @@ export default async function Home() {
     <main>
       <Nav />
       <Hero />
-      <QAForge />
+      <QAForge svgs={svgs} />
       <Projects />
       <Lab />
       <Skills svgs={svgs} />

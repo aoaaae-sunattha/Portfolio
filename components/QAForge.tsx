@@ -1,4 +1,29 @@
-export default function QAForge() {
+import { resolveLogo } from '@/lib/svgl'
+import type { Svg } from '@/lib/svgl'
+
+function AILogo({ name, svgs, size = 32 }: { name: string; svgs: Svg[]; size?: number }) {
+  const aliases: Record<string, string[]> = {
+    'Anthropic': ['Anthropic', 'Claude'],
+    'Gemini': ['Gemini', 'Google Gemini'],
+    'TypeScript': ['TypeScript'],
+    'OpenAI': ['OpenAI', 'ChatGPT'],
+  }
+  const candidates = aliases[name] ?? [name]
+  let logoUrl: string | null = null
+  for (const c of candidates) {
+    logoUrl = resolveLogo(svgs, c)
+    if (logoUrl) break
+  }
+  if (!logoUrl) return <span style={{ fontSize: size * 0.7 + 'px' }}>🤖</span>
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={logoUrl} alt={name} width={size} height={size} style={{ objectFit: 'contain', borderRadius: 6 }} />
+  )
+}
+
+type Props = { svgs: Svg[] }
+
+export default function QAForge({ svgs }: Props) {
   return (
     <section id="qa-forge" className="wrap">
       <hr className="section-hr" style={{ marginBottom: '4rem' }} />
@@ -21,8 +46,9 @@ export default function QAForge() {
               </span>
               <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Built with Claude · 20 Claude skills · v3.0</span>
             </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.35rem', color: '#fff' }}>
-              🔨 Agentic QA Pipeline
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.35rem', color: '#fff' }}>
+              <AILogo name="Anthropic" svgs={svgs} size={28} />
+              Agentic QA Pipeline
             </div>
             <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.25rem' }}>
               CEO brief → Business Goals → PM Stories → BA Review → QA Plan → Manual Tests → Playwright → SHIP/HOLD
@@ -116,7 +142,7 @@ export default function QAForge() {
           <div className="stripe-amber" />
           <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🧪</div>
+              <div style={{ flexShrink: 0 }}><AILogo name="TypeScript" svgs={svgs} size={32} /></div>
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>KODA — QA on a Fintech BNPL Product</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.15rem' }}>Built the product. Then tested every edge case that matters in fintech.</div>
@@ -151,7 +177,7 @@ export default function QAForge() {
           <div className="stripe-green" />
           <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🤖</div>
+              <div style={{ flexShrink: 0 }}><AILogo name="Gemini" svgs={svgs} size={32} /></div>
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>QA Agent — CrewAI System</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.15rem' }}>2 pipelines · 6 agents · Feature testing + Bug verification</div>
@@ -189,8 +215,8 @@ export default function QAForge() {
         <div className="stripe-slate" />
         <div style={{ padding: '1.5rem 2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
           <div>
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.85rem' }}>
-              <div style={{ fontSize: '1.5rem' }}>🎯</div>
+            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.85rem', alignItems: 'center' }}>
+              <AILogo name="Anthropic" svgs={svgs} size={28} />
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>The QA Forge Approach</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)' }}>Why I build the process, not just run it</div>
