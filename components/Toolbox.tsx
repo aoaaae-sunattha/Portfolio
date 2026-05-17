@@ -1,4 +1,4 @@
-import { BookOpen, Boxes, Plug } from 'lucide-react'
+import { BookOpen, Plug } from 'lucide-react'
 import { FadeUp } from './Animate'
 
 const tools = [
@@ -33,12 +33,12 @@ const tools = [
     uses: 'agent orchestration · PR-diff retesting',
   },
   {
-    phase: 'Step 04', icon: <Boxes size={22} />, name: 'OpenCrew', role: 'Lightweight Agents',
-    desc: 'Used when CrewAI is overkill — quick one-shot agent runs for ad-hoc skill experiments before they earn a place in the manifest.',
-    uses: 'rapid agent prototyping · throwaway skills',
+    phase: 'Experiment', img: '/openclaw.svg', name: 'OpenClaw', role: 'Local AI Assistant',
+    desc: 'Local-first personal AI assistant — runs on your own machine, no cloud required. Used for experimenting with multi-model setups (Claude, GPT, local models) and building custom skills outside the main pipeline.',
+    uses: 'multi-model experimentation · custom skills · local automation',
   },
   {
-    phase: 'Step 04 · Eval', img: '/hermes.svg', name: 'Hermes', role: 'Open-Weight Model',
+    phase: 'Offline Eval', img: '/hermes.svg', name: 'Hermes', role: 'Open-Weight Model',
     desc: 'Local / open-weight model used to evaluate prompts offline and stress-test new skills without burning Claude quota. Cheap iteration.',
     uses: 'prompt eval · offline regression · cost control',
   },
@@ -57,9 +57,9 @@ export default function Toolbox() {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/></svg>
           Module 2 · AI Toolbox
         </div>
-        <h2 className="sec-h">9 tools · one job each</h2>
+        <h2 className="sec-h">The toolkit · context-driven</h2>
         <p className="sec-sub">
-          Each card answers one question: <em>why this tool, and where in my workflow does it actually run?</em> Don&apos;t list a tool you don&apos;t use.
+          I pick what fits the project — each card shows <em>why this tool, and where it runs in my workflow.</em>
         </p>
       </FadeUp>
 
