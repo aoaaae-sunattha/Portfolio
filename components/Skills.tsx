@@ -1,3 +1,5 @@
+import { FadeUp } from './Animate'
+
 const columns = [
   {
     title: 'QA · Testing',
@@ -70,31 +72,35 @@ const columns = [
 export default function Skills() {
   return (
     <section className="wrap" id="skills">
-      <div className="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        Skills &amp; tools
-      </div>
-      <h2 className="sec-h">What I reach for</h2>
-      <p className="sec-sub">
-        Every tool here starts the same way — use AI to digest the docs, understand the architecture, plan the approach, then build with intention.
-      </p>
+      <FadeUp>
+        <div className="eyebrow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Skills &amp; tools
+        </div>
+        <h2 className="sec-h">What I reach for</h2>
+        <p className="sec-sub">
+          Every tool here starts the same way — use AI to digest the docs, understand the architecture, plan the approach, then build with intention.
+        </p>
+      </FadeUp>
 
       <div className="skills-grid">
-        {columns.map((col) => (
-          <div key={col.title} className="skill-col">
-            <h5>{col.title}</h5>
-            <ul>
-              {col.items.map((item, i) => (
-                <li key={i}>
-                  {item.bold ? (
-                    <><b>{item.text}</b>{item.suffix ? ` ${item.suffix}` : ''}</>
-                  ) : (
-                    item.text
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {columns.map((col, i) => (
+          <FadeUp key={col.title} delay={Math.min(i * 0.07, 0.28)}>
+            <div className="skill-col">
+              <h5>{col.title}</h5>
+              <ul>
+                {col.items.map((item, j) => (
+                  <li key={j}>
+                    {item.bold ? (
+                      <><b>{item.text}</b>{item.suffix ? ` ${item.suffix}` : ''}</>
+                    ) : (
+                      item.text
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </FadeUp>
         ))}
       </div>
     </section>

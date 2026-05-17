@@ -1,4 +1,5 @@
-import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, GitBranch as GithubIcon, PlayCircle, Search, BookOpen, Plug, Terminal, Users } from 'lucide-react'
+import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, GitBranch as GithubIcon, Search, BookOpen, Plug, Terminal, Users } from 'lucide-react'
+import { VideoModalTrigger } from '@/components/VideoModal'
 import ImageLightbox from '@/components/ImageLightbox'
 
 function AiEntry({ img, icon, name, forText }: { img?: string; icon?: React.ReactNode; name: string; forText: string }) {
@@ -153,10 +154,10 @@ export default function Projects() {
             </div>
           </div>
           <div className="pcard-foot">
-            <div className="pcard-note">Demo video and QA notion available on request</div>
+            <div className="pcard-note">30-sec demo · QA Notion available</div>
             <div className="pcard-links">
               <a className="chip" href="https://www.notion.so/Clotilde-v3-0-360dee0fbb3e806b9fe0f677169a2e26" target="_blank" rel="noopener noreferrer"><FileText size={14} /> QA Notion</a>
-              <a className="chip" href="#"><PlayCircle size={14} /> Demo</a>
+              <VideoModalTrigger src="/clotilde-demo.mp4" label="Demo" />
             </div>
           </div>
         </article>

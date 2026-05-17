@@ -1,3 +1,5 @@
+import { FadeUp } from './Animate'
+
 const items = [
   {
     title: 'AEON — Multi-agent forecast system',
@@ -24,24 +26,28 @@ const items = [
 export default function Lab() {
   return (
     <section className="wrap" id="lab">
-      <div className="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0-3 3m3-3 3 3m5-14v11m0 0-3 3m3-3 3 3M3 9h18"/></svg>
-        Lab · Experiments
-      </div>
-      <h2 className="sec-h">Self-directed work</h2>
-      <p className="sec-sub">
-        Smaller projects exploring AI agent patterns, fintech logic, and automation. Not flagship work — but each one fed a skill into the manifest.
-      </p>
+      <FadeUp>
+        <div className="eyebrow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0-3 3m3-3 3 3m5-14v11m0 0-3 3m3-3 3 3M3 9h18"/></svg>
+          Lab · Experiments
+        </div>
+        <h2 className="sec-h">Self-directed work</h2>
+        <p className="sec-sub">
+          Smaller projects exploring AI agent patterns, fintech logic, and automation. Not flagship work — but each one fed a skill into the manifest.
+        </p>
+      </FadeUp>
 
       <div className="lab-grid">
-        {items.map((item) => (
-          <div key={item.title} className="lab-item">
-            <h4>{item.title}</h4>
-            <p>{item.desc}</p>
-            <div className="lab-tags">
-              {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+        {items.map((item, i) => (
+          <FadeUp key={item.title} delay={i * 0.08}>
+            <div className="lab-item" style={{ height: '100%' }}>
+              <h4>{item.title}</h4>
+              <p>{item.desc}</p>
+              <div className="lab-tags">
+                {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+              </div>
             </div>
-          </div>
+          </FadeUp>
         ))}
       </div>
     </section>

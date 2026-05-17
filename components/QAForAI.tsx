@@ -1,4 +1,5 @@
 import { Signpost, ShieldCheck, RefreshCcw, BarChart3, SearchX, GitPullRequest } from 'lucide-react'
+import { FadeUp } from './Animate'
 
 const cards = [
   {
@@ -42,21 +43,25 @@ const cards = [
 export default function QAForAI() {
   return (
     <section className="wrap" id="qa-for-ai">
-      <div className="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Specialisation
-      </div>
-      <h2 className="sec-h">QA thinking applied to AI</h2>
-      <p className="sec-sub">Testing AI systems is different from testing regular software. Here&apos;s how I approach it.</p>
+      <FadeUp>
+        <div className="eyebrow">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Specialisation
+        </div>
+        <h2 className="sec-h">QA thinking applied to AI</h2>
+        <p className="sec-sub">Testing AI systems is different from testing regular software. Here&apos;s how I approach it.</p>
+      </FadeUp>
 
       <div className="qa-grid">
         {cards.map((card, i) => (
-          <div key={i} className="qa-card">
-            <div className="qa-icon">{card.icon}</div>
-            <h5>{card.title}</h5>
-            <p>{card.desc}</p>
-            <div className="qa-from"><b>From:</b> {card.from}</div>
-          </div>
+          <FadeUp key={i} delay={Math.min(i * 0.07, 0.28)}>
+            <div className="qa-card" style={{ height: '100%' }}>
+              <div className="qa-icon">{card.icon}</div>
+              <h5>{card.title}</h5>
+              <p>{card.desc}</p>
+              <div className="qa-from"><b>From:</b> {card.from}</div>
+            </div>
+          </FadeUp>
         ))}
       </div>
     </section>
