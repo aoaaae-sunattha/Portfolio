@@ -19,8 +19,8 @@ const tools = [
   },
   {
     phase: 'Runtime + Eval', img: 'https://svgl.app/library/gemini.svg', name: 'Gemini 2.5', role: 'Production Model',
-    desc: "Powers AI features inside products I ship (Clotilde intent + admin). Also dual-checks Claude's test plans — two models, one verdict.",
-    uses: 'production inference · cross-model eval',
+    desc: "Used two ways: as a code generation partner to help Claude build faster, and as the LLM backend via Google API key for production inference inside shipped products.",
+    uses: 'code generation · Google API · production inference · cross-model eval',
   },
   {
     phase: 'Step 03', img: '/codex.svg', name: 'Codex', role: 'Code Reader',
