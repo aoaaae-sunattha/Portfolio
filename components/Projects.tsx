@@ -152,10 +152,12 @@ export default function Projects() {
             </div>
           </div>
           <div className="pcard-foot">
-            <div className="pcard-note">30-sec demo · QA Notion · slide presentation available</div>
+            <div className="pcard-note">QA docs · testing strategy · slide deck · source on GitHub</div>
             <div className="pcard-links">
               <a className="chip" href="https://www.notion.so/Clotilde-v3-0-360dee0fbb3e806b9fe0f677169a2e26" target="_blank" rel="noopener noreferrer"><FileText size={14} /> QA Notion</a>
+              <a className="chip" href="https://www.notion.so/Four-Layer-Testing-Strategy-363dee0fbb3e8019b99ee6dc90261fc4" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Testing Strategy</a>
               <a className="chip" href="https://docs.google.com/presentation/d/1ZlNVMXSrT9uLDg-hExS_xZXgZrdCuot8XqvaqCFgCEQ/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Slides</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha/Clotilde_AI" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
               <VideoModalTrigger src="/clotilde-demo.mp4" label="Demo" />
             </div>
           </div>
@@ -167,7 +169,7 @@ export default function Projects() {
             <div className="pcard-idx">03</div>
             <div>
               <div className="pcard-ttl">KODA — BNPL Fintech Build &amp; QA</div>
-              <div className="pcard-tag">169 tests · 76 E2E specs · 3-gate CI</div>
+              <div className="pcard-tag">244 tests · 76 E2E specs · 3-gate CI</div>
             </div>
           </div>
           <div className="pcard-lede">
@@ -179,14 +181,14 @@ export default function Projects() {
               <div className="pcol-lbl"><Lightbulb size={14} /> Proposed</div>
               <ul>
                 <li>Build working BNPL: cards, KYC, credit limit, fee formula, refund engine, merchant payout.</li>
-                <li>Design QA around <b>real business risk</b>, not feature coverage.</li>
-                <li>Atomic test design — 1 test per file — for fast failure isolation.</li>
+                <li>Design QA around real business risk, not feature coverage.</li>
+                <li>1 spec per behavior, organized by domain — for fast failure isolation.</li>
               </ul>
             </div>
             <div className="pcol">
               <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
               <ul>
-                <li><b>8 personas</b>: active · pre-KYC · overdue-locked · declined card · credit-maxed · power user · merchant.</li>
+                <li>8 personas: active · pre-KYC · overdue-locked · declined card · credit-maxed · power user · merchant.</li>
                 <li>P0 surfaces: auth · checkout · KYC gate · credit limit · refund engine.</li>
                 <li>Fee formula verified across all 7 term configurations.</li>
                 <li>Backward refund allocation rule (last installment first).</li>
@@ -195,26 +197,27 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
               <ul>
-                <li><b>76 Playwright E2E specs</b> across Auth · Checkout · Risk · Refund · Payments · Credit.</li>
-                <li><b>93 unit tests</b> for store, fee formula, guards, refund, merchant payout.</li>
+                <li><b>76 E2E spec files · 130 test cases</b> across Auth · Checkout · Risk · Refund · Payments · Credit · Regression · Smoke.</li>
+                <li>114 unit tests across 14 files — store, fee formula (all 7 terms), guards, refund engine, merchant payout, formatting utils.</li>
                 <li>Page Object Model · tagged @smoke @regression @auth @checkout @risk @credit.</li>
-                <li><b>3-gate CI</b>: ESLint+TS → Vitest → Playwright → PR comment + report.</li>
+                <li><b>3-gate CI</b>: ESLint+TS → Vitest → Playwright → HTML report → PR comment → commits to QA/REPORTS/.</li>
               </ul>
             </div>
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry img="https://svgl.app/library/perplexity.svg" name="Perplexity" forText="BNPL regulation · fee disclosure" />
-                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="test design · personas · healer" />
-                <AiEntry img="/codex.svg" name="Codex" forText="component scan · unit scaffolding" />
-                <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="Actions wiring · PR posts" />
+                <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude Code" forText="app build · test design · spec writing · CI wiring" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini CLI" forText="QA cross-review · final review validation · session sync" />
+                <AiEntry icon={<Plug size={14} />} name="MCP · Playwright" forText="browser automation · E2E test execution · QA pipeline" />
+                <AiEntry img="/github.svg" name="GitHub Actions" forText="CI pipeline · PR comment reporting · report commits" />
               </div>
             </div>
           </div>
           <div className="pcard-foot">
-            <div className="pcard-note">Latest CI run: 172 parallel executions · 453s duration</div>
+            <div className="pcard-note">244 automated tests · 76 E2E specs · 114 unit tests · 3-gate CI</div>
             <div className="pcard-links">
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha/KODA" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
+              <VideoModalTrigger src="/KODA.mp4" label="Demo" />
             </div>
           </div>
         </article></FadeUp>
@@ -224,14 +227,14 @@ export default function Projects() {
           <div className="pcard-head">
             <div className="pcard-idx">04</div>
             <div>
-              <div className="pcard-ttl">CrewAI QA Agent — Two Pipelines, Six Agents</div>
+              <div className="pcard-ttl">QA Challenger</div>
               <div className="pcard-tag">OSS · qa-challenger + qa-retest · project-agnostic</div>
             </div>
           </div>
           <div className="pcard-lede">
-            <b>Premise.</b> Two completely independent CrewAI pipelines. <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-challenger</code> turns a vague feature ticket
-            into a user story, test plan, manual cases, and Playwright scripts. <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-retest</code> reads a real GitHub PR diff
-            and generates targeted retest cases. Runs on any codebase via shell alias.
+            <b>Premise.</b> QA Challenger challenges vague BA/PO tickets before they become bugs — turning a one-liner into a user story, test plan, manual cases, and Playwright scripts.
+            Paired with <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>qa-retest</code>: reads a real GitHub PR diff and generates targeted retest cases for bug fixes.
+            Runs on any codebase via <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.9em' }}>crewai run</code>.
           </div>
           <div className="pcard-cols">
             <div className="pcol">
@@ -240,7 +243,7 @@ export default function Projects() {
                 <li>Two flows, two agent topologies — don&apos;t try to make one pipeline do both.</li>
                 <li>Pipeline 1 (challenger): ticket → story → plan → cases → <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.85em' }}>.spec.ts</code>.</li>
                 <li>Pipeline 2 (retest): bug + PR diff → targeted retest cases.</li>
-                <li>Human review gates between every agent handoff.</li>
+                <li>Human review gates at key handoffs — not every step (Playwright gen and retest analyzer run automatically).</li>
               </ul>
             </div>
             <div className="pcol">
@@ -254,10 +257,10 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><ShieldCheck size={14} /> QA Process</div>
               <ul>
-                <li><b>6 agents</b> total · 3 per pipeline.</li>
+                <li><b>6 agents</b> total · 4 in qa-challenger · 2 in qa-retest.</li>
                 <li>Outputs: user stories · test plans · manual cases · Playwright specs.</li>
-                <li>Self-auditing: each agent&apos;s output is reviewed by the next.</li>
-                <li>Drop-in via shell alias on any repo.</li>
+                <li>Sequential handoff: each agent builds on and validates the previous output.</li>
+                <li>Drop-in on any repo via <code style={{ fontFamily: 'var(--font-mono)', fontSize: '.85em' }}>crewai run</code>.</li>
               </ul>
             </div>
             <div className="pcol">
@@ -265,7 +268,7 @@ export default function Projects() {
               <div className="ai-list">
                 <AiEntry img="/crewai.svg" name="CrewAI" forText="multi-agent · both pipelines" />
                 <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="primary model · all 6 agents" />
-                <AiEntry icon={<Plug size={14} />} name="MCP · GitHub" forText="PR diff · file context" />
+                <AiEntry icon={<Plug size={14} />} name="GitHub REST API" forText="PR diff · file context · optional GITHUB_TOKEN" />
                 <AiEntry img="https://svgl.app/library/python.svg" name="Python + Playwright" forText="generated spec runtime" />
               </div>
             </div>
@@ -273,7 +276,7 @@ export default function Projects() {
           <div className="pcard-foot">
             <div className="pcard-note">Open source · drop-in on any codebase</div>
             <div className="pcard-links">
-              <a className="chip" href="https://github.com/aoaaae-sunattha" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
+              <a className="chip" href="https://github.com/aoaaae-sunattha/QAAgent-CrewAI" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
             </div>
           </div>
         </article></FadeUp>
@@ -330,6 +333,9 @@ export default function Projects() {
           </div>
           <div className="pcard-foot">
             <div className="pcard-note">Production system · 20–30 backends validated on every push</div>
+            <div className="pcard-links">
+              <a className="chip" href="/tp-lib" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> README.md</a>
+            </div>
           </div>
         </article></FadeUp>
 
