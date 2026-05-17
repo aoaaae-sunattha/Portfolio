@@ -1,7 +1,7 @@
 import { resolveLogo } from '@/lib/svgl'
 import type { Svg } from '@/lib/svgl'
 
-function AILogo({ name, svgs, size = 32 }: { name: string; svgs: Svg[]; size?: number }) {
+function resolveUrl(name: string, svgs: Svg[]): string | null {
   const aliases: Record<string, string[]> = {
     'Anthropic': ['Anthropic', 'Claude'],
     'Gemini': ['Gemini', 'Google Gemini'],
@@ -9,11 +9,54 @@ function AILogo({ name, svgs, size = 32 }: { name: string; svgs: Svg[]; size?: n
     'OpenAI': ['OpenAI', 'ChatGPT'],
   }
   const candidates = aliases[name] ?? [name]
-  let logoUrl: string | null = null
   for (const c of candidates) {
-    logoUrl = resolveLogo(svgs, c)
-    if (logoUrl) break
+    const url = resolveLogo(svgs, c)
+    if (url) return url
   }
+  return null
+}
+
+function StackedLogos({ names, svgs, size = 32 }: { names: string[]; svgs: Svg[]; size?: number }) {
+  const overlap = Math.round(size * 0.35)
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+      {names.map((name, i) => {
+        const url = resolveUrl(name, svgs)
+        return (
+          <div
+            key={name}
+            title={name}
+            style={{
+              width: size,
+              height: size,
+              borderRadius: '50%',
+              border: '2px solid rgba(10,10,26,0.9)',
+              background: 'rgba(255,255,255,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: i === 0 ? 0 : -overlap,
+              zIndex: names.length - i,
+              overflow: 'hidden',
+              position: 'relative',
+              flexShrink: 0,
+            }}
+          >
+            {url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={url} alt={name} width={size - 8} height={size - 8} style={{ objectFit: 'contain' }} />
+            ) : (
+              <span style={{ fontSize: size * 0.45 + 'px' }}>🤖</span>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function AILogo({ name, svgs, size = 32 }: { name: string; svgs: Svg[]; size?: number }) {
+  const logoUrl = resolveUrl(name, svgs)
   if (!logoUrl) return <span style={{ fontSize: size * 0.7 + 'px' }}>🤖</span>
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -141,8 +184,8 @@ export default function QAForge({ svgs }: Props) {
         <div className="glass hover-lift" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div className="stripe-amber" />
           <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={{ flexShrink: 0 }}><AILogo name="TypeScript" svgs={svgs} size={32} /></div>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+              <StackedLogos names={['Gemini', 'Anthropic']} svgs={svgs} size={32} />
               <div>
                 <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff' }}>KODA — QA on a Fintech BNPL Product</div>
                 <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: '0.15rem' }}>Built the product. Then tested every edge case that matters in fintech.</div>
