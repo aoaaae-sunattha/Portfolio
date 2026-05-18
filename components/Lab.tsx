@@ -32,6 +32,20 @@ const items = [
     iframe: '/FlightTracker_demo.html',
   },
   {
+    title: 'InstantTab — ETH bar tabs, settled off-chain',
+    desc: 'Non-custodial Ethereum bar-tab system using EIP-712 state channels. Customers lock ETH into a UUPS-proxy contract (TabChannel.sol) via openTab() — every drink settles as a co-signed off-chain ChannelState message, zero gas per transaction. Only closeTab() hits the chain. Chainlink oracle locks the ETH/USD rate at session open.',
+    desc2: 'Per-transaction gas makes on-chain micropayments unviable for frequent small purchases. InstantTab moves settlement off-chain with a 10-minute fraud challenge window — a PM2 watcher auto-submits a higher-nonce state if fraud is detected, triggering a 100% slash (90% merchant / 10% treasury).',
+    stat: '2 on-chain txs  ·  6 Hardhat tests  ·  10-min challenge window  ·  90/10 slash split  ·  EIP-712 signed  ·  Chainlink oracle',
+    tags: ['Solidity', 'State channels', 'EIP-712', 'Hardhat', 'UUPS', 'Chainlink'],
+    iframe: '/on-off_chain-demo.html',
+    icons: [
+      { src: '/ethereum.svg', alt: 'Ethereum' },
+      { src: '/solidity.svg', alt: 'Solidity' },
+      { src: '/chainlink.svg', alt: 'Chainlink' },
+      { src: '/node-js.png', alt: 'Node.js', size: 44 },
+    ],
+  },
+  {
     title: 'Prompt Compiler — Modular LLM prompt builder',
     desc: 'Takes structured input via a wizard or CLI flags, runs it through a validation and enrichment pipeline, and compiles a finished system prompt in the native format of the chosen LLM target. Supports Claude, Gemini, Codex, AI Agent, and QA-oriented Project CT — no API calls, compile-time only.',
     desc2: 'Most teams write one generic prompt and reuse it across Claude, Gemini, Codex, and agents — and get mediocre results. Prompt Compiler solves this by compiling a single input into the native format each LLM actually responds best to.',
