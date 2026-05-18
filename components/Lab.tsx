@@ -16,6 +16,7 @@ const items = [
       { src: '/obsidian.png', alt: 'Obsidian' },
       { src: '/node-js.png', alt: 'Node.js', size: 44 },
     ],
+    iframe: '/AEON_demo.html',
   },
   {
     title: 'Flight Deal Finder — Autonomous Price Watch Agent',
