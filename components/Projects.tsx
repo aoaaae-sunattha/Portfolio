@@ -1,5 +1,6 @@
 import { Lightbulb, Microscope, ShieldCheck, Cpu, FileText, BookOpen, Plug } from 'lucide-react'
 import { VideoModalTrigger } from '@/components/VideoModal'
+import { IframeModalTrigger } from '@/components/IframeModal'
 import ImageLightbox from '@/components/ImageLightbox'
 import { FadeUp } from './Animate'
 
@@ -335,6 +336,7 @@ export default function Projects() {
             <div className="pcard-note">Production system · 20–30 backends validated on every push</div>
             <div className="pcard-links">
               <a className="chip" href="/tp-lib" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> README.md</a>
+              <IframeModalTrigger src="/tp-lib/TP-libs_demo.html" label="Demo" />
             </div>
           </div>
         </article></FadeUp>
