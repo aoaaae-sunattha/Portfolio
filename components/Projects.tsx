@@ -99,6 +99,7 @@ export default function Projects() {
               <a className="chip" href="https://www.notion.so/Phase-0-CEO-BA-Dev-Discovery-Requirements-362dee0fbb3e8046a3a4c22962b7fc39" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 0</a>
               <a className="chip" href="https://www.notion.so/Phase-1-BA-QA-Analysis-Planning-362dee0fbb3e807f8a41f706cdff6c02" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 1</a>
               <a className="chip" href="https://www.notion.so/Phase-2-Execution-Test-Deliver-362dee0fbb3e80ce9b00c5790d040a22" target="_blank" rel="noopener noreferrer"><FileText size={14} /> Phase 2</a>
+              <IframeModalTrigger src="/QApipeline-demo.html" label="Demo" />
             </div>
           </div>
         </article></FadeUp>
@@ -278,6 +279,7 @@ export default function Projects() {
             <div className="pcard-note">Open source · drop-in on any codebase</div>
             <div className="pcard-links">
               <a className="chip" href="https://github.com/aoaaae-sunattha/QAAgent-CrewAI" target="_blank" rel="noopener noreferrer"><img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub</a>
+              <VideoModalTrigger src="/crew_ai_qa_agent_demo.mp4" label="Demo" />
             </div>
           </div>
         </article></FadeUp>
