@@ -20,7 +20,7 @@ const items = [
   },
   {
     title: 'Flight Deal Finder — Autonomous Price Watch Agent',
-    desc: 'OpenClaw agent that runs on a daily schedule, monitors user-configured flight watches (route, date, budget), and sends proactive Telegram alerts when prices match criteria — no user prompting required. The LLM acts as a travel advisor, reasoning over price trends and giving the user enough context to decide when to book. QA scope covers 20 test cases across scheduling, threshold detection, input validation, API error states, and advisory quality.',
+    desc: 'OpenClaw agent that runs on a daily schedule, monitors user-configured flight watches (route, date, budget), and sends proactive Telegram alerts when prices match criteria — no user prompting required. Gemini acts as the travel advisor, reasoning over price trends and giving the user enough context to decide when to book. QA scope covers 20 test cases across scheduling, threshold detection, input validation, API error states, and advisory quality.',
     tags: ['OpenClaw', 'Claude AI', 'Duffel API', 'Telegram Bot', 'Agent scheduling', 'Node.js'],
     icons: [
       { src: '/openclaw.svg', alt: 'OpenClaw' },
