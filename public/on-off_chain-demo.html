@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>InstantTab — Live Demo</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:       #1e1e1e;
+  --panel:    #252526;
+  --border:   #3e3e42;
+  --text:     #d4d4d4;
+  --dim:      #858585;
+  --green:    #4ec9b0;
+  --blue:     #569cd6;
+  --purple:   #c586c0;
+  --yellow:   #dcdcaa;
+  --orange:   #ce9178;
+  --red:      #f44747;
+  --font:     'Menlo','Monaco','Courier New',monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 48px;
+  gap: 20px;
+}
+
+/* ── Header ─────────────────────────────────── */
+.header { text-align:center; }
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.header h1 span { color: var(--green); }
+.header p {
+  color: var(--dim);
+  font-size: 11px;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Step bar ────────────────────────────────── */
+.stepbar {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  width: 680px;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  position: relative;
+}
+.step-circle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--dim);
+  transition: all 0.4s;
+  background: var(--panel);
+  z-index: 1;
+}
+.step.active .step-circle {
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 12px rgba(78,201,176,0.4);
+}
+.step.done .step-circle {
+  border-color: var(--green);
+  background: var(--green);
+  color: #1e1e1e;
+  font-weight: 700;
+}
+.step-label { font-size: 9px; color: var(--dim); letter-spacing:0.05em; text-align:center; white-space:nowrap; }
+.step.active .step-label { color: var(--green); }
+.step-line {
+  position: absolute;
+  top: 14px; left: 50%; right: -50%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+  transition: background 0.4s;
+}
+.step.done .step-line { background: var(--green); }
+.step:last-child .step-line { display:none; }
+
+/* ── Main layout ─────────────────────────────── */
+.main {
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  gap: 12px;
+  width: 760px;
+}
+
+/* ── Panel cards ─────────────────────────────── */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-body { padding: 12px; }
+
+.badge-on  { background: rgba(86,156,214,0.15); color: var(--blue);   border:1px solid rgba(86,156,214,0.3); padding:2px 7px; border-radius:3px; font-size:9px; }
+.badge-off { background: rgba(78,201,176,0.15); color: var(--green); border:1px solid rgba(78,201,176,0.3); padding:2px 7px; border-radius:3px; font-size:9px; }
+
+/* ── Channel state viz ───────────────────────── */
+.channel-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.channel-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nonce-badge {
+  background: rgba(197,134,192,0.2);
+  color: var(--purple);
+  border: 1px solid rgba(197,134,192,0.3);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  transition: all 0.3s;
+}
+.nonce-badge.flash {
+  background: rgba(197,134,192,0.5);
+  box-shadow: 0 0 8px rgba(197,134,192,0.6);
+}
+
+/* ── Balance bar ─────────────────────────────── */
+.balance-section { padding: 12px; }
+.balance-label { font-size: 9px; color: var(--dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+.balance-bar {
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+.bar-customer {
+  background: var(--blue);
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+  display: flex; align-items:center; justify-content:center;
+  font-size: 9px; color: #1e1e1e; font-weight: 700;
+  overflow: hidden;
+}
+.bar-merchant {
+  background: var(--green);
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+  display: flex; align-items:center; justify-content:center;
+  font-size: 9px; color: #1e1e1e; font-weight: 700;
+  overflow: hidden;
+}
+.balance-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.legend-item { display:flex; align-items:center; gap:4px; font-size:9px; color:var(--dim); }
+.legend-dot { width:6px;height:6px;border-radius:50%; }
+
+/* ── Wallet card ─────────────────────────────── */
+.wallet-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.wallet-row:last-child { border-bottom: none; }
+.wallet-label { color: var(--dim); }
+.wallet-val { color: var(--text); font-weight: 600; transition: color 0.3s; }
+.wallet-val.changed { color: var(--green); }
+.wallet-val.locked { color: var(--orange); }
+.wallet-val.depleted { color: var(--red); }
+
+/* ── Contract state ──────────────────────────── */
+.kv { display:flex; flex-direction:column; gap:4px; }
+.kv-row { display:flex; justify-content:space-between; font-size:10px; }
+.kv-key { color: var(--blue); }
+.kv-val { color: var(--yellow); max-width: 120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.kv-val.highlight { color: var(--green); }
+
+/* ── Log panel ───────────────────────────────── */
+.log-panel {
+  grid-column: 1 / -1;
+}
+.log-body {
+  padding: 10px 14px;
+  min-height: 100px;
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.log-entry {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s, transform 0.3s;
+  font-size: 11px;
+}
+.log-entry.show { opacity:1; transform:translateY(0); }
+.log-time { color: var(--dim); white-space:nowrap; min-width:44px; }
+.log-tag  { padding:1px 6px; border-radius:3px; font-size:9px; text-transform:uppercase; letter-spacing:0.06em; white-space:nowrap; }
+.tag-chain  { background:rgba(86,156,214,0.2);  color:var(--blue); }
+.tag-off    { background:rgba(78,201,176,0.15); color:var(--green); }
+.tag-eip    { background:rgba(197,134,192,0.2); color:var(--purple); }
+.tag-guard  { background:rgba(244,71,71,0.2);   color:var(--red); }
+.tag-done   { background:rgba(78,201,176,0.3);  color:var(--green); font-weight:700; }
+.log-msg { color: var(--text); flex:1; }
+
+/* ── Sig viz ─────────────────────────────────── */
+.sig-row {
+  display:flex; gap:4px; margin:4px 0; font-size:9px;
+}
+.sig-box {
+  padding: 3px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  transition: all 0.3s;
+}
+.sig-box.signed { border-color:var(--green); color:var(--green); background:rgba(78,201,176,0.1); }
+.sig-box.pending { border-color:var(--yellow); color:var(--yellow); background:rgba(220,220,170,0.1); animation: sigpulse 1s ease-in-out infinite; }
+@keyframes sigpulse { 50%{opacity:0.5;} }
+
+/* ── Challenge countdown ─────────────────────── */
+.challenge-bar {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(244,71,71,0.08);
+  border: 1px solid rgba(244,71,71,0.2);
+  border-radius: 6px;
+  display: none;
+}
+.challenge-bar.show { display:block; }
+.challenge-label { font-size:9px; color:var(--red); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:5px; }
+.challenge-track {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  overflow:hidden;
+}
+.challenge-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 3px;
+  width: 100%;
+  transition: width 0.2s linear;
+}
+
+/* ── Controls ────────────────────────────────── */
+.controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  padding: 7px 18px;
+  border-radius: 5px;
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.btn:hover { border-color:var(--green); color:var(--green); }
+.btn.primary {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(78,201,176,0.08);
+}
+.btn.primary:hover { background: rgba(78,201,176,0.18); }
+.btn:disabled { opacity:0.3; cursor:default; }
+
+/* ── Tags strip ──────────────────────────────── */
+.tags { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.tag-pill {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-size:10px;
+  padding:3px 10px;
+  border-radius:4px;
+  letter-spacing:0.04em;
+}
+
+/* scrollbar */
+.log-body::-webkit-scrollbar { width:4px; }
+.log-body::-webkit-scrollbar-track { background:transparent; }
+.log-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+/* flash animation */
+@keyframes flash {
+  0%,100% { opacity:1; }
+  50% { opacity:0.3; }
+}
+.flash-anim { animation: flash 0.4s ease 2; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>Instant<span>Tab</span></h1>
+  <p>State-channel bar tab · Non-custodial · EIP-712 · Ethereum</p>
+</div>
+
+<!-- Step bar -->
+<div class="stepbar" id="stepbar">
+  <div class="step" id="step0">
+    <div class="step-circle">1</div>
+    <div class="step-label">Open Tab</div>
+    <div class="step-line"></div>
+  </div>
+  <div class="step" id="step1">
+    <div class="step-circle">2</div>
+    <div class="step-label">Order Drinks</div>
+    <div class="step-line"></div>
+  </div>
+  <div class="step" id="step2">
+    <div class="step-circle">3</div>
+    <div class="step-label">Close Tab</div>
+    <div class="step-line"></div>
+  </div>
+  <div class="step" id="step3">
+    <div class="step-circle">4</div>
+    <div class="step-label">Challenge Guard</div>
+    <div class="step-line"></div>
+  </div>
+  <div class="step" id="step4">
+    <div class="step-circle">5</div>
+    <div class="step-label">Settle</div>
+    <div class="step-line"></div>
+  </div>
+</div>
+
+<!-- Main grid -->
+<div class="main">
+
+  <!-- LEFT: Customer wallet -->
+  <div class="card">
+    <div class="card-header">
+      <span class="badge-on">ON-CHAIN</span> Customer
+    </div>
+    <div class="card-body">
+      <div class="wallet-row">
+        <span class="wallet-label">Wallet</span>
+        <span class="wallet-val" id="cust-wallet">0.500 ETH</span>
+      </div>
+      <div class="wallet-row">
+        <span class="wallet-label">Locked</span>
+        <span class="wallet-val" id="cust-locked">—</span>
+      </div>
+      <div class="wallet-row">
+        <span class="wallet-label">Drinks</span>
+        <span class="wallet-val" id="cust-drinks">0</span>
+      </div>
+    </div>
+    <div style="padding:0 12px 10px">
+      <div class="sig-row">
+        <div class="sig-box" id="sig-customer">✦ sig customer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: Channel state -->
+  <div style="display:flex;flex-direction:column;gap:12px;">
+
+    <!-- Channel state card -->
+    <div class="channel-card card">
+      <div class="channel-header">
+        <span>ChannelState · EIP-712</span>
+        <span class="nonce-badge" id="nonce-badge">nonce: 0</span>
+      </div>
+      <div class="balance-section">
+        <div class="balance-label">Collateral split (0.100 ETH locked)</div>
+        <div class="balance-bar">
+          <div class="bar-customer" id="bar-customer" style="width:100%">100%</div>
+          <div class="bar-merchant" id="bar-merchant" style="width:0%"></div>
+        </div>
+        <div class="balance-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Customer</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Merchant</div>
+        </div>
+      </div>
+
+      <!-- Challenge bar -->
+      <div class="challenge-bar" id="challenge-bar">
+        <div class="challenge-label">⚑ Challenge window · Watcher monitoring</div>
+        <div class="challenge-track">
+          <div class="challenge-fill" id="challenge-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contract state -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge-on">ON-CHAIN</span> TabChannel.sol
+      </div>
+      <div class="card-body kv" id="contract-kv">
+        <div class="kv-row"><span class="kv-key">status</span><span class="kv-val" id="kv-status">—</span></div>
+        <div class="kv-row"><span class="kv-key">channelId</span><span class="kv-val" id="kv-channel">—</span></div>
+        <div class="kv-row"><span class="kv-key">openingBalance</span><span class="kv-val" id="kv-balance">—</span></div>
+        <div class="kv-row"><span class="kv-key">currentNonce</span><span class="kv-val" id="kv-nonce">0</span></div>
+        <div class="kv-row"><span class="kv-key">expiry</span><span class="kv-val" id="kv-expiry">—</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: Merchant / Backend -->
+  <div class="card">
+    <div class="card-header">
+      <span class="badge-off">OFF-CHAIN</span> Merchant
+    </div>
+    <div class="card-body">
+      <div class="wallet-row">
+        <span class="wallet-label">Earned</span>
+        <span class="wallet-val" id="merch-earned">0.000 ETH</span>
+      </div>
+      <div class="wallet-row">
+        <span class="wallet-label">DB States</span>
+        <span class="wallet-val" id="merch-states">0</span>
+      </div>
+      <div class="wallet-row">
+        <span class="wallet-label">Watcher</span>
+        <span class="wallet-val" id="merch-watcher">idle</span>
+      </div>
+    </div>
+    <div style="padding:0 12px 10px">
+      <div class="sig-row">
+        <div class="sig-box" id="sig-merchant">✦ sig merchant</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom log -->
+  <div class="card log-panel">
+    <div class="card-header">
+      <span class="badge-off">LOG</span> Event stream
+    </div>
+    <div class="log-body" id="log-body"></div>
+  </div>
+
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="btn primary" id="btn-next" onclick="nextStep()">▶ Start</button>
+  <button class="btn" onclick="restart()">↺ Restart</button>
+</div>
+
+<!-- Tags -->
+<div class="tags">
+  <span class="tag-pill">Solidity ^0.8.20</span>
+  <span class="tag-pill">State Channels</span>
+  <span class="tag-pill">EIP-712</span>
+  <span class="tag-pill">UUPS Proxy</span>
+  <span class="tag-pill">Chainlink Oracle</span>
+  <span class="tag-pill">ReentrancyGuard</span>
+  <span class="tag-pill">Hardhat v2</span>
+  <span class="tag-pill">ethers.js v6</span>
+</div>
+
+<!-- ── Explainer section ──────────────────────────── -->
+<div class="explainer" id="explainer">
+
+  <div class="exp-toggle" onclick="toggleExplainer()">
+    <span id="exp-toggle-label">📖 What is this? — Explain like I'm 5</span>
+    <span id="exp-arrow">▼</span>
+  </div>
+
+  <div class="exp-body" id="exp-body">
+
+    <div class="exp-grid">
+
+      <!-- Problem -->
+      <div class="exp-card">
+        <div class="exp-icon">😩</div>
+        <div class="exp-title">The Problem</div>
+        <div class="exp-text">
+          Paying on Ethereum normally costs a <b>gas fee every single transaction</b>. If you bought 4 drinks at a bar, that's 4 separate fees — slow, expensive, and annoying.
+          <br><br>
+          Credit cards charge the venue <b>2.5–3% per transaction</b>, and customers can chargeback after the fact — leaving the bar unpaid.
+        </div>
+      </div>
+
+      <!-- Big idea -->
+      <div class="exp-card">
+        <div class="exp-icon">💡</div>
+        <div class="exp-title">The Big Idea — State Channels</div>
+        <div class="exp-text">
+          Imagine you open a tab at a bar. Instead of paying per drink, you <b>leave your card behind the bar</b> as a deposit. Every drink just updates a running total — no fee, instant.
+          <br><br>
+          At the end of the night, only <b>one final payment</b> actually happens. That's exactly what InstantTab does, but on Ethereum — trustlessly.
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="exp-card exp-card-wide">
+        <div class="exp-icon">⚙️</div>
+        <div class="exp-title">How It Works — Step by Step</div>
+        <div class="exp-steps">
+          <div class="exp-step">
+            <div class="exp-step-num on-chain-badge">ON-CHAIN</div>
+            <div class="exp-step-text"><b>1. Lock collateral.</b> Customer sends ETH to a smart contract — like leaving cash with the bartender. No one can take it without your signature.</div>
+          </div>
+          <div class="exp-step">
+            <div class="exp-step-num off-chain-badge">OFF-CHAIN</div>
+            <div class="exp-step-text"><b>2. Order drinks freely.</b> Every drink creates a tiny signed message (EIP-712) — like a digitally signed IOU. Both customer and merchant sign it. Zero gas, instant, stored in the backend database.</div>
+          </div>
+          <div class="exp-step">
+            <div class="exp-step-num on-chain-badge">ON-CHAIN</div>
+            <div class="exp-step-text"><b>3. Close the tab.</b> Merchant submits the final signed message to the blockchain. The contract checks both signatures are valid and the nonce is correct.</div>
+          </div>
+          <div class="exp-step">
+            <div class="exp-step-num guard-badge">GUARD</div>
+            <div class="exp-step-text"><b>4. Challenge window (10 min).</b> A backend watcher monitors for fraud — e.g. if the merchant tries to submit an old state with a smaller total. If caught, the merchant gets 100% slashed.</div>
+          </div>
+          <div class="exp-step">
+            <div class="exp-step-num on-chain-badge">ON-CHAIN</div>
+            <div class="exp-step-text"><b>5. Settle.</b> After the window, anyone calls <code>withdraw()</code>. Merchant gets what they earned. Customer gets unused collateral back. Protocol takes a tiny fee.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key concepts -->
+      <div class="exp-card">
+        <div class="exp-icon">🔑</div>
+        <div class="exp-title">Key Concepts</div>
+        <div class="exp-concepts">
+          <div class="concept-row">
+            <span class="concept-term">EIP-712</span>
+            <span class="concept-def">A standard way to sign structured data on Ethereum. Makes signatures human-readable and tamper-proof.</span>
+          </div>
+          <div class="concept-row">
+            <span class="concept-term">Nonce</span>
+            <span class="concept-def">A counter that only goes up. Prevents anyone from replaying an old message as if it were the latest.</span>
+          </div>
+          <div class="concept-row">
+            <span class="concept-term">State Channel</span>
+            <span class="concept-def">Two parties exchange signed messages off-chain, and only settle the final result on-chain. Like keeping score on paper and only paying at the end of the game.</span>
+          </div>
+          <div class="concept-row">
+            <span class="concept-term">Challenge Guard</span>
+            <span class="concept-def">A robot (backend watcher) that watches the blockchain. If the merchant cheats by submitting an old score, the watcher submits proof and the cheater loses everything.</span>
+          </div>
+          <div class="concept-row">
+            <span class="concept-term">UUPS Proxy</span>
+            <span class="concept-def">The smart contract can be upgraded safely. A 48-hour timelock means no surprise changes — users always have time to exit first.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="exp-card">
+        <div class="exp-icon">🏆</div>
+        <div class="exp-title">The Result</div>
+        <div class="exp-text">
+          <div class="result-row"><span class="result-check">✔</span> <b>0 gas fees</b> per drink — only 2 on-chain transactions total per session</div>
+          <div class="result-row"><span class="result-check">✔</span> <b>Zero walkouts</b> — collateral is pre-locked, merchant always gets paid</div>
+          <div class="result-row"><span class="result-check">✔</span> <b>No chargebacks</b> — both parties signed every state</div>
+          <div class="result-row"><span class="result-check">✔</span> <b>Self-custody</b> — the smart contract holds the funds, not a company</div>
+          <div class="result-row"><span class="result-check">✔</span> <b>Fraud-proof</b> — challenge window punishes any attempt to cheat</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.explainer {
+  width: 760px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.exp-toggle {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--dim);
+  user-select: none;
+  transition: color 0.2s;
+  border-bottom: 1px solid transparent;
+}
+.exp-toggle:hover { color: var(--text); }
+.exp-body-open .exp-toggle { border-bottom-color: var(--border); }
+#exp-arrow { transition: transform 0.3s; font-size: 10px; }
+.exp-body {
+  display: none;
+  padding: 20px;
+}
+.exp-body.open { display: block; }
+
+.exp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.exp-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.exp-card-wide { grid-column: 1 / -1; }
+
+.exp-icon { font-size: 20px; margin-bottom: 8px; }
+.exp-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+}
+.exp-text {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.7;
+}
+.exp-text b { color: var(--text); }
+.exp-text code {
+  background: rgba(255,255,255,0.06);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--yellow);
+  font-size: 10px;
+}
+
+/* Steps */
+.exp-steps { display: flex; flex-direction: column; gap: 10px; }
+.exp-step { display: flex; gap: 10px; align-items: flex-start; }
+.exp-step-num {
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.on-chain-badge  { background:rgba(86,156,214,0.2);  color:var(--blue); border:1px solid rgba(86,156,214,0.3); }
+.off-chain-badge { background:rgba(78,201,176,0.15); color:var(--green); border:1px solid rgba(78,201,176,0.3); }
+.guard-badge     { background:rgba(244,71,71,0.15);  color:var(--red); border:1px solid rgba(244,71,71,0.3); }
+.exp-step-text { font-size: 11px; color: var(--dim); line-height: 1.65; }
+.exp-step-text b { color: var(--text); }
+.exp-step-text code { background:rgba(255,255,255,0.06); padding:1px 5px; border-radius:3px; color:var(--yellow); font-size:10px; }
+
+/* Concepts */
+.exp-concepts { display: flex; flex-direction: column; gap: 8px; }
+.concept-row { display: flex; gap: 10px; align-items: flex-start; }
+.concept-term {
+  min-width: 100px;
+  color: var(--purple);
+  font-size: 10px;
+  font-weight: 700;
+  padding-top: 1px;
+}
+.concept-def { font-size: 10px; color: var(--dim); line-height: 1.6; }
+
+/* Result */
+.result-row { display:flex; gap:8px; align-items:flex-start; margin-bottom:7px; font-size:11px; color:var(--dim); }
+.result-row b { color: var(--text); }
+.result-check { color: var(--green); font-weight:700; }
+</style>
+
+<script>
+function toggleExplainer() {
+  const body = document.getElementById("exp-body");
+  const arrow = document.getElementById("exp-arrow");
+  const explainer = document.getElementById("explainer");
+  const isOpen = body.classList.toggle("open");
+  arrow.style.transform = isOpen ? "rotate(180deg)" : "rotate(0deg)";
+  explainer.classList.toggle("exp-body-open", isOpen);
+}
+</script>
+
+<script>
+// ── State ───────────────────────────────────────
+let currentStep = -1;
+let challengeTimer = null;
+const TOTAL_DRINKS = 4;
+const PRICE = 0.020; // ETH per drink
+const OPEN_AMOUNT = 0.100;
+
+const DRINKS = [
+  "IPA Draft",
+  "Whisky Sour",
+  "Gin & Tonic",
+  "Craft Lager",
+];
+
+const DRINK_EMOJIS = ["🍺","🥃","🍸","🍺"];
+
+// ── Step definitions ────────────────────────────
+const STEPS = [
+  { label:"Open Tab",        fn: doOpenTab },
+  { label:"Order Drinks",    fn: doDrinks },
+  { label:"Close Tab",       fn: doCloseTab },
+  { label:"Challenge Guard", fn: doChallenge },
+  { label:"Settle",          fn: doSettle },
+];
+
+// ── Log helper ──────────────────────────────────
+let logTime = 0;
+
+function addLog(tag, tagClass, msg, delay=0) {
+  logTime += delay;
+  setTimeout(()=>{
+    const body = document.getElementById("log-body");
+    const t = new Date();
+    const ts = t.toTimeString().slice(0,8);
+    const el = document.createElement("div");
+    el.className = "log-entry";
+    el.innerHTML = `<span class="log-time">${ts}</span><span class="log-tag ${tagClass}">${tag}</span><span class="log-msg">${msg}</span>`;
+    body.appendChild(el);
+    requestAnimationFrame(()=>{ el.classList.add("show"); body.scrollTop = body.scrollHeight; });
+  }, logTime);
+}
+
+// ── Nonce / balance updaters ────────────────────
+function setNonce(n, animate=true) {
+  const nb = document.getElementById("nonce-badge");
+  document.getElementById("kv-nonce").textContent = n;
+  nb.textContent = `nonce: ${n}`;
+  if(animate) { nb.classList.add("flash"); setTimeout(()=>nb.classList.remove("flash"),600); }
+}
+
+function setBalance(custPct, delay=0) {
+  setTimeout(()=>{
+    const merPct = 100 - custPct;
+    const bc = document.getElementById("bar-customer");
+    const bm = document.getElementById("bar-merchant");
+    bc.style.width = custPct + "%";
+    bm.style.width = merPct + "%";
+    bc.textContent = custPct > 8 ? custPct + "%" : "";
+    bm.textContent = merPct > 8 ? merPct + "%" : "";
+  }, delay);
+}
+
+function setSig(who, state) {
+  const el = document.getElementById("sig-"+who);
+  el.className = "sig-box";
+  if(state==="pending") el.classList.add("pending");
+  if(state==="signed")  el.classList.add("signed");
+  el.textContent = state==="signed" ? "✔ sig "+who : state==="pending" ? "… signing" : "✦ sig "+who;
+}
+
+function setStep(n) {
+  document.querySelectorAll(".step").forEach((el,i)=>{
+    el.classList.remove("active","done");
+    if(i < n) el.classList.add("done"), el.querySelector(".step-circle").textContent = "✓";
+    else if(i===n) el.classList.add("active");
+    else el.querySelector(".step-circle").textContent = i+1;
+  });
+}
+
+function setWatcherStatus(s, color) {
+  const el = document.getElementById("merch-watcher");
+  el.textContent = s;
+  el.style.color = color || "var(--text)";
+}
+
+// ── Step 0: openTab ─────────────────────────────
+function doOpenTab() {
+  logTime = 0;
+  setStep(0);
+  document.getElementById("btn-next").disabled = true;
+
+  addLog("ON-CHAIN", "tag-chain", "Customer calls <b>openTab()</b> with 0.100 ETH collateral", 200);
+  addLog("ON-CHAIN", "tag-chain", `Tx mined · channelId = <b>keccak256(customer ‖ merchant ‖ ts)</b>`, 700);
+
+  setTimeout(()=>{
+    document.getElementById("cust-wallet").textContent = "0.400 ETH";
+    document.getElementById("cust-wallet").classList.add("changed");
+    document.getElementById("cust-locked").textContent = "0.100 ETH";
+    document.getElementById("cust-locked").classList.add("locked");
+    document.getElementById("kv-status").textContent = "Open";
+    document.getElementById("kv-status").classList.add("highlight");
+    document.getElementById("kv-channel").textContent = "0x3f7a…c91e";
+    document.getElementById("kv-balance").textContent = "0.100 ETH";
+    document.getElementById("kv-expiry").textContent = "+24 hours";
+    setTimeout(()=>document.getElementById("cust-wallet").classList.remove("changed"),700);
+  }, 900);
+
+  addLog("ON-CHAIN", "tag-chain", "Event <b>TabOpened</b> emitted · collateral locked in contract", 1200);
+  addLog("OFF-CHAIN","tag-off",   "Backend stores channel row · status = open", 1700);
+
+  setTimeout(()=>{
+    document.getElementById("btn-next").disabled = false;
+    document.getElementById("btn-next").textContent = "▶ Order Drinks";
+  }, 2000);
+}
+
+// ── Step 1: drinks ─────────────────────────────
+function doDrinks() {
+  logTime = 0;
+  setStep(1);
+  document.getElementById("btn-next").disabled = true;
+
+  let drinkDelay = 0;
+  let totalSpent = 0;
+
+  for(let i=0; i<TOTAL_DRINKS; i++){
+    const nonce = i+1;
+    const custBal = OPEN_AMOUNT - (nonce * PRICE);
+    const merBal  = nonce * PRICE;
+    const custPct = Math.round((custBal / OPEN_AMOUNT)*100);
+    const d = DRINKS[i];
+    const e = DRINK_EMOJIS[i];
+
+    drinkDelay += 400;
+    const dd = drinkDelay;
+
+    setTimeout(()=>{
+      setSig("customer","pending");
+      setSig("merchant","none");
+    }, dd);
+
+    addLog("EIP-712","tag-eip", `${e} <b>${d}</b> · Customer signs ChannelState{nonce:${nonce}, custBal:${custBal.toFixed(3)}, merBal:${merBal.toFixed(3)}}`, dd + 200);
+
+    setTimeout(()=>{ setSig("customer","signed"); setSig("merchant","pending"); }, dd+600);
+
+    addLog("EIP-712","tag-eip", `Co-signed by merchant · state stored to DB (channel_states nonce=${nonce})`, dd + 700);
+
+    setTimeout(()=>{
+      setSig("merchant","signed");
+      setNonce(nonce);
+      setBalance(custPct, 0);
+      document.getElementById("merch-earned").textContent = merBal.toFixed(3)+" ETH";
+      document.getElementById("merch-states").textContent = nonce;
+      totalSpent = merBal;
+    }, dd+1000);
+
+    drinkDelay += 600;
+  }
+
+  const finalDelay = drinkDelay + 400;
+
+  setTimeout(()=>{
+    setSig("customer","none");
+    setSig("merchant","none");
+    document.getElementById("btn-next").disabled = false;
+    document.getElementById("btn-next").textContent = "▶ Close Tab";
+  }, finalDelay);
+}
+
+// ── Step 2: closeTab ────────────────────────────
+function doCloseTab() {
+  logTime = 0;
+  setStep(2);
+  document.getElementById("btn-next").disabled = true;
+
+  addLog("ON-CHAIN","tag-chain","Merchant calls <b>closeTab()</b> with final ChannelState (nonce:4)", 300);
+  addLog("ON-CHAIN","tag-chain","Contract validates both EIP-712 signatures · nonce > currentNonce ✔", 900);
+
+  setTimeout(()=>{
+    document.getElementById("kv-status").textContent = "Closing";
+    document.getElementById("kv-status").style.color = "var(--yellow)";
+    document.getElementById("kv-nonce").textContent = "4";
+  }, 1100);
+
+  addLog("ON-CHAIN","tag-chain","Event <b>TabClosed</b> emitted · 10-min challenge window begins", 1300);
+  addLog("OFF-CHAIN","tag-off", "Backend detects TabClosed event · watcher armed", 1800);
+
+  setTimeout(()=>{
+    document.getElementById("challenge-bar").classList.add("show");
+    setWatcherStatus("armed 🛡", "var(--red)");
+    startChallengeBar(8000);
+  }, 2000);
+
+  setTimeout(()=>{
+    document.getElementById("btn-next").disabled = false;
+    document.getElementById("btn-next").textContent = "▶ Challenge Guard";
+  }, 2200);
+}
+
+// ── Step 3: challenge guard ─────────────────────
+function doChallenge() {
+  logTime = 0;
+  setStep(3);
+  document.getElementById("btn-next").disabled = true;
+
+  addLog("GUARD","tag-guard","Watcher scans submitted nonce (4) vs stored nonce (4) — <b>match ✔</b>", 400);
+  addLog("GUARD","tag-guard","No fraud detected · challenge not required", 900);
+
+  setTimeout(()=>{ setWatcherStatus("clear ✔", "var(--green)"); }, 1100);
+
+  addLog("OFF-CHAIN","tag-off","Challenge window expires · <b>withdraw()</b> now callable", 2000);
+
+  setTimeout(()=>{
+    stopChallengeBar();
+    document.getElementById("challenge-bar").classList.remove("show");
+    document.getElementById("btn-next").disabled = false;
+    document.getElementById("btn-next").textContent = "▶ Settle";
+  }, 2500);
+}
+
+// ── Step 4: settle ──────────────────────────────
+function doSettle() {
+  logTime = 0;
+  setStep(4);
+  document.getElementById("btn-next").disabled = true;
+
+  addLog("ON-CHAIN","tag-chain","<b>withdraw()</b> called · distributing funds from contract", 400);
+
+  const merBal = TOTAL_DRINKS * PRICE;
+  const custBal = OPEN_AMOUNT - merBal;
+  const fee = merBal * 0.003; // 30bps
+  const merNet = merBal - fee;
+
+  addLog("ON-CHAIN","tag-chain",`Merchant receives <b>${merNet.toFixed(4)} ETH</b> · Protocol fee: ${fee.toFixed(5)} ETH`, 1000);
+  addLog("ON-CHAIN","tag-chain",`Customer receives <b>${custBal.toFixed(3)} ETH</b> collateral back`, 1500);
+
+  setTimeout(()=>{
+    document.getElementById("kv-status").textContent = "Closed";
+    document.getElementById("kv-status").style.color = "var(--green)";
+    document.getElementById("cust-locked").textContent = "—";
+    document.getElementById("cust-locked").className = "wallet-val";
+    document.getElementById("cust-wallet").textContent = (0.400 + custBal).toFixed(3) + " ETH";
+    document.getElementById("cust-wallet").classList.add("changed");
+    document.getElementById("cust-drinks").textContent = TOTAL_DRINKS;
+    document.getElementById("merch-earned").textContent = merNet.toFixed(4)+" ETH";
+    document.getElementById("merch-earned").classList.add("changed");
+    setWatcherStatus("idle", "var(--dim)");
+    setTimeout(()=>{
+      document.getElementById("cust-wallet").classList.remove("changed");
+      document.getElementById("merch-earned").classList.remove("changed");
+    }, 800);
+  }, 1700);
+
+  addLog("ON-CHAIN","tag-chain","Event <b>FundsDistributed</b> emitted · channel closed", 2000);
+
+  setTimeout(()=>{
+    const body = document.getElementById("log-body");
+    const el = document.createElement("div");
+    el.className = "log-entry";
+    el.innerHTML = `<span class="log-time">${new Date().toTimeString().slice(0,8)}</span><span class="log-tag tag-done">DONE</span><span class="log-msg">✔ Tab settled — 0 gas per drink · 2 on-chain txs total</span>`;
+    body.appendChild(el);
+    setTimeout(()=>{ el.classList.add("show"); body.scrollTop=body.scrollHeight; },50);
+  }, logTime + 2400);
+
+  // mark all steps done
+  setTimeout(()=>{
+    document.querySelectorAll(".step").forEach(el=>{
+      el.classList.remove("active");
+      el.classList.add("done");
+      el.querySelector(".step-circle").textContent = "✓";
+    });
+    document.getElementById("btn-next").textContent = "✔ Complete";
+    document.getElementById("btn-next").disabled = true;
+  }, logTime + 2800);
+}
+
+// ── Challenge bar animation ─────────────────────
+let challengeStart = 0;
+let challengeDuration = 8000;
+let challengeRaf = null;
+
+function startChallengeBar(duration) {
+  challengeDuration = duration;
+  challengeStart = performance.now();
+  function tick(now) {
+    const pct = Math.max(0, 1 - (now-challengeStart)/challengeDuration);
+    document.getElementById("challenge-fill").style.width = (pct*100)+"%";
+    if(pct > 0) challengeRaf = requestAnimationFrame(tick);
+  }
+  challengeRaf = requestAnimationFrame(tick);
+}
+
+function stopChallengeBar() {
+  if(challengeRaf) cancelAnimationFrame(challengeRaf);
+  document.getElementById("challenge-fill").style.width = "0%";
+}
+
+// ── Controls ────────────────────────────────────
+function nextStep() {
+  currentStep++;
+  if(currentStep < STEPS.length) {
+    STEPS[currentStep].fn();
+  }
+}
+
+function restart() {
+  currentStep = -1;
+  logTime = 0;
+  stopChallengeBar();
+
+  // Reset UI
+  document.getElementById("log-body").innerHTML = "";
+  document.getElementById("cust-wallet").textContent = "0.500 ETH";
+  document.getElementById("cust-wallet").className = "wallet-val";
+  document.getElementById("cust-locked").textContent = "—";
+  document.getElementById("cust-locked").className = "wallet-val";
+  document.getElementById("cust-drinks").textContent = "0";
+  document.getElementById("merch-earned").textContent = "0.000 ETH";
+  document.getElementById("merch-earned").className = "wallet-val";
+  document.getElementById("merch-states").textContent = "0";
+  document.getElementById("merch-watcher").textContent = "idle";
+  document.getElementById("merch-watcher").style.color = "";
+  document.getElementById("kv-status").textContent = "—";
+  document.getElementById("kv-status").className = "kv-val";
+  document.getElementById("kv-channel").textContent = "—";
+  document.getElementById("kv-balance").textContent = "—";
+  document.getElementById("kv-nonce").textContent = "0";
+  document.getElementById("kv-expiry").textContent = "—";
+  document.getElementById("nonce-badge").textContent = "nonce: 0";
+  setBalance(100);
+  setSig("customer","none");
+  setSig("merchant","none");
+  document.getElementById("challenge-bar").classList.remove("show");
+
+  document.querySelectorAll(".step").forEach((el,i)=>{
+    el.classList.remove("active","done");
+    el.querySelector(".step-circle").textContent = i+1;
+  });
+
+  const btn = document.getElementById("btn-next");
+  btn.disabled = false;
+  btn.textContent = "▶ Start";
+}
+</script>
+</body>
+</html>
