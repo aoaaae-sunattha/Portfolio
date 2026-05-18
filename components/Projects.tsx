@@ -145,8 +145,8 @@ export default function Projects() {
             <div className="pcol">
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
-                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="agentic decision-making · function calling · production" />
-                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Flash" forText="admin NL → action resolver" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini" forText="agentic decision-making · function calling · production" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini" forText="admin NL → action resolver" />
                 <AiEntry img="https://svgl.app/library/claude-ai-icon.svg" name="Claude" forText="build · test plan · golden dataset" />
                 <AiEntry img="https://svgl.app/library/telegram.svg" name="Telegram + Duffel" forText="runtime · live flight inventory" />
               </div>
@@ -268,7 +268,7 @@ export default function Projects() {
               <div className="pcol-lbl"><Cpu size={14} /> AI Stack</div>
               <div className="ai-list">
                 <AiEntry img="/crewai.svg" name="CrewAI" forText="multi-agent · both pipelines" />
-                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini 2.5 Pro" forText="primary model · all 6 agents" />
+                <AiEntry img="https://svgl.app/library/gemini.svg" name="Gemini" forText="primary model · all 6 agents" />
                 <AiEntry icon={<Plug size={14} />} name="GitHub REST API" forText="PR diff · file context · optional GITHUB_TOKEN" />
                 <AiEntry img="https://svgl.app/library/python.svg" name="Python + Playwright" forText="generated spec runtime" />
               </div>

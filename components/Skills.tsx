@@ -17,7 +17,7 @@ const columns = [
     title: 'AI · Models',
     items: [
       { text: 'Claude', bold: true, suffix: '— orchestrator' },
-      { text: 'Gemini 2.5', bold: true, suffix: '— Pro & Flash' },
+      { text: 'Gemini', bold: true, suffix: '— code gen · inference' },
       { text: 'Codex — scaffolding · schema gen' },
       { text: 'Hermes — open-weight eval' },
       { text: 'Perplexity', bold: true, suffix: '— research · docs' },

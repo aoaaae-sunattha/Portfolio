@@ -18,7 +18,7 @@ const tools = [
     uses: 'app planning · QA pipeline · skill execution · code generation',
   },
   {
-    phase: 'Runtime + Eval', img: 'https://svgl.app/library/gemini.svg', name: 'Gemini 2.5', role: 'Production Model',
+    phase: 'Runtime + Eval', img: 'https://svgl.app/library/gemini.svg', name: 'Gemini', role: 'Production Model',
     desc: "Used two ways: as a code generation partner to help Claude build faster, and as the LLM backend via Google API key for production inference inside shipped products.",
     uses: 'code generation · Google API · production inference · cross-model eval',
   },

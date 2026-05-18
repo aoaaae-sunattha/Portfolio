@@ -241,8 +241,8 @@ export default function QAForge({ svgs }: Props) {
               ))}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-              {['CrewAI', 'Gemini 2.5 Pro', 'Playwright (generated)', 'Python', 'GitHub PR diff'].map((t) => (
-                <span key={t} className={t === 'CrewAI' || t === 'Gemini 2.5 Pro' ? 'tag-ai' : t.includes('Playwright') ? 'tag-qa' : 'tag-tech'}>{t}</span>
+              {['CrewAI', 'Gemini', 'Playwright (generated)', 'Python', 'GitHub PR diff'].map((t) => (
+                <span key={t} className={t === 'CrewAI' || t === 'Gemini' ? 'tag-ai' : t.includes('Playwright') ? 'tag-qa' : 'tag-tech'}>{t}</span>
               ))}
             </div>
             <div className="demo-slot">▶ Demo clip placeholder</div>

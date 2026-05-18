@@ -7,7 +7,7 @@ const items = [
   {
     title: 'AEON Lite — Crypto signal & self-learning forecast system',
     desc: 'Hermes-orchestrated agent that runs twice daily, fetching technical indicators (RSI, EMA, ATR via CCXT/Binance) and macro sentiment (Tavily + Fear & Greed Index) to produce LONG/SHORT/HOLD signals with confidence scores for BTC, ETH, and XRP. A Claude-powered Trader Agent generates the forecast; a QA Auditor evaluates outcomes against real prices and writes lessons back into Obsidian. Each new cycle reads prior lessons before deciding — a self-correcting feedback loop.',
-    tags: ['Hermes', 'Node.js', 'Claude', 'Gemini 2.5 Flash', 'Binance API', 'Obsidian', 'Self-audit'],
+    tags: ['Hermes', 'Node.js', 'Claude', 'Gemini', 'Binance API', 'Obsidian', 'Self-audit'],
     icons: [
       { src: '/hermes.svg', alt: 'Hermes' },
       { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
