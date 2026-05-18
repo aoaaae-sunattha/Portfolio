@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { FadeUp } from './Animate'
 import { VideoModalTrigger } from '@/components/VideoModal'
+import { IframeModalTrigger } from '@/components/IframeModal'
 
 const items = [
   {
@@ -25,6 +26,7 @@ const items = [
       { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
       { src: 'https://svgl.app/library/telegram.svg', alt: 'Telegram' },
     ],
+    iframe: '/FlightTracker_demo.html',
   },
   {
     title: 'Prompt Compiler — Modular LLM prompt builder',
@@ -110,6 +112,7 @@ export default function Lab() {
                         <img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub
                       </a>
                     )}
+                    {item.iframe && <IframeModalTrigger src={item.iframe} label="Demo" />}
                     {item.video && <VideoModalTrigger src={item.video} label="Demo" />}
                   </div>
                 </div>
