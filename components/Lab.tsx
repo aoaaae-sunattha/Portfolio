@@ -13,6 +13,7 @@ const items = [
       { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
       { src: 'https://svgl.app/library/gemini.svg', alt: 'Gemini' },
       { src: '/obsidian.png', alt: 'Obsidian' },
+      { src: '/node-js.png', alt: 'Node.js', size: 44 },
     ],
   },
   {
