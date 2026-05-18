@@ -25,7 +25,9 @@ const items = [
     icons: [
       { src: '/openclaw.svg', alt: 'OpenClaw' },
       { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
+      { src: 'https://svgl.app/library/gemini.svg', alt: 'Gemini' },
       { src: 'https://svgl.app/library/telegram.svg', alt: 'Telegram' },
+      { src: '/node-js.png', alt: 'Node.js', size: 44 },
     ],
     iframe: '/FlightTracker_demo.html',
   },
