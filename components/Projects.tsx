@@ -302,7 +302,6 @@ export default function Projects() {
                 <li>Treat upstream APIs as untrusted — fields disappear, types flip.</li>
                 <li>Production-environment exposure on every CI run.</li>
               </ul>
-              <TpExchangesShots />
             </div>
             <div className="pcol">
               <div className="pcol-lbl"><Microscope size={14} /> Analyze</div>
@@ -331,6 +330,7 @@ export default function Projects() {
               </div>
             </div>
           </div>
+          <TpExchangesShots />
           <div className="pcard-foot">
             <div className="pcard-note">Production system · 20–30 backends validated on every push</div>
             <div className="pcard-links">

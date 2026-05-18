@@ -1,22 +1,44 @@
 'use client'
 import { useRef, useState, useEffect } from 'react'
 import { FadeUp } from './Animate'
+import { VideoModalTrigger } from '@/components/VideoModal'
 
 const items = [
   {
     title: 'AEON Lite — Crypto signal & self-learning forecast system',
     desc: 'Hermes-orchestrated agent that runs twice daily, fetching technical indicators (RSI, EMA, ATR via CCXT/Binance) and macro sentiment (Tavily + Fear & Greed Index) to produce LONG/SHORT/HOLD signals with confidence scores for BTC, ETH, and XRP. A Claude-powered Trader Agent generates the forecast; a QA Auditor evaluates outcomes against real prices and writes lessons back into Obsidian. Each new cycle reads prior lessons before deciding — a self-correcting feedback loop.',
     tags: ['Hermes', 'Node.js', 'Claude', 'Gemini 2.5 Flash', 'Binance API', 'Obsidian', 'Self-audit'],
+    icons: [
+      { src: '/hermes.svg', alt: 'Hermes' },
+      { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
+      { src: 'https://svgl.app/library/gemini.svg', alt: 'Gemini' },
+      { src: '/obsidian.png', alt: 'Obsidian' },
+    ],
   },
   {
     title: 'Flight Deal Finder — Autonomous Price Watch Agent',
     desc: 'OpenClaw agent that runs on a daily schedule, monitors user-configured flight watches (route, date, budget), and sends proactive Telegram alerts when prices match criteria — no user prompting required. The LLM acts as a travel advisor, reasoning over price trends and giving the user enough context to decide when to book. QA scope covers 20 test cases across scheduling, threshold detection, input validation, API error states, and advisory quality.',
     tags: ['OpenClaw', 'Claude AI', 'Duffel API', 'Telegram Bot', 'Agent scheduling', 'Node.js'],
+    icons: [
+      { src: '/openclaw.svg', alt: 'OpenClaw' },
+      { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
+      { src: 'https://svgl.app/library/telegram.svg', alt: 'Telegram' },
+    ],
   },
   {
     title: 'Prompt Compiler — Modular LLM prompt builder',
     desc: 'Takes structured input via a wizard or CLI flags, runs it through a validation and enrichment pipeline, and compiles a finished system prompt in the native format of the chosen LLM target. Supports Claude, Gemini, Codex, AI Agent, and QA-oriented Project CT — no API calls, compile-time only.',
+    desc2: 'Most teams write one generic prompt and reuse it across Claude, Gemini, Codex, and agents — and get mediocre results. Prompt Compiler solves this by compiling a single input into the native format each LLM actually responds best to.',
+    stat: '5 targets  ·  7 roles  ·  2 input modes  ·  compile-time only',
     tags: ['Node.js ESM', 'Prompt eng', 'CLI', 'Multi-target'],
+    video: '/prompt_Complier.mp4',
+    github: 'https://github.com/aoaaae-sunattha/prompt-compiler',
+    icons: [
+      { src: 'https://svgl.app/library/claude-ai-icon.svg', alt: 'Claude' },
+      { src: 'https://svgl.app/library/gemini.svg', alt: 'Gemini' },
+      { src: '/codex.svg', alt: 'Codex' },
+      { src: '/node-js.png', alt: 'Node.js', size: 44 },
+    ],
   },
 ]
 
@@ -70,8 +92,25 @@ export default function Lab() {
               <div className="lab-item">
                 <h4>{item.title}</h4>
                 <p>{item.desc}</p>
+                {item.desc2 && <p>{item.desc2}</p>}
+                {item.stat && <p className="lab-stat">{item.stat}</p>}
                 <div className="lab-tags">
                   {item.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                </div>
+                <div className="lab-item-foot">
+                  <div className="lab-stack-icons">
+                    {item.icons?.map((ic) => (
+                      <img key={ic.alt} src={ic.src} alt={ic.alt} className="lab-stack-icon" style={ic.size ? { width: ic.size, height: ic.size } : undefined} />
+                    ))}
+                  </div>
+                  <div className="lab-foot-btns">
+                    {item.github && (
+                      <a className="chip" href={item.github} target="_blank" rel="noopener noreferrer">
+                        <img src="/github.svg" alt="GitHub" className="icon-mono" style={{ width: 14, height: 14 }} /> GitHub
+                      </a>
+                    )}
+                    {item.video && <VideoModalTrigger src={item.video} label="Demo" />}
+                  </div>
                 </div>
               </div>
             </div>

@@ -18,8 +18,9 @@ const columns = [
     items: [
       { text: 'Claude', bold: true, suffix: '— orchestrator' },
       { text: 'Gemini 2.5', bold: true, suffix: '— Pro & Flash' },
-      { text: 'Codex — code reading' },
+      { text: 'Codex — scaffolding · schema gen' },
       { text: 'Hermes — open-weight eval' },
+      { text: 'Perplexity', bold: true, suffix: '— research · docs' },
       { text: 'Prompt engineering' },
       { text: 'Intent classification' },
       { text: 'Cross-model evaluation' },
@@ -29,7 +30,8 @@ const columns = [
     title: 'Agentic · Orchestration',
     items: [
       { text: 'CrewAI', bold: true, suffix: '— multi-agent' },
-      { text: 'OpenCrew — light agents' },
+      { text: 'OpenClaw — light agents' },
+      { text: 'Agentic function calling' },
       { text: 'MCP', bold: true, suffix: '— tool bridge' },
       { text: 'Skill manifests · Claude' },
       { text: 'Self-auditing loops' },
@@ -64,6 +66,7 @@ const columns = [
       { text: 'Given/When/Then ACs' },
       { text: 'SHIP/HOLD verdict format' },
       { text: 'Notion · PM/BA artifacts' },
+      { text: 'Obsidian — knowledge base' },
       { text: 'Sprint grooming · AC analysis' },
     ],
   },
