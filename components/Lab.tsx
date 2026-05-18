@@ -100,7 +100,7 @@ export default function Lab() {
                 <div className="lab-item-foot">
                   <div className="lab-stack-icons">
                     {item.icons?.map((ic) => (
-                      <img key={ic.alt} src={ic.src} alt={ic.alt} className="lab-stack-icon" style={ic.size ? { width: ic.size, height: ic.size } : undefined} />
+                      <img key={ic.alt} src={ic.src} alt={ic.alt} className="lab-stack-icon" style={'size' in ic && ic.size ? { width: ic.size, height: ic.size } : undefined} />
                     ))}
                   </div>
                   <div className="lab-foot-btns">
