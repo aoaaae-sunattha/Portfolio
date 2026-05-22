@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Development-Agile QA Pipeline — Live Demo</title>
+<style>
+:root {
+  --bg:      #0d0f1a;
+  --surface: #141827;
+  --surf2:   #1c2035;
+  --surf3:   #242840;
+  --border:  #2a2f4a;
+  --accent:  #6c63ff;
+  --green:   #00c9a7;
+  --orange:  #ffd166;
+  --red:     #ff6b6b;
+  --blue:    #4ea8de;
+  --text:    #e4e6f0;
+  --muted:   #6b7299;
+  --dim:     #3d4266;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif}
+
+/* ── SLIDE WRAPPER ── */
+#deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:48px 60px 36px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .45s ease,transform .45s ease;
+  pointer-events:none;overflow:auto;
+}
+.slide.active{opacity:1;transform:translateY(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateY(-30px)}
+
+/* ── HEADER BAR ── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;height:6px;
+  background:var(--border);z-index:100;
+}
+#progress{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));width:0%;transition:width .4s ease}
+#slideno{
+  position:fixed;bottom:20px;right:28px;
+  font-size:11px;color:var(--muted);letter-spacing:.5px;z-index:100;
+}
+#nav{
+  position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:10px;z-index:100;
+}
+.nav-btn{
+  background:var(--surf2);border:1.5px solid var(--border);color:var(--muted);
+  padding:7px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .2s;user-select:none;
+}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn.auto{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ── BADGE / TAG ── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:3px 11px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase}
+.b-ceo   {background:#1e1530;color:#c084fc;border:1px solid #7c3aed}
+.b-ba    {background:#0f2030;color:#60a5fa;border:1px solid #3b82f6}
+.b-arch  {background:#0f2520;color:#34d399;border:1px solid #10b981}
+.b-qa    {background:#1e1520;color:#f472b6;border:1px solid #ec4899}
+.b-dev   {background:#1a1800;color:#fbbf24;border:1px solid #d97706}
+.b-git   {background:#1a1010;color:#f87171;border:1px solid #ef4444}
+.b-ok    {background:#0a2520;color:var(--green);border:1px solid var(--green)}
+.b-step  {background:var(--surf3);color:var(--muted);border:1px solid var(--border)}
+
+/* ── TYPOGRAPHY ── */
+h1{font-size:2.2rem;font-weight:800;letter-spacing:-.5px;line-height:1.15}
+h2{font-size:1.5rem;font-weight:700;letter-spacing:-.3px}
+h3{font-size:1.1rem;font-weight:700}
+.sub{font-size:.9rem;color:var(--muted);line-height:1.6;margin-top:8px}
+.label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+
+/* ── TERMINAL BLOCK ── */
+.term{
+  background:#080a10;border:1.5px solid var(--border);border-radius:10px;
+  padding:18px 22px;font-family:'SF Mono','Consolas','Fira Code',monospace;
+  font-size:12.5px;line-height:1.7;color:#c8ccdc;overflow:auto;
+  position:relative;
+}
+.term-bar{display:flex;align-items:center;gap:6px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.dot{width:12px;height:12px;border-radius:50%}
+.d-r{background:#ff5f57}.d-y{background:#febc2e}.d-g{background:#28c840}
+.term-title{font-size:11px;color:var(--muted);margin-left:4px;font-family:sans-serif}
+.t-prompt{color:#6c63ff}
+.t-cmd{color:#e4e6f0}
+.t-out{color:#6b7299}
+.t-ok{color:#00c9a7}
+.t-warn{color:#ffd166}
+.t-err{color:#ff6b6b}
+.t-hi{color:#c084fc}
+.t-blue{color:#4ea8de}
+.t-dim{color:#3d4266}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--accent);vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── PIPELINE FLOW ── */
+.flow{display:flex;align-items:stretch;gap:0;margin:20px 0}
+.flow-step{
+  flex:1;background:var(--surf2);border:1.5px solid var(--border);
+  border-radius:10px;padding:16px 14px;text-align:center;position:relative;
+  transition:border-color .3s,box-shadow .3s;
+}
+.flow-step.active{border-color:var(--accent);box-shadow:0 0 18px rgba(108,99,255,.25)}
+.flow-step.done{border-color:var(--green);box-shadow:0 0 14px rgba(0,201,167,.15)}
+.flow-arrow{display:flex;align-items:center;padding:0 6px;color:var(--dim);font-size:18px;flex-shrink:0}
+.flow-icon{font-size:24px;margin-bottom:6px}
+.flow-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px}
+.flow-sub{font-size:10px;color:var(--muted)}
+
+/* ── STEP GRID ── */
+.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.step-card{
+  background:var(--surf2);border:1.5px solid var(--border);border-radius:10px;
+  padding:14px;transition:all .3s;
+}
+.step-card.active{border-color:var(--accent);background:var(--surf3);box-shadow:0 0 16px rgba(108,99,255,.2)}
+.step-card.done{border-color:var(--green)}
+.step-num{font-family:monospace;font-size:11px;color:var(--accent);font-weight:700;margin-bottom:4px}
+.step-name{font-size:12px;font-weight:700;margin-bottom:3px}
+.step-out{font-size:11px;color:var(--muted);font-family:monospace}
+
+/* ── TWO-COL LAYOUT ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px;flex:1}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:18px}
+
+/* ── CARD ── */
+.card{background:var(--surf2);border:1.5px solid var(--border);border-radius:10px;padding:18px}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.card-icon{font-size:22px}
+.card-body{font-size:12.5px;color:var(--muted);line-height:1.7}
+.card-body b{color:var(--text)}
+
+/* ── VERDICT CARD ── */
+.verdict{
+  border-radius:14px;padding:28px;text-align:center;
+  border:2px solid var(--green);background:rgba(0,201,167,.06);
+  margin-top:20px;
+}
+.verdict-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:10px}
+.verdict-text{font-size:3rem;font-weight:900;color:var(--green)}
+.verdict-sub{font-size:.85rem;color:var(--muted);margin-top:10px}
+
+/* ── HANDOFF ROW ── */
+.handoff{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ho{background:var(--surf3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-family:monospace;color:var(--blue)}
+
+/* ── ACTOR TAG IN HEADER ── */
+.slide-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.step-tag{font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.5px;background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-family:monospace}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;margin-top:10px}
+.checklist li{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)}
+.checklist li:last-child{border:none}
+.checklist li .ck{color:var(--green);font-size:15px;flex-shrink:0;margin-top:1px}
+.checklist li span{line-height:1.5}
+
+/* ── FADE IN CHILDREN ── */
+.fade-children > *{opacity:0;transform:translateY(14px)}
+.fade-children.go > *{
+  animation:fadeUp .4s ease forwards;
+}
+.fade-children.go > *:nth-child(1){animation-delay:.05s}
+.fade-children.go > *:nth-child(2){animation-delay:.12s}
+.fade-children.go > *:nth-child(3){animation-delay:.19s}
+.fade-children.go > *:nth-child(4){animation-delay:.26s}
+.fade-children.go > *:nth-child(5){animation-delay:.33s}
+.fade-children.go > *:nth-child(6){animation-delay:.40s}
+.fade-children.go > *:nth-child(7){animation-delay:.47s}
+.fade-children.go > *:nth-child(8){animation-delay:.54s}
+@keyframes fadeUp{to{opacity:1;transform:none}}
+
+/* ── SCROLL ── */
+.slide{scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
+
+/* ── TYPEWRITER ── */
+.typed::after{content:'';display:inline-block;width:7px;height:13px;background:var(--green);vertical-align:middle;margin-left:2px;animation:blink .9s step-end infinite}
+</style>
+</head>
+<body>
+
+<div id="topbar"><div id="progress"></div></div>
+<div id="deck">
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 0 — COVER
+══════════════════════════════════════════════════════ -->
+<section class="slide active" id="s0">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div style="margin-bottom:20px">
+      <span class="badge b-ok">Live Demo</span>
+    </div>
+    <h1 style="max-width:760px">Development-Agile<br><span style="color:var(--accent)">QA Pipeline</span></h1>
+    <p class="sub" style="max-width:580px;font-size:1rem;margin-top:14px">
+      Full lifecycle from business concept to shipped feature —<br>
+      CEO → BA → Architect → QA Orchestrator → Git
+    </p>
+
+    <div class="flow fade-children" style="margin-top:40px;max-width:860px">
+      <div class="flow-step">
+        <div class="flow-icon">🎯</div>
+        <div class="flow-title">CEO / PO</div>
+        <div class="flow-sub">Discovery & PRD</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">📋</div>
+        <div class="flow-title">BA</div>
+        <div class="flow-sub">User Stories</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🏗️</div>
+        <div class="flow-title">Architect</div>
+        <div class="flow-sub">Master Plan</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🧪</div>
+        <div class="flow-title">QA Pipeline</div>
+        <div class="flow-sub">Steps 001 → 07</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🚀</div>
+        <div class="flow-title">Git Handoff</div>
+        <div class="flow-sub">PR + Verdict</div>
+      </div>
+    </div>
+
+    <div style="margin-top:44px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <div class="card" style="padding:14px 20px;display:flex;align-items:center;gap:12px;flex:0 0 auto">
+        <div style="font-size:28px">💳</div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700">Demo Project</div>
+          <div style="font-size:15px;font-weight:800;color:var(--accent)">KODA — BNPL Platform</div>
+          <div style="font-size:12px;color:var(--muted)">Buy Now, Pay Later · React 19 + TypeScript</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">
+        Press <kbd style="background:var(--surf3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:11px">→</kbd>
+        to advance &nbsp;·&nbsp;
+        <kbd style="background:var(--surf3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:11px">←</kbd>
+        to go back &nbsp;·&nbsp; Auto-play available below
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 1 — CEO PHASE: BUSINESS GOAL
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s1">
+  <div class="slide-header fade-children">
+    <span class="badge b-ceo">Phase 1</span>
+    <span class="badge b-ceo">CEO / Product Owner</span>
+    <span class="step-tag">00.prompt_Business_Goal</span>
+  </div>
+  <h2 class="fade-children">Strategic Discovery — Business Goal</h2>
+  <p class="sub fade-children" style="margin-bottom:20px">The CEO provides the raw concept. AI applies a Verdict Engineering lens to structure it into a complete business specification.</p>
+
+  <div class="two-col fade-children">
+    <div>
+      <div class="label">Input — Raw Concept from CEO</div>
+      <div class="term">
+        <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">CEO Input</div></div>
+        <span class="t-prompt">You</span><span class="t-cmd"> → AI Architect</span><br><br>
+        <span class="t-hi">"Build a BNPL payment solution for</span><br>
+        <span class="t-hi"> Southeast Asian e-commerce.</span><br>
+        <span class="t-hi"> Users pay in 4–24 installments.</span><br>
+        <span class="t-hi"> Merchants get instant payout.</span><br>
+        <span class="t-hi"> Risky users get blocked automatically."</span>
+      </div>
+
+      <div class="label" style="margin-top:16px">The Prompt Role</div>
+      <ul class="checklist">
+        <li><span class="ck">◆</span><span>Expert <b>Fintech Architect</b> + QA Engineer + AI Orchestrator</span></li>
+        <li><span class="ck">◆</span><span>Apply strict <b>Verdict Engineering</b> lens</span></li>
+        <li><span class="ck">◆</span><span>Produce 7-section business specification</span></li>
+        <li><span class="ck">◆</span><span>End with QA edge case strategy</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="label">Output Structure (7 sections)</div>
+      <div class="step-grid" style="grid-template-columns:1fr 1fr">
+        <div class="step-card done"><div class="step-num">1</div><div class="step-name">Business Goal</div><div class="step-out">Why + Value</div></div>
+        <div class="step-card done"><div class="step-num">2</div><div class="step-name">Business Rules</div><div class="step-out">Constraints + Logic</div></div>
+        <div class="step-card done"><div class="step-num">3</div><div class="step-name">User Flow</div><div class="step-out">Onboarding → Exec</div></div>
+        <div class="step-card done"><div class="step-num">4</div><div class="step-name">Issue</div><div class="step-out">Tech hurdles</div></div>
+        <div class="step-card done"><div class="step-num">5</div><div class="step-name">Problem</div><div class="step-out">Core risk</div></div>
+        <div class="step-card done"><div class="step-num">6</div><div class="step-name">How to Fix</div><div class="step-out">Strategic solution</div></div>
+        <div class="step-card active" style="grid-column:1/-1"><div class="step-num">7 → MVP</div><div class="step-name">60-min Execution Roadmap</div><div class="step-out">0-15m Planning · 15-40m Dev · 40-60m QA Check</div></div>
+      </div>
+
+      <div class="label" style="margin-top:16px">KODA output snapshot</div>
+      <div class="term" style="font-size:11.5px">
+        <span class="t-ok">## Business Goal</span><br>
+        <span class="t-out">KODA provides zero-interest installment payments</span><br>
+        <span class="t-out">for 4-term plans, enabling SEA consumers to afford</span><br>
+        <span class="t-out">high-value goods while merchants receive 97.5% payout.</span><br><br>
+        <span class="t-ok">## MVP Roadmap</span><br>
+        <span class="t-blue">0-15m </span><span class="t-out">→ Schema: orders, installments, users, cards</span><br>
+        <span class="t-blue">15-40m</span><span class="t-out"> → React + Zustand store + Vite</span><br>
+        <span class="t-blue">40-60m</span><span class="t-out"> → Playwright E2E quality check</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 2 — CEO → PRD
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="slide-header fade-children">
+    <span class="badge b-ceo">Phase 1 · Discovery</span>
+    <span class="step-tag">01.PROMPT — PRD (Business Level) — CEO</span>
+  </div>
+  <h2 class="fade-children">CEO produces the Business-Level PRD</h2>
+  <p class="sub fade-children">Acting as CEO/PO, the AI conducts a Strategic Discovery session and writes the official Phase 1 → Phase 2 handover document.</p>
+
+  <div class="two-col fade-children" style="margin-top:16px">
+    <div class="card">
+      <div class="card-head"><div class="card-icon">🎯</div><h3>CEO / PO Role</h3></div>
+      <ul class="checklist">
+        <li><span class="ck">1</span><span><b>office-hours</b> — CEO in discovery workshop. What problem? Who is the customer? What is commercial success?</span></li>
+        <li><span class="ck">2</span><span><b>brainstorming</b> — Core business goals, user pain points, ROI indicators</span></li>
+        <li><span class="ck">3</span><span><b>write-spec</b> — Produce the PRD (Business Level) in Markdown</span></li>
+      </ul>
+      <div style="margin-top:14px">
+        <div class="label">Handover Artifact</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <span class="badge b-step">PRD (Business Level)</span>
+          <span class="badge b-ok">→ BA</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">PRD Sections (KODA)</div>
+      <div class="term" style="font-size:11.5px">
+        <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">PRD (Business Level) — KODA</div></div>
+        <span class="t-hi"># PRD (Business Level) — KODA</span><br>
+        <span class="t-hi">### Buy Now, Pay Later · Installment Payment Platform</span><br><br>
+        <span class="t-ok">## 1. Executive Summary</span><br>
+        <span class="t-out">KODA enables 4–24 installment payments with dynamic</span><br>
+        <span class="t-out">fee rates. Zero-interest for 4-term plans.</span><br><br>
+        <span class="t-ok">## 2. Problem Statement</span><br>
+        <span class="t-out">SEA consumers lack flexible credit for $300+ purchases.</span><br><br>
+        <span class="t-ok">## 3. Target Users</span><br>
+        <span class="t-out">• Buyers: 18-35, mobile-first, limited credit access</span><br>
+        <span class="t-out">• Merchants: SME e-commerce, instant settlement needed</span><br><br>
+        <span class="t-ok">## 4. Business Rules</span><br>
+        <span class="t-blue">Fee rates: </span><span class="t-out">4:0% / 6:3.98% / 8:6.22% ... 24:23.38%</span><br>
+        <span class="t-blue">Commission: </span><span class="t-out">2.5% per order (merchant payout = 97.5%)</span><br>
+        <span class="t-blue">Lock: </span><span class="t-out">Overdue accounts → blocked at checkout</span><br><br>
+        <span class="t-ok">## 5. Success Metrics (ROI)</span><br>
+        <span class="t-out">GMV, approval rate, 30-day default rate (&lt;2%)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 3 — BA PHASE: USER STORIES
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="slide-header fade-children">
+    <span class="badge b-ba">Phase 2 · Analysis</span>
+    <span class="badge b-ba">Business Analyst</span>
+    <span class="step-tag">02.PROMPT — Final PRD + User Stories — BA</span>
+  </div>
+  <h2 class="fade-children">BA: PRD → User Stories + Acceptance Criteria</h2>
+  <p class="sub fade-children">BA receives the CEO's PRD, applies rigorous analysis, and produces QA-ready user stories with testable acceptance criteria.</p>
+
+  <div class="two-col fade-children" style="margin-top:16px">
+    <div>
+      <div class="label">BA Process</div>
+      <ul class="checklist">
+        <li><span class="ck">1</span><span>Parse PRD for user personas and pain points</span></li>
+        <li><span class="ck">2</span><span>Decompose into atomic user stories (As a… I want… So that…)</span></li>
+        <li><span class="ck">3</span><span>Write <b>testable Acceptance Criteria</b> for each story</span></li>
+        <li><span class="ck">4</span><span>Flag edge cases: locked accounts, overdue, KYC, insufficient credit</span></li>
+        <li><span class="ck">5</span><span>Handover: Final PRD + Story list → Architect</span></li>
+      </ul>
+
+      <div class="label" style="margin-top:16px">KODA — Story Map</div>
+      <div class="three-col" style="margin-top:0;gap:8px">
+        <div class="step-card done"><div class="step-num">US-AUTH-01</div><div class="step-name">Login / Logout</div></div>
+        <div class="step-card done"><div class="step-num">US-KYC-01</div><div class="step-name">KYC Verification</div></div>
+        <div class="step-card done"><div class="step-num">US-STORE-01</div><div class="step-name">Browse & Cart</div></div>
+        <div class="step-card done"><div class="step-num">US-CHK-01</div><div class="step-name">Checkout + Plan</div></div>
+        <div class="step-card done"><div class="step-num">US-DASH-01</div><div class="step-name">Dashboard Orders</div></div>
+        <div class="step-card done"><div class="step-num">US-CARD-01</div><div class="step-name">Card Management</div></div>
+        <div class="step-card done"><div class="step-num">US-MRCH-01</div><div class="step-name">Merchant Payout</div></div>
+        <div class="step-card active"><div class="step-num">US-RISK-01</div><div class="step-name">Risk / Lock Guard</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label">Sample Story — US-CHK-01</div>
+      <div class="term" style="font-size:11.5px">
+        <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">US-CHK-01 — Installment Checkout</div></div>
+        <span class="t-hi">## US-CHK-01 — Installment Checkout</span><br><br>
+        <span class="t-ok">As a</span><span class="t-out"> verified buyer with available credit</span><br>
+        <span class="t-ok">I want to</span><span class="t-out"> select an installment plan at checkout</span><br>
+        <span class="t-ok">So that</span><span class="t-out"> I can split payment across 4–24 months</span><br><br>
+        <span class="t-warn">### Acceptance Criteria</span><br>
+        <span class="t-blue">AC-01 </span><span class="t-out">Plan selector shows terms valid for item price</span><br>
+        <span class="t-blue">AC-02 </span><span class="t-out">Fee badge shows 0% for 4-term, correct % others</span><br>
+        <span class="t-blue">AC-03 </span><span class="t-out">First payment = (principal/N) + one-time fee</span><br>
+        <span class="t-blue">AC-04 </span><span class="t-out">Subsequent = principal/N (no fee)</span><br>
+        <span class="t-blue">AC-05 </span><span class="t-out">KYC gate fires before checkout for unverified users</span><br>
+        <span class="t-blue">AC-06 </span><span class="t-out">Locked account returns 403-style error</span><br>
+        <span class="t-blue">AC-07 </span><span class="t-out">Insufficient credit blocks checkout + shows balance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 4 — ARCHITECT: MASTER PLAN
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="slide-header fade-children">
+    <span class="badge b-arch">Phase 3 · Architecture</span>
+    <span class="badge b-arch">Architect</span>
+    <span class="step-tag">03.PROMPT — Master Plan — Architect</span>
+  </div>
+  <h2 class="fade-children">Architect: Stories → Technical Master Plan</h2>
+  <p class="sub fade-children">The Architect translates business requirements into the technical blueprint that developers will build and QA will test.</p>
+
+  <div class="two-col fade-children">
+    <div class="card">
+      <div class="card-head"><div class="card-icon">🏗️</div><h3>Architect Decisions — KODA</h3></div>
+      <ul class="checklist">
+        <li><span class="ck">◆</span><span><b>Stack:</b> React 19 + TypeScript 5.9 + Vite 8</span></li>
+        <li><span class="ck">◆</span><span><b>State:</b> Zustand 5 with persist middleware</span></li>
+        <li><span class="ck">◆</span><span><b>Routing:</b> react-router-dom v7 + RequireAuth guards</span></li>
+        <li><span class="ck">◆</span><span><b>Styling:</b> Tailwind v4 with @theme tokens in index.css</span></li>
+        <li><span class="ck">◆</span><span><b>Animations:</b> framer-motion AnimatePresence</span></li>
+        <li><span class="ck">◆</span><span><b>E2E:</b> Playwright with Page Object Model</span></li>
+        <li><span class="ck">◆</span><span><b>Credit calc:</b> derived via get() — never stored state</span></li>
+        <li><span class="ck">◆</span><span><b>Auth:</b> email-only mock, hydrates from mockUsers.ts</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="label">Phase Roadmap (from Master Plan)</div>
+      <div class="term" style="font-size:11px">
+        <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">tasks.md — Phase Tracker</div></div>
+        <span class="t-ok">✅ Phase 0</span><span class="t-out"> — Planning (CLAUDE.md, design-reference)</span><br>
+        <span class="t-ok">✅ Phase 1</span><span class="t-out"> — Foundation: Zustand store, mockUsers, routing</span><br>
+        <span class="t-ok">✅ Phase 1.5</span><span class="t-out"> — Merchant Storefront</span><br>
+        <span class="t-ok">✅ Phase 2</span><span class="t-out"> — Dashboard polish + animations</span><br>
+        <span class="t-ok">✅ Phase 3</span><span class="t-out"> — Checkout modal + plan selector</span><br>
+        <span class="t-ok">✅ Phase 4</span><span class="t-out"> — Refund engine</span><br>
+        <span class="t-ok">✅ Phase 5</span><span class="t-out"> — Risk & error states</span><br>
+        <span class="t-ok">✅ Phase 6</span><span class="t-out"> — Card management</span><br>
+        <span class="t-ok">✅ Phase 7</span><span class="t-out"> — Merchant back-office</span><br>
+        <span class="t-warn">← Phase 8</span><span class="t-out"> — Animation pass + responsive</span><br><br>
+        <span class="t-dim">── QA Pipeline kicks in at each phase boundary ──</span>
+      </div>
+
+      <div class="label" style="margin-top:14px">Handover to QA Pipeline</div>
+      <div class="handoff">
+        <div class="ho">plan.md</div>
+        <div class="ho">tasks.md</div>
+        <div class="ho">UserStories/*.md</div>
+        <div class="ho">Spec/ImplementationSpecs.md</div>
+        <div class="ho">techstack.md</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 5 — QA PIPELINE OVERVIEW
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">QA Pipeline</span>
+    <span class="step-tag">C.PIPELINE.md — v1.2</span>
+    <span class="badge b-ok">9-Step Lifecycle</span>
+  </div>
+  <h2 class="fade-children">Agentic QA Pipeline — Full Lifecycle</h2>
+  <p class="sub fade-children">The master orchestrator runs linearly. Each step produces a saved artifact. Never skip a step. <b>001 → 002 → 01 → 02 → 03 → 04 → 05 → 06 → 07</b></p>
+
+  <div class="fade-children" style="margin-top:20px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <!-- PRE-PIPELINE -->
+      <div style="grid-column:1/-1">
+        <div class="label">Phase 0 — Requirements Generation (Pre-Pipeline)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+          <div class="step-card done">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div class="step-num">Step 001</div><span class="badge b-dev" style="font-size:10px">PM/PO</span>
+            </div>
+            <div class="step-name">Story Writer</div>
+            <div class="step-out" style="margin-top:4px">001-YYYY-US-ID-draft.md</div>
+          </div>
+          <div class="step-card done">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div class="step-num">Step 002</div><span class="badge b-ba" style="font-size:10px">BA</span>
+            </div>
+            <div class="step-name">BA Review &amp; Refinement</div>
+            <div class="step-out" style="margin-top:4px">002-YYYY-US-ID-final.md</div>
+          </div>
+        </div>
+      </div>
+      <!-- QA PIPELINE -->
+      <div style="grid-column:1/-1">
+        <div class="label" style="margin-top:6px">Phase 1 — QA Execution (Core Pipeline)</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:8px">
+          <div class="step-card done">
+            <div class="step-num">01</div>
+            <div class="step-name">Requirements Analysis</div>
+            <div class="step-out">01-spec.md</div>
+          </div>
+          <div class="step-card done">
+            <div class="step-num">02</div>
+            <div class="step-name">Test Plan</div>
+            <div class="step-out">02-plan.md</div>
+          </div>
+          <div class="step-card done">
+            <div class="step-num">03</div>
+            <div class="step-name">Exploratory Testing</div>
+            <div class="step-out">03-obs.md</div>
+          </div>
+          <div class="step-card done">
+            <div class="step-num">04</div>
+            <div class="step-name">Test Generation</div>
+            <div class="step-out">.spec.ts files</div>
+          </div>
+          <div class="step-card done">
+            <div class="step-num">05</div>
+            <div class="step-name">Execution &amp; Healing</div>
+            <div class="step-out">fix-proposals.md</div>
+          </div>
+          <div class="step-card done">
+            <div class="step-num">06</div>
+            <div class="step-name">Unified Report</div>
+            <div class="step-out">final-report.md</div>
+          </div>
+          <div class="step-card active">
+            <div class="step-num">07</div>
+            <div class="step-name">Git Handoff</div>
+            <div class="step-out">qa/branch + PR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="card" style="padding:12px 16px">
+        <div class="label">Mandatory Rule #1</div>
+        <div class="card-body" style="font-size:12px"><b>Linear Flow</b> — Never skip a step. 001 → 002 → 01 → … → 07</div>
+      </div>
+      <div class="card" style="padding:12px 16px">
+        <div class="label">Mandatory Rule #2</div>
+        <div class="card-body" style="font-size:12px"><b>Announce Progress</b> — State step number + skill name before each step starts</div>
+      </div>
+      <div class="card" style="padding:12px 16px">
+        <div class="label">Mandatory Rule #3</div>
+        <div class="card-body" style="font-size:12px"><b>Final Verdict</b> — Report must include clear <b style="color:var(--green)">SHIP</b> / <b style="color:var(--red)">HOLD</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 6 — STEP 001 + 002: PM DRAFT + BA REVIEW
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="slide-header fade-children">
+    <span class="badge b-dev">Step 001</span>
+    <span class="badge b-ba">Step 002</span>
+    <span class="step-tag">Pre-Pipeline: PM Draft → BA Review</span>
+  </div>
+  <h2 class="fade-children">Steps 001–002: Story Creation &amp; BA Refinement</h2>
+  <p class="sub fade-children">PM/PO creates the initial story draft. BA polishes acceptance criteria for QA-readiness. Two small steps, big payoff downstream.</p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11.5px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 001 — PM/PO Story Draft</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 001-PM:PO-Story-Writer</span><br>
+      <span class="t-out">input: plan.md + business goal</span><br><br>
+      <span class="t-warn">▸ Announcing Step 001 — PM/PO Story Writer</span><br><br>
+      <span class="t-out">Reading plan.md... </span><span class="t-ok">✓</span><br>
+      <span class="t-out">Identifying next story: US-CARD-01</span><br><br>
+      <span class="t-hi">## US-CARD-01 (Draft)</span><br>
+      <span class="t-out">As a verified buyer</span><br>
+      <span class="t-out">I want to add/remove payment cards</span><br>
+      <span class="t-out">So that I can manage my payment methods</span><br><br>
+      <span class="t-ok">→ Saved:</span><span class="t-blue"> QA/00_user-stories/001-2026-05-18-US-CARD-01-draft.md</span>
+    </div>
+
+    <div class="term" style="font-size:11.5px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 002 — BA Review &amp; Refinement</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 002-BA-story-reviewer</span><br>
+      <span class="t-out">input: 001-draft.md</span><br><br>
+      <span class="t-warn">▸ Announcing Step 002 — BA Story Reviewer</span><br><br>
+      <span class="t-out">Parsing draft ACs... </span><span class="t-ok">✓</span><br>
+      <span class="t-out">Checking: testable? atomic? complete? </span><span class="t-ok">✓</span><br>
+      <span class="t-out">Flagging ambiguities: 2 found</span><br>
+      <span class="t-out">  - "remove card" — what if it's primary?</span><br>
+      <span class="t-out">  - "expired card" — does UI indicate?</span><br><br>
+      <span class="t-hi">## Refined ACs</span><br>
+      <span class="t-blue">AC-01</span><span class="t-out"> Add card → appears in list immediately</span><br>
+      <span class="t-blue">AC-02</span><span class="t-out"> Remove non-primary card → removed from list</span><br>
+      <span class="t-blue">AC-03</span><span class="t-out"> Cannot remove last card</span><br>
+      <span class="t-blue">AC-04</span><span class="t-out"> Set primary → purple badge updates</span><br><br>
+      <span class="t-ok">→ Saved:</span><span class="t-blue"> QA/00_user-stories/002-2026-05-18-US-CARD-01-final.md</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 7 — STEPS 01 + 02: REQUIREMENTS + TEST PLAN
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Step 01</span>
+    <span class="badge b-qa">Step 02</span>
+    <span class="step-tag">Requirements Analysis → Test Plan Generation</span>
+  </div>
+  <h2 class="fade-children">Steps 01–02: Requirements → Test Scenarios</h2>
+  <p class="sub fade-children">Step 01 extracts testable ACs. Step 02 expands each AC into a full test scenario with test data and pre-conditions. <b style="color:var(--red)">STOP if either fails.</b></p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11.5px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 01 — Requirements Analysis</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 01-read-user-story</span><br>
+      <span class="t-out">input: 002-US-CARD-01-final.md</span><br><br>
+      <span class="t-warn">▸ Announcing Step 01 — Requirements Analysis</span><br><br>
+      <span class="t-out">Story: US-CARD-01 — Card Management</span><br>
+      <span class="t-out">ACs extracted: 4</span><br>
+      <span class="t-out">Edge cases identified:</span><br>
+      <span class="t-blue">  E-01</span><span class="t-out"> Remove only remaining card</span><br>
+      <span class="t-blue">  E-02</span><span class="t-out"> Set primary when 1 card exists</span><br>
+      <span class="t-blue">  E-03</span><span class="t-out"> Add duplicate card number</span><br>
+      <span class="t-out">In-scope: add, remove, set primary, UI feedback</span><br>
+      <span class="t-out">Out-of-scope: real card tokenization, payment routing</span><br><br>
+      <span class="t-ok">→ Saved:</span><span class="t-blue"> QA/01_specs/01-2026-05-18-US-CARD-01-requirements.md</span>
+    </div>
+
+    <div class="term" style="font-size:11.5px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 02 — Test Plan Generation</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 02-test-plan-planner</span><br>
+      <span class="t-out">input: 01-requirements.md · url: localhost:5173</span><br><br>
+      <span class="t-warn">▸ Announcing Step 02 — Test Plan Generation</span><br><br>
+      <span class="t-out">Reading QA Master Plan §3 for US-CARD-01... </span><span class="t-ok">✓</span><br>
+      <span class="t-out">TC-IDs from §3: TC-001 to TC-008</span><br><br>
+      <span class="t-hi">Test Scenarios Table</span><br>
+      <span class="t-blue">TC-001</span><span class="t-out"> Add card (valid) → card appears | High | Functional</span><br>
+      <span class="t-blue">TC-002</span><span class="t-out"> Remove non-primary → removed  | High | Functional</span><br>
+      <span class="t-blue">TC-003</span><span class="t-out"> Remove last card → blocked     | High | Negative</span><br>
+      <span class="t-blue">TC-004</span><span class="t-out"> Set primary card → badge moves | Med  | Functional</span><br>
+      <span class="t-blue">TC-005</span><span class="t-out"> Add card invalid number → error | Med  | Negative</span><br>
+      <span class="t-dim">... TC-006, 007, 008 (boundary + edge)</span><br><br>
+      <span class="t-ok">→ Saved:</span><span class="t-blue"> QA/01_specs/02-2026-05-18-US-CARD-01-test-plan.md</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 8 — STEP 03: EXPLORATORY TESTING
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Step 03</span>
+    <span class="step-tag">03-exploratory-testing</span>
+    <span class="badge" style="background:#1a1010;color:#fb923c;border:1px solid #f97316">Playwright Browser</span>
+  </div>
+  <h2 class="fade-children">Step 03: Exploratory Testing — AI Drives the Browser</h2>
+  <p class="sub fade-children">The QA agent opens a real browser, exercises all test scenarios, logs observations, and discovers confirmed locators for automation.</p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 03 — Exploratory Testing</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 03-exploratory-testing</span><br>
+      <span class="t-out">url: localhost:5173/settings/cards</span><br><br>
+      <span class="t-warn">▸ Announcing Step 03 — Exploratory Testing</span><br><br>
+      <span class="t-out">Phase 1: Happy Path</span><br>
+      <span class="t-out">  Navigate → /login → active@koda.test</span><br>
+      <span class="t-out">  → /settings/cards</span><br>
+      <span class="t-ok">  TC-001: </span><span class="t-out">Add card → card appears ✓</span><br>
+      <span class="t-ok">  TC-002: </span><span class="t-out">Remove card → removed ✓</span><br>
+      <span class="t-ok">  TC-004: </span><span class="t-out">Set primary → badge updates ✓</span><br><br>
+      <span class="t-out">Phase 2: Break Attempts</span><br>
+      <span class="t-ok">  TC-003: </span><span class="t-out">Remove last card → button disabled ✓</span><br>
+      <span class="t-warn">  TC-005: </span><span class="t-out">Invalid card → no toast shown ⚠ BUG</span><br>
+      <span class="t-err">  DEF-01: </span><span class="t-out">[Med] No error feedback for invalid card number</span><br><br>
+      <span class="t-out">Phase 3: Accessibility</span><br>
+      <span class="t-out">  aria-labels present, focus ring visible ✓</span><br><br>
+      <span class="t-out">Confirmed locators:</span><br>
+      <span class="t-blue">  addCardBtn: </span><span class="t-out">getByRole('button', {name: 'Add Card'})</span><br>
+      <span class="t-blue">  removeBtn:  </span><span class="t-out">getByTestId('remove-card-*')</span><br>
+      <span class="t-blue">  primaryBadge: </span><span class="t-out">getByText('Primary')</span><br><br>
+      <span class="t-ok">→ Saved: QA/results/01_manual_observations/03-....md</span>
+    </div>
+
+    <div>
+      <div class="label">Exploration Summary</div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+          <div><div style="font-size:1.8rem;font-weight:800;color:var(--green)">8</div><div style="font-size:11px;color:var(--muted)">TC exercised</div></div>
+          <div><div style="font-size:1.8rem;font-weight:800;color:var(--orange)">1</div><div style="font-size:11px;color:var(--muted)">Bug found</div></div>
+          <div><div style="font-size:1.8rem;font-weight:800;color:var(--blue)">4</div><div style="font-size:11px;color:var(--muted)">Phases complete</div></div>
+        </div>
+      </div>
+
+      <div class="label">Defect Log</div>
+      <div class="term" style="font-size:11px">
+        <span class="t-warn">DEF-01</span><span class="t-out"> · Medium · TC-005</span><br>
+        <span class="t-out">Title: No error feedback for invalid card</span><br>
+        <span class="t-out">AC violated: AC-05 (error message required)</span><br>
+        <span class="t-out">Steps: Add card → enter "123" → submit</span><br>
+        <span class="t-out">Expected: validation error toast</span><br>
+        <span class="t-out">Actual: silent failure, form resets</span><br>
+        <span class="t-blue">Recommendation: AUTOMATE WITH SKIP</span>
+      </div>
+
+      <div class="label" style="margin-top:12px">Context Snapshot → Step 04</div>
+      <div class="term" style="font-size:10.5px">
+        <span class="t-dim">=== CONTEXT SNAPSHOT — Skill 03 → 04 ===</span><br>
+        <span class="t-out">Cleared for automation: TC-001,002,003,004,007,008</span><br>
+        <span class="t-warn">Skipped (DEF-01 blocks): TC-005</span><br>
+        <span class="t-out">Confirmed locators: addCardBtn, removeBtn, primaryBadge</span><br>
+        <span class="t-dim">=== END SNAPSHOT ===</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 9 — STEP 04: TEST GENERATION
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s9">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Step 04</span>
+    <span class="step-tag">04-test-generator</span>
+    <span class="badge b-dev">Playwright .spec.ts</span>
+  </div>
+  <h2 class="fade-children">Step 04: Automated Test Generation</h2>
+  <p class="sub fade-children">Using confirmed locators and TC-IDs from Step 03, the agent generates Playwright spec files with Page Object Models.</p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Generated: card-management.spec.ts</div></div>
+      <span class="t-dim">// QA/tests/US-CARD-01/04-2026-05-18-card-management-functional.spec.ts</span><br>
+      <span class="t-hi">import</span><span class="t-out"> { test, expect } from </span><span class="t-blue">'@playwright/test'</span><span class="t-out">;</span><br>
+      <span class="t-hi">import</span><span class="t-out"> { CardManagementPage } from </span><span class="t-blue">'../pages/CardManagementPage'</span><span class="t-out">;</span><br><br>
+      <span class="t-dim">// TC-001: Add card — functional</span><br>
+      <span class="t-ok">test</span><span class="t-out">(</span><span class="t-blue">'TC-001: Add card appears in list immediately'</span><span class="t-out">, async ({ page }) =&gt; {</span><br>
+      <span class="t-out">  const cards = </span><span class="t-hi">new</span><span class="t-out"> CardManagementPage(page);</span><br>
+      <span class="t-out">  await cards.goto();</span><br>
+      <span class="t-out">  await cards.addCard(</span><span class="t-blue">'4242424242424242'</span><span class="t-out">, </span><span class="t-blue">'12/29'</span><span class="t-out">);</span><br>
+      <span class="t-out">  await cards.expectCardVisible(</span><span class="t-blue">'**** 4242'</span><span class="t-out">);</span><br>
+      <span class="t-out">});</span><br><br>
+      <span class="t-dim">// TC-003: Negative — remove last card blocked</span><br>
+      <span class="t-ok">test</span><span class="t-out">(</span><span class="t-blue">'TC-003: Cannot remove the last card'</span><span class="t-out">, async ({ page }) =&gt; {</span><br>
+      <span class="t-out">  const cards = </span><span class="t-hi">new</span><span class="t-out"> CardManagementPage(page);</span><br>
+      <span class="t-out">  await cards.gotoWithOneCard();</span><br>
+      <span class="t-out">  await cards.expectRemoveDisabled();</span><br>
+      <span class="t-out">});</span><br><br>
+      <span class="t-dim">// TC-005: SKIP — DEF-01 blocks</span><br>
+      <span class="t-warn">test.skip</span><span class="t-out">(</span><span class="t-blue">'TC-005: Invalid card → error [DEF-01]'</span><span class="t-out">, ...);</span>
+    </div>
+
+    <div>
+      <div class="label">Generated Files</div>
+      <div class="handoff" style="flex-direction:column">
+        <div class="ho">QA/tests/US-CARD-01/04-...-functional.spec.ts</div>
+        <div class="ho">QA/tests/US-CARD-01/04-...-boundary.spec.ts</div>
+        <div class="ho">QA/tests/US-CARD-01/04-...-accessibility.spec.ts</div>
+        <div class="ho">playwright/pages/CardManagementPage.ts</div>
+      </div>
+
+      <div class="label" style="margin-top:14px">TC Coverage</div>
+      <div class="term" style="font-size:11px">
+        <span class="t-ok">Automated: </span><span class="t-out">TC-001, 002, 003, 004, 007, 008</span><br>
+        <span class="t-warn">Skipped:   </span><span class="t-out">TC-005 (DEF-01 — no error toast)</span><br>
+        <span class="t-out">Blocked:   </span><span class="t-out">none</span>
+      </div>
+
+      <div class="label" style="margin-top:14px">Page Object — Methods</div>
+      <div class="term" style="font-size:11px">
+        <span class="t-hi">CardManagementPage</span><br>
+        <span class="t-blue">  goto</span><span class="t-out">()  </span>
+        <span class="t-blue">addCard</span><span class="t-out">(num, exp)</span><br>
+        <span class="t-blue">  removeCard</span><span class="t-out">(last4)  </span>
+        <span class="t-blue">setPrimary</span><span class="t-out">(last4)</span><br>
+        <span class="t-blue">  expectCardVisible</span><span class="t-out">(last4)</span><br>
+        <span class="t-blue">  expectRemoveDisabled</span><span class="t-out">()  </span>
+        <span class="t-blue">gotoWithOneCard</span><span class="t-out">()</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 10 — STEP 05: EXECUTION & HEALING
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s10">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Step 05</span>
+    <span class="step-tag">05-test-healer</span>
+    <span class="badge" style="background:#1a1010;color:#fb923c;border:1px solid #f97316">Run · Fail · Fix · Repeat</span>
+  </div>
+  <h2 class="fade-children">Step 05: Test Execution &amp; Auto-Healing</h2>
+  <p class="sub fade-children">Run the tests. Classify failures. Auto-fix selector issues. Propose fixes for logic breaks. Escalate real defects for dev review.</p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">npm test — QA/tests/US-CARD-01</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">npx playwright test playwright/tests/card.spec.ts</span><br><br>
+      <span class="t-warn">▸ Run 1 — First Execution</span><br>
+      <span class="t-out">Running 6 tests (3 workers)...</span><br><br>
+      <span class="t-ok">  ✓ TC-001 Add card appears in list immediately</span><span class="t-dim"> (1.2s)</span><br>
+      <span class="t-ok">  ✓ TC-002 Remove non-primary card</span><span class="t-dim"> (0.9s)</span><br>
+      <span class="t-ok">  ✓ TC-003 Cannot remove the last card</span><span class="t-dim"> (0.8s)</span><br>
+      <span class="t-ok">  ✓ TC-004 Set primary card badge updates</span><span class="t-dim"> (1.1s)</span><br>
+      <span class="t-err">  ✗ TC-007 Card count updates after add</span><span class="t-dim"> (5.0s)</span><br>
+      <span class="t-err">    → Timeout: getByTestId('card-count') not found</span><br>
+      <span class="t-ok">  ✓ TC-008 Accessibility: focus ring visible</span><span class="t-dim"> (0.7s)</span><br><br>
+      <span class="t-out">Results: </span><span class="t-ok">5 passed</span><span class="t-out">, </span><span class="t-err">1 failed</span><span class="t-out">, </span><span class="t-warn">1 skipped</span><br><br>
+      <span class="t-warn">▸ Healing TC-007 — Type A (selector fix)</span><br>
+      <span class="t-out">Old: getByTestId('card-count')</span><br>
+      <span class="t-out">New: getByText(/\d+ cards?/)</span><br><br>
+      <span class="t-warn">▸ Run 2 — Post-Fix</span><br>
+      <span class="t-ok">  ✓ TC-007 Card count updates after add</span><span class="t-dim"> (0.9s)</span><br><br>
+      <span class="t-ok">Results: </span><span class="t-ok">6 passed</span><span class="t-out">, </span><span class="t-warn">1 skipped</span>
+    </div>
+
+    <div>
+      <div class="label">Failure Classification</div>
+      <div class="three-col" style="gap:8px;margin-top:0">
+        <div class="step-card done">
+          <div class="step-num">Type A</div>
+          <div class="step-name">Selector fix</div>
+          <div class="step-out">Auto-healed</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">Type B/C</div>
+          <div class="step-name">Logic / env</div>
+          <div class="step-out">Propose fix</div>
+        </div>
+        <div class="step-card" style="border-color:var(--red)">
+          <div class="step-num">Type D</div>
+          <div class="step-name">Real defect</div>
+          <div class="step-out">→ Dev review</div>
+        </div>
+      </div>
+
+      <div class="label" style="margin-top:14px">Final Run Results</div>
+      <div class="card" style="text-align:center;padding:18px">
+        <div style="display:flex;justify-content:center;gap:24px">
+          <div><div style="font-size:2rem;font-weight:800;color:var(--green)">6</div><div style="font-size:11px;color:var(--muted)">Passed</div></div>
+          <div><div style="font-size:2rem;font-weight:800;color:var(--red)">0</div><div style="font-size:11px;color:var(--muted)">Failed</div></div>
+          <div><div style="font-size:2rem;font-weight:800;color:var(--orange)">1</div><div style="font-size:11px;color:var(--muted)">Skipped</div></div>
+        </div>
+      </div>
+
+      <div class="label" style="margin-top:12px">Pipeline Recommendation</div>
+      <div class="term" style="font-size:12px">
+        <span class="t-warn">PROCEED WITH KNOWN ISSUES</span><br>
+        <span class="t-out">Reason: 1 medium defect (DEF-01) — no blocker.</span><br>
+        <span class="t-out">Dev fix for AC-05 error toast needed.</span><br>
+        <span class="t-out">Core flows (add/remove/primary) all passing.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 11 — STEP 06: FINAL REPORT
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Step 06</span>
+    <span class="step-tag">06-report-writer</span>
+    <span class="badge b-ok">READS FROM DISK — not context</span>
+  </div>
+  <h2 class="fade-children">Step 06: Unified QA Report</h2>
+  <p class="sub fade-children">The report writer reads all 5 saved artifact files from disk and produces the final deliverable. <b>Context is reset here.</b></p>
+
+  <div class="two-col fade-children">
+    <div>
+      <div class="label">Input Files (Read from Disk)</div>
+      <div class="handoff" style="flex-direction:column">
+        <div class="ho">QA/01_specs/01-2026-05-18-US-CARD-01-requirements.md</div>
+        <div class="ho">QA/01_specs/02-2026-05-18-US-CARD-01-test-plan.md</div>
+        <div class="ho">QA/results/01_manual_observations/03-...-observations.md</div>
+        <div class="ho">QA/results/03_fix_proposals/05-...-fix-proposals.md</div>
+        <div class="ho">QA/results/02_automation_raw/results.json</div>
+      </div>
+
+      <div class="label" style="margin-top:14px">Report Sections</div>
+      <ul class="checklist">
+        <li><span class="ck">◆</span><span><b>Story Summary</b> — US-CARD-01, scope, coverage</span></li>
+        <li><span class="ck">◆</span><span><b>Test Results</b> — 6 passed / 0 failed / 1 skipped</span></li>
+        <li><span class="ck">◆</span><span><b>Defect Register</b> — DEF-01 (Medium) with AC reference</span></li>
+        <li><span class="ck">◆</span><span><b>Automation Coverage</b> — 7/8 TC automated (87.5%)</span></li>
+        <li><span class="ck">◆</span><span><b>Recommendations</b> — Fix DEF-01 error toast in Phase 8</span></li>
+        <li><span class="ck">◆</span><span><b>VERDICT</b> — Clear SHIP / HOLD decision</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="term" style="font-size:11px;margin-bottom:14px">
+        <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">06-2026-05-18-US-CARD-01-final-report.md</div></div>
+        <span class="t-hi"># QA Final Report — US-CARD-01</span><br>
+        <span class="t-hi">## Card Management · KODA Platform</span><br><br>
+        <span class="t-warn">### Test Execution Summary</span><br>
+        <span class="t-out">| Metric         | Value      |</span><br>
+        <span class="t-out">|----------------|------------|</span><br>
+        <span class="t-out">| Total TC       | 8          |</span><br>
+        <span class="t-out">| Automated      | 7          |</span><br>
+        <span class="t-out">| Passed         | 6          |</span><br>
+        <span class="t-out">| Skipped        | 1 (DEF-01) |</span><br>
+        <span class="t-out">| Coverage       | 87.5%      |</span><br><br>
+        <span class="t-warn">### Defect Register</span><br>
+        <span class="t-err">DEF-01</span><span class="t-out"> [Medium] No error toast for invalid card number</span><br>
+        <span class="t-out">AC-05 violated. Recommend: fix in Phase 8 polish.</span><br><br>
+        <span class="t-warn">### Verdict</span>
+      </div>
+
+      <div class="verdict">
+        <div class="verdict-label">QA Verdict — US-CARD-01</div>
+        <div class="verdict-text">SHIP</div>
+        <div class="verdict-sub">Core flows fully covered · 1 medium defect tracked<br>No blockers to production release</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 12 — STEP 07: GIT HANDOFF
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s12">
+  <div class="slide-header fade-children">
+    <span class="badge b-git">Step 07</span>
+    <span class="step-tag">07-git-commit</span>
+    <span class="badge b-ok">Zero Context Dependency</span>
+  </div>
+  <h2 class="fade-children">Step 07: Git Handoff — Branch + Pull Request</h2>
+  <p class="sub fade-children">The final step reads only from saved files. It stages all QA artifacts, opens a dedicated branch, and creates a descriptive PR.</p>
+
+  <div class="two-col fade-children">
+    <div class="term" style="font-size:11px">
+      <div class="term-bar"><div class="dot d-r"></div><div class="dot d-y"></div><div class="dot d-g"></div><div class="term-title">Step 07 — Git Handoff</div></div>
+      <span class="t-prompt">$ </span><span class="t-cmd">skill: 07-git-commit</span><br>
+      <span class="t-out">story: US-CARD-01 · verdict: PROCEED WITH KNOWN ISSUES</span><br><br>
+      <span class="t-warn">▸ Announcing Step 07 — Git Handoff</span><br><br>
+      <span class="t-out">Creating branch:</span><br>
+      <span class="t-ok">  git checkout -b qa/US-CARD-01</span><br><br>
+      <span class="t-out">Staging artifacts:</span><br>
+      <span class="t-ok">  git add QA/01_specs/01-2026-05-18-US-CARD-01-*</span><br>
+      <span class="t-ok">  git add QA/01_specs/02-2026-05-18-US-CARD-01-*</span><br>
+      <span class="t-ok">  git add QA/results/</span><br>
+      <span class="t-ok">  git add QA/tests/US-CARD-01/</span><br>
+      <span class="t-ok">  git add playwright/pages/CardManagementPage.ts</span><br><br>
+      <span class="t-out">Committing:</span><br>
+      <span class="t-ok">  git commit -m "qa(US-CARD-01): Card Management E2E coverage"</span><br><br>
+      <span class="t-out">Opening PR:</span><br>
+      <span class="t-ok">  gh pr create --title "QA: US-CARD-01 Card Management"</span><br><br>
+      <span class="t-out">PR #42 opened → </span><span class="t-blue">github.com/Aoaaae/koda/pull/42</span><br><br>
+      <span class="t-ok">✓ Step 07 complete. Pipeline run closed.</span>
+    </div>
+
+    <div>
+      <div class="label">PR Description (auto-generated)</div>
+      <div class="term" style="font-size:11px;margin-bottom:14px">
+        <span class="t-hi">## QA Run — US-CARD-01 Card Management</span><br><br>
+        <span class="t-ok">**Verdict:** PROCEED WITH KNOWN ISSUES</span><br><br>
+        <span class="t-warn">## Results</span><br>
+        <span class="t-out">- ✅ 6 tests passing</span><br>
+        <span class="t-out">- ⏭  1 skipped (DEF-01)</span><br>
+        <span class="t-out">- ❌ 0 failed</span><br><br>
+        <span class="t-warn">## Defects</span><br>
+        <span class="t-out">- DEF-01 [Med] No error toast for invalid card</span><br>
+        <span class="t-out">  AC-05 violated · Phase 8 fix recommended</span><br><br>
+        <span class="t-warn">## Artifacts</span><br>
+        <span class="t-blue">QA/01_specs/ · QA/tests/ · QA/results/</span>
+      </div>
+
+      <div class="label">Pipeline Complete ✓</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <span class="badge b-ok">001 ✓</span>
+        <span class="badge b-ok">002 ✓</span>
+        <span class="badge b-ok">01 ✓</span>
+        <span class="badge b-ok">02 ✓</span>
+        <span class="badge b-ok">03 ✓</span>
+        <span class="badge b-ok">04 ✓</span>
+        <span class="badge b-ok">05 ✓</span>
+        <span class="badge b-ok">06 ✓</span>
+        <span class="badge b-ok">07 ✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 13 — CONTEXT STRATEGY
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="slide-header fade-children">
+    <span class="badge b-qa">Context Strategy</span>
+    <span class="step-tag">E. Context Strategy — Agentic QA Pipeline</span>
+  </div>
+  <h2 class="fade-children">Context Management: Keep Decisions, Drop Process</h2>
+  <p class="sub fade-children">On large projects (27 stories / 6 sprints), unmanaged context fills the window before the report is written. This strategy prevents that.</p>
+
+  <div class="fade-children" style="margin-top:18px">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div class="card" style="border-color:var(--green)">
+        <div class="label">KEEP in full</div>
+        <div class="card-body">
+          <b>Decisions</b> — ACs, TC-IDs, defect IDs, verdicts, skill overrides.<br>
+          These are referenced by every later step. Never compress.
+        </div>
+      </div>
+      <div class="card" style="border-color:var(--orange)">
+        <div class="label">COMPRESS</div>
+        <div class="card-body">
+          <b>Evidence</b> — observation logs, raw Playwright output, run logs.<br>
+          Compress to summary table + bug list only.
+        </div>
+      </div>
+      <div class="card" style="border-color:var(--red)">
+        <div class="label">DROP</div>
+        <div class="card-body">
+          <b>Process</b> — skill instructions, boilerplate, intermediate reasoning.<br>
+          These live in skill files. Never carry in context.
+        </div>
+      </div>
+    </div>
+
+    <div class="label">Context Budget by Pipeline Stage</div>
+    <div style="background:var(--surf2);border:1.5px solid var(--border);border-radius:10px;padding:16px;margin-top:8px">
+      <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;text-align:center">
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">001+002</div><div style="height:30px;background:var(--green);border-radius:4px;opacity:.3"></div><div style="font-size:10px;color:var(--green);margin-top:4px">Low</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">01</div><div style="height:50px;background:var(--green);border-radius:4px;opacity:.4"></div><div style="font-size:10px;color:var(--green);margin-top:4px">Low</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">02</div><div style="height:80px;background:var(--orange);border-radius:4px;opacity:.5"></div><div style="font-size:10px;color:var(--orange);margin-top:4px">Med</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">03</div><div style="height:140px;background:var(--red);border-radius:4px;opacity:.7"></div><div style="font-size:10px;color:var(--red);margin-top:4px">HIGH</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">04</div><div style="height:150px;background:var(--red);border-radius:4px;opacity:.8"></div><div style="font-size:10px;color:var(--red);margin-top:4px">HIGH</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">05</div><div style="height:100px;background:var(--orange);border-radius:4px;opacity:.6"></div><div style="font-size:10px;color:var(--orange);margin-top:4px">Med</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">06</div><div style="height:50px;background:var(--blue);border-radius:4px;opacity:.5"></div><div style="font-size:10px;color:var(--blue);margin-top:4px">Low</div></div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px">07</div><div style="height:20px;background:var(--green);border-radius:4px;opacity:.3"></div><div style="font-size:10px;color:var(--green);margin-top:4px">Safe</div></div>
+        <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center"><div style="font-size:9px;color:var(--muted);text-align:center;line-height:1.3">Reads<br>from<br>disk</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+        ⚠️ Compress after Step 03 &nbsp;·&nbsp; Compress after Step 04 &nbsp;·&nbsp; Steps 06+07 read from disk
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 14 — SUMMARY / CLOSE
+══════════════════════════════════════════════════════ -->
+<section class="slide" id="s14">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="fade-children">
+      <div style="margin-bottom:20px"><span class="badge b-ok">Pipeline Complete</span></div>
+      <h1>CEO → BA → Architect<br><span style="color:var(--accent)">→ QA Pipeline → Ship</span></h1>
+      <p class="sub" style="max-width:600px;font-size:.95rem;margin-top:14px">
+        Every feature goes through the same lifecycle. No steps skipped.<br>
+        Every artifact saved. Every defect tracked. Clear verdict every time.
+      </p>
+    </div>
+
+    <div class="three-col fade-children" style="margin-top:36px;max-width:900px">
+      <div class="card">
+        <div class="card-head"><div class="card-icon">📁</div><h3>Folder Structure</h3></div>
+        <div class="term" style="font-size:10.5px">
+          <span class="t-out">QA/</span><br>
+          <span class="t-out">├── 00_Development-Agile/</span><br>
+          <span class="t-out">│   ├── 1.CEO-BA-Dev/</span><br>
+          <span class="t-out">│   └── 2.BA-QA/</span><br>
+          <span class="t-out">├── 00_user-stories/</span><br>
+          <span class="t-out">├── 01-planning/</span><br>
+          <span class="t-out">├── 02-test-design/</span><br>
+          <span class="t-out">├── tests/  ← .spec.ts</span><br>
+          <span class="t-out">├── results/ ← reports</span><br>
+          <span class="t-out">└── REPORTS/ ← final</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-icon">⚡</div><h3>Run It Yourself</h3></div>
+        <div class="term" style="font-size:10.5px">
+          <span class="t-dim"># Start the pipeline</span><br>
+          <span class="t-prompt">$ </span><span class="t-cmd">/qa_pipeline</span><br><br>
+          <span class="t-dim"># Or run QA only</span><br>
+          <span class="t-prompt">$ </span><span class="t-cmd">/qa</span><br><br>
+          <span class="t-dim"># Run Playwright tests</span><br>
+          <span class="t-prompt">$ </span><span class="t-cmd">npm run test:e2e</span><br><br>
+          <span class="t-dim"># Single spec</span><br>
+          <span class="t-prompt">$ </span><span class="t-cmd">npx playwright test</span><br>
+          <span class="t-cmd">  playwright/tests/cards.spec.ts</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-icon">🗂️</div><h3>Source Documents</h3></div>
+        <ul class="checklist" style="font-size:11px">
+          <li><span class="ck">◆</span><span>C.PIPELINE.md — Master orchestrator</span></li>
+          <li><span class="ck">◆</span><span>E. Context Strategy — Budget rules</span></li>
+          <li><span class="ck">◆</span><span>A. Prompt Template — QA Analysis</span></li>
+          <li><span class="ck">◆</span><span>B. Prompt — QA Master Test Plan</span></li>
+          <li><span class="ck">◆</span><span>D. Prompt Eval — Quality Checklist</span></li>
+          <li><span class="ck">◆</span><span>01–03 Prompts — CEO/BA/Architect</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fade-children" style="margin-top:32px;display:flex;gap:14px;align-items:center">
+      <div style="font-size:12px;color:var(--muted)">KODA Platform · Development-Agile QA Pipeline v1.2 · 2026</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- #deck -->
+
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Prev</button>
+  <button class="nav-btn auto" id="autoBtn" onclick="toggleAuto()">▶ Auto</button>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+<div id="slideno">1 / 15</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+let autoTimer = null;
+let isAuto = false;
+const AUTO_INTERVAL = 7000;
+
+function goTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(() => slides[current < total ? current : current].classList.remove('exit'), 500);
+  const prev = current;
+  current = n;
+  slides[current].classList.add('active');
+  setTimeout(() => slides[prev].classList.remove('exit'), 500);
+
+  // Trigger fade-children animations
+  const fc = slides[current].querySelectorAll('.fade-children');
+  fc.forEach(el => {
+    el.classList.remove('go');
+    void el.offsetWidth; // reflow
+    el.classList.add('go');
+  });
+
+  // Update progress
+  document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('slideno').textContent = (current + 1) + ' / ' + total;
+
+  // Update prev/next disabled state
+  document.getElementById('prevBtn').style.opacity = current === 0 ? '.35' : '1';
+  document.getElementById('nextBtn').style.opacity = current === total - 1 ? '.35' : '1';
+}
+
+function changeSlide(dir) {
+  goTo(current + dir);
+}
+
+function toggleAuto() {
+  isAuto = !isAuto;
+  const btn = document.getElementById('autoBtn');
+  if (isAuto) {
+    btn.textContent = '⏸ Pause';
+    btn.style.background = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+    autoTimer = setInterval(() => {
+      if (current < total - 1) goTo(current + 1);
+      else { toggleAuto(); }
+    }, AUTO_INTERVAL);
+  } else {
+    btn.textContent = '▶ Auto';
+    btn.style.background = 'var(--accent)';
+    btn.style.borderColor = 'var(--accent)';
+    clearInterval(autoTimer);
+    autoTimer = null;
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  if (e.key === 'Escape') { if (isAuto) toggleAuto(); }
+});
+
+// Touch/swipe
+let touchX = 0;
+document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+});
+
+// Init first slide animations
+goTo(0);
+</script>
+</body>
+</html>
