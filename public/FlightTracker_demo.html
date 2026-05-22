@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Deal Finder Bot — Demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0d0d1a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  gap: 16px;
+  padding: 20px;
+  transition: background 0.8s ease;
+}
+
+/* ── Scene label ── */
+.scene-label {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.06);
+  padding: 6px 16px;
+  border-radius: 20px;
+  transition: all 0.5s ease;
+}
+
+/* ── Phone frame ── */
+.phone {
+  width: 375px;
+  height: 720px;
+  background: #0e1621;
+  border-radius: 36px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone.mini {
+  width: 320px;
+  height: 620px;
+  border-radius: 28px;
+  flex-shrink: 0;
+}
+
+/* Status bar */
+.status-bar {
+  background: #17212b;
+  padding: 10px 20px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  flex-shrink: 0;
+}
+.status-right { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+
+/* Header */
+.header {
+  background: #17212b;
+  padding: 8px 16px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.back-btn { color: #6ab3f3; font-size: 20px; margin-right: 2px; }
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4fae4e, #267826);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.header-info { flex: 1; }
+.header-info h2 { color: #fff; font-size: 14px; font-weight: 600; }
+.header-info p  { color: #4fae4e; font-size: 11px; margin-top: 1px; }
+.header-icons { color: #8096a7; display: flex; gap: 14px; font-size: 16px; }
+
+/* Chat */
+.chat {
+  flex: 1; overflow-y: auto;
+  padding: 10px 10px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+  background: #0e1621; scroll-behavior: smooth;
+}
+.chat::-webkit-scrollbar { width: 0; }
+
+/* Date divider */
+.date-divider {
+  text-align: center; color: #6b7f8e; font-size: 11px;
+  margin: 6px auto; background: rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 3px 12px;
+}
+
+/* Messages */
+.msg { display: flex; flex-direction: column; max-width: 82%; animation: msgIn 0.25s ease; }
+.msg.bot  { align-self: flex-start; }
+.msg.user { align-self: flex-end; }
+
+.bubble {
+  padding: 7px 11px; border-radius: 16px;
+  font-size: 13.5px; line-height: 1.55; word-break: break-word;
+}
+.bot  .bubble { background: #182533; color: #dde6ee; border-bottom-left-radius: 4px; }
+.user .bubble { background: #2b5278; color: #fff;    border-bottom-right-radius: 4px; }
+
+.time { font-size: 10px; color: #536878; margin-top: 2px; }
+.bot  .time { align-self: flex-start; padding-left: 3px; }
+.user .time { align-self: flex-end;   padding-right: 3px; }
+
+/* Keyboard buttons */
+.keyboard { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.kb-btn {
+  background: #1d3a54; color: #6ab3f3;
+  border: 1px solid #2a5a8a; border-radius: 8px;
+  padding: 5px 11px; font-size: 12.5px;
+  cursor: pointer; transition: all 0.2s; font-family: inherit;
+}
+.kb-btn.selected { background: #2b5278; color: #fff; border-color: #5a9abf; }
+
+/* Typing indicator */
+.typing-wrap {
+  display: flex; align-items: center; gap: 4px;
+  padding: 9px 13px; background: #182533;
+  border-radius: 16px; border-bottom-left-radius: 4px;
+  width: fit-content; animation: msgIn 0.25s ease;
+}
+.dot {
+  width: 6px; height: 6px; background: #6b7f8e;
+  border-radius: 50%; animation: bounce 1.1s infinite;
+}
+.dot:nth-child(2) { animation-delay: 0.18s; }
+.dot:nth-child(3) { animation-delay: 0.36s; }
+
+/* Searching */
+.searching-row { display: flex; align-items: center; gap: 7px; color: #8096a7; font-size: 12.5px; padding: 2px 0; }
+.spin {
+  width: 13px; height: 13px;
+  border: 2px solid #253a4e; border-top-color: #6ab3f3;
+  border-radius: 50%; animation: spin 0.75s linear infinite; flex-shrink: 0;
+}
+
+/* Results card */
+.results-card { background: #131f2e; border-radius: 10px; overflow: hidden; margin-bottom: 1px; }
+.results-header { background: #1a3350; padding: 7px 11px; color: #6ab3f3; font-weight: 700; font-size: 11px; letter-spacing: 0.6px; }
+.flight-opt { padding: 7px 11px; border-bottom: 1px solid #0e1621; }
+.flight-opt:last-child { border-bottom: none; }
+.flight-num   { font-size: 11px; font-weight: 700; color: #6ab3f3; margin-bottom: 1px; }
+.flight-route { font-size: 13px; font-weight: 600; color: #fff; }
+.flight-meta  { font-size: 11.5px; color: #8096a7; margin-top: 2px; }
+.price        { color: #4fae4e; font-weight: 700; }
+
+/* AI insight */
+.ai-insight {
+  background: #0e1e0e; border-left: 3px solid #4fae4e;
+  padding: 7px 10px; font-size: 12px; color: #a0c8a0;
+  border-radius: 0 8px 8px 0; margin-top: 5px; line-height: 1.5;
+}
+
+/* Booking link */
+.booking-link {
+  display: block; background: #1d3a54; color: #6ab3f3;
+  padding: 7px 11px; border-radius: 8px; text-align: center;
+  margin-top: 7px; font-size: 12.5px; text-decoration: none;
+  border: 1px solid #2a5a8a;
+}
+
+/* Scene banner */
+.scene-banner {
+  background: linear-gradient(135deg, #0e1e0e, #0e1825);
+  border: 1px solid #2a4a2a; border-radius: 10px;
+  padding: 9px 13px; margin: 8px auto; text-align: center;
+  color: #4fae4e; font-size: 11.5px; font-weight: 500;
+  max-width: 90%; animation: msgIn 0.4s ease; line-height: 1.5;
+}
+
+/* Alert card */
+.alert-card { background: #131f2e; border: 1px solid #1e3a5a; border-radius: 10px; padding: 10px 12px; }
+.alert-badge {
+  display: inline-block; background: rgba(79,174,78,0.15);
+  color: #4fae4e; border: 1px solid rgba(79,174,78,0.3);
+  border-radius: 5px; padding: 2px 8px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.price-drop { color: #4fae4e; font-size: 16px; font-weight: 700; }
+.price-was  { color: #8096a7; text-decoration: line-through; font-size: 13px; }
+
+/* Input area */
+.input-area {
+  background: #17212b; padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0; border-top: 1px solid rgba(0,0,0,0.3);
+}
+.input-box {
+  flex: 1; background: #0e1621; border-radius: 20px;
+  padding: 8px 14px; color: #4a6070; font-size: 13.5px;
+  border: 1px solid #1e2f3e;
+}
+.mic-btn { color: #8096a7; font-size: 18px; }
+
+/* ═══════════════════════════════════════════
+   SCENE 3 — Split layout
+═══════════════════════════════════════════ */
+#scene3-view {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#scene3-view.visible { opacity: 1; }
+
+.split-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Terminal window */
+.terminal-panel {
+  width: 560px;
+  height: 620px;
+  background: #0d1117;
+  border-radius: 12px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.term-bar {
+  background: #161b22;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #21262d;
+  flex-shrink: 0;
+}
+.term-dots { display: flex; gap: 6px; }
+.term-dot  { width: 12px; height: 12px; border-radius: 50%; }
+.td-red    { background: #ff5f57; }
+.td-yellow { background: #febc2e; }
+.td-green  { background: #28c840; }
+.term-title { color: #8b949e; font-size: 12px; font-family: 'SF Mono', 'Menlo', monospace; margin-left: 6px; }
+
+.term-body {
+  flex: 1; overflow-y: auto;
+  padding: 14px 16px;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.term-body::-webkit-scrollbar { width: 0; }
+
+/* Terminal line types */
+.tl { display: block; animation: termIn 0.15s ease; white-space: pre; }
+.t-dim    { color: #484f58; }
+.t-white  { color: #c9d1d9; }
+.t-green  { color: #3fb950; }
+.t-yellow { color: #d29922; }
+.t-blue   { color: #58a6ff; }
+.t-red    { color: #f85149; }
+.t-bold   { color: #e6edf3; font-weight: 700; }
+.t-alert  {
+  color: #3fb950; font-weight: 700;
+  background: rgba(63,185,80,0.1);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: -6px;
+}
+.t-skip   { color: #484f58; }
+.t-sep    { color: #21262d; }
+.t-header { color: #58a6ff; font-weight: 700; }
+
+.cursor {
+  display: inline-block;
+  width: 7px; height: 14px;
+  background: #3fb950;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+/* ── Animations ── */
+@keyframes msgIn   { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes termIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bounce  { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes blink   { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes fadeOut { to { opacity: 0; transform: scale(0.97); } }
+</style>
+</head>
+<body>
+
+<!-- ── Scene 1 & 2: single phone ── -->
+<div id="main-view" style="display:flex;flex-direction:column;align-items:center;gap:16px">
+  <div class="scene-label" id="sceneLabel">Scene 1 — Happy Path (On-Demand Search)</div>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-right"><span>▲▲▲</span><span>WiFi</span><span>100%</span></div>
+    </div>
+    <div class="header">
+      <div class="back-btn">‹</div>
+      <div class="avatar">✈</div>
+      <div class="header-info">
+        <h2>Flight Deal Finder</h2>
+        <p>bot · online</p>
+      </div>
+      <div class="header-icons"><span>📞</span><span>⋯</span></div>
+    </div>
+    <div class="chat" id="chat">
+      <div class="date-divider">Today, May 18</div>
+    </div>
+    <div class="input-area">
+      <span class="mic-btn">🎙</span>
+      <div class="input-box">Message</div>
+      <span class="mic-btn" style="color:#6ab3f3">➤</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Scene 3: OpenClaw split view ── -->
+<div id="scene3-view">
+  <div class="scene-label">Scene 3 — OpenClaw Scheduled Automation (08:00 Daily Run)</div>
+  <div class="split-layout">
+
+    <!-- Terminal -->
+    <div class="terminal-panel">
+      <div class="term-bar">
+        <div class="term-dots">
+          <div class="term-dot td-red"></div>
+          <div class="term-dot td-yellow"></div>
+          <div class="term-dot td-green"></div>
+        </div>
+        <span class="term-title">openclaw — flight-watch-runner</span>
+      </div>
+      <div class="term-body" id="term"></div>
+    </div>
+
+    <!-- Mini phone -->
+    <div class="phone mini">
+      <div class="status-bar" style="padding:8px 16px 5px;font-size:11px">
+        <span>8:00</span>
+        <div class="status-right"><span>▲▲▲</span><span>100%</span></div>
+      </div>
+      <div class="header" style="padding:6px 12px 8px">
+        <div class="back-btn">‹</div>
+        <div class="avatar" style="width:32px;height:32px;font-size:14px">✈</div>
+        <div class="header-info">
+          <h2 style="font-size:13px">Flight Deal Finder</h2>
+          <p style="font-size:10px">bot · online</p>
+        </div>
+      </div>
+      <div class="chat" id="chat2" style="padding:8px">
+        <div class="date-divider">May 19 — Automated Alert</div>
+      </div>
+      <div class="input-area" style="padding:6px 10px">
+        <div class="input-box" style="font-size:12px;padding:6px 12px">Message</div>
+        <span class="mic-btn" style="color:#6ab3f3;font-size:15px">➤</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// Helpers — shared
+// ═══════════════════════════════════════════
+const chat      = document.getElementById('chat');
+const chat2     = document.getElementById('chat2');
+const term      = document.getElementById('term');
+const sceneLabel= document.getElementById('sceneLabel');
+
+function now() {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function scrollDown(el) { el.scrollTop = el.scrollHeight; }
+
+// ── Phone helpers ──
+function showTyping(chatEl) {
+  removeTyping(chatEl);
+  const w = document.createElement('div');
+  w.className = 'msg bot'; w.dataset.typing = '1';
+  w.innerHTML = `<div class="typing-wrap"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatEl.appendChild(w); scrollDown(chatEl);
+}
+function removeTyping(chatEl) {
+  chatEl.querySelector('[data-typing]')?.remove();
+}
+function userMsg(chatEl, text, delay) {
+  return new Promise(r => setTimeout(() => {
+    const m = document.createElement('div');
+    m.className = 'msg user';
+    m.innerHTML = `<div class="bubble">${text}</div><div class="time">${now()}</div>`;
+    chatEl.appendChild(m); scrollDown(chatEl); r();
+  }, delay));
+}
+function botMsg(chatEl, html, pauseBefore, typingDur) {
+  return new Promise(r => {
+    setTimeout(() => {
+      showTyping(chatEl);
+      setTimeout(() => {
+        removeTyping(chatEl);
+        const m = document.createElement('div');
+        m.className = 'msg bot';
+        m.innerHTML = `<div class="bubble">${html}</div><div class="time">${now()}</div>`;
+        chatEl.appendChild(m); scrollDown(chatEl); r();
+      }, typingDur);
+    }, pauseBefore);
+  });
+}
+function appendToBubble(chatEl, html) {
+  const bubbles = chatEl.querySelectorAll('.bubble');
+  bubbles[bubbles.length - 1]?.insertAdjacentHTML('beforeend', html);
+  scrollDown(chatEl);
+}
+
+// ── Terminal helpers ──
+let cursorEl = null;
+function termLine(cls, text, delay) {
+  return new Promise(r => setTimeout(() => {
+    if (cursorEl) cursorEl.remove();
+    const s = document.createElement('span');
+    s.className = `tl ${cls}`;
+    s.textContent = text;
+    term.appendChild(s);
+    cursorEl = document.createElement('span');
+    cursorEl.className = 'cursor';
+    term.appendChild(cursorEl);
+    scrollDown(term); r();
+  }, delay));
+}
+function termBlank(delay) {
+  return new Promise(r => setTimeout(() => {
+    term.appendChild(document.createElement('br')); r();
+  }, delay));
+}
+
+// ═══════════════════════════════════════════
+// SCENE 1 — Happy Path
+// ═══════════════════════════════════════════
+async function scene1() {
+  await userMsg(chat, '/start', 600);
+  await botMsg(chat,
+    `<strong>Flight Deal Finder</strong> — powered by OpenClaw + Claude AI<br><br>` +
+    `I find the cheapest flights with the best travel time, anywhere to anywhere.<br><br>` +
+    `<span style="color:#6ab3f3">📍 Where are you flying <strong>FROM</strong>?</span>`,
+    300, 1200);
+
+  await userMsg(chat, 'Bangkok', 2400);
+  await botMsg(chat,
+    `<span style="color:#6ab3f3">📅 When do you want to fly?</span><br>` +
+    `<span style="color:#536878;font-size:12px">e.g. "June 20", "next Friday"</span>`,
+    400, 900);
+
+  await userMsg(chat, 'June 20', 2000);
+  await botMsg(chat,
+    `<span style="color:#6ab3f3">🌍 Where would you like to fly to?</span><br>` +
+    `<span style="color:#536878;font-size:12px">Enter a city, country, or airport code</span>`,
+    400, 800);
+
+  await userMsg(chat, 'Japan', 2000);
+  await botMsg(chat, `Japan has several airports. <strong>Which one would you like to fly to?</strong>`, 400, 900);
+  await new Promise(r => setTimeout(() => {
+    appendToBubble(chat, `
+      <div class="keyboard">
+        <button class="kb-btn" id="btn-nrt">Tokyo Narita (NRT)</button>
+        <button class="kb-btn" id="btn-hnd">Tokyo Haneda (HND)</button>
+        <button class="kb-btn" id="btn-kix">Osaka Kansai (KIX)</button>
+        <button class="kb-btn" id="btn-any-jp">Any airport in Japan</button>
+      </div>`);
+    r();
+  }, 150));
+  await new Promise(r => setTimeout(() => { document.getElementById('btn-nrt')?.classList.add('selected'); r(); }, 1800));
+  await userMsg(chat, 'Tokyo Narita (NRT)', 400);
+
+  await botMsg(chat,
+    `<span style="color:#6ab3f3">↔ One-way or Return?</span>`,
+    400, 800);
+  await new Promise(r => setTimeout(() => {
+    appendToBubble(chat, `
+      <div class="keyboard">
+        <button class="kb-btn" id="btn-oneway">One-way</button>
+        <button class="kb-btn" id="btn-return">Return</button>
+      </div>`);
+    r();
+  }, 150));
+  await new Promise(r => setTimeout(() => { document.getElementById('btn-oneway')?.classList.add('selected'); r(); }, 1200));
+  await userMsg(chat, 'One-way', 400);
+
+  await botMsg(chat,
+    `<span style="color:#6ab3f3">💰 Any budget limit?</span><br>` +
+    `<span style="color:#536878;font-size:12px">Or find best value overall?</span>`,
+    400, 800);
+  await new Promise(r => setTimeout(() => {
+    appendToBubble(chat, `
+      <div class="keyboard">
+        <button class="kb-btn" id="btn-budget">Set budget</button>
+        <button class="kb-btn" id="btn-bestval">Best value overall</button>
+      </div>`);
+    r();
+  }, 150));
+  await new Promise(r => setTimeout(() => { document.getElementById('btn-bestval')?.classList.add('selected'); r(); }, 1200));
+  await userMsg(chat, 'Best value overall', 400);
+
+  // Searching
+  await new Promise(r => setTimeout(() => {
+    const m = document.createElement('div');
+    m.className = 'msg bot'; m.id = 'searching-msg';
+    m.innerHTML = `<div class="bubble">
+      <div class="searching-row"><div class="spin"></div>Searching Bangkok → Tokyo NRT · June 20...</div>
+      <div class="searching-row" style="margin-top:5px"><div class="spin"></div>Claude AI ranking results for best value...</div>
+    </div>`;
+    chat.appendChild(m); scrollDown(chat); r();
+  }, 600));
+
+  // Results
+  await new Promise(r => setTimeout(() => {
+    document.getElementById('searching-msg')?.remove();
+    const m = document.createElement('div');
+    m.className = 'msg bot';
+    m.innerHTML = `
+      <div class="bubble" style="padding:0;background:transparent">
+        <div class="results-card">
+          <div class="results-header">✈  TOP 3 DEALS — BANGKOK → TOKYO NRT · JUNE 20</div>
+          <div class="flight-opt">
+            <div class="flight-num">OPTION 1</div>
+            <div class="flight-route">Bangkok → Tokyo Narita (NRT)</div>
+            <div class="flight-meta"><span class="price">฿8,200</span> &nbsp;·&nbsp; 6h 30m &nbsp;·&nbsp; Direct &nbsp;·&nbsp; TG682 · Dep 09:00</div>
+          </div>
+          <div class="flight-opt">
+            <div class="flight-num">OPTION 2</div>
+            <div class="flight-route">Bangkok → Tokyo Narita (NRT)</div>
+            <div class="flight-meta"><span class="price">฿9,100</span> &nbsp;·&nbsp; 6h 45m &nbsp;·&nbsp; Direct &nbsp;·&nbsp; JL709 · Dep 11:30</div>
+          </div>
+          <div class="flight-opt">
+            <div class="flight-num">OPTION 3</div>
+            <div class="flight-route">Bangkok → Tokyo Narita (NRT)</div>
+            <div class="flight-meta"><span class="price">฿7,400</span> &nbsp;·&nbsp; 9h 15m &nbsp;·&nbsp; 1 stop (KUL) &nbsp;·&nbsp; AK856 · Dep 06:10</div>
+          </div>
+        </div>
+        <div class="ai-insight">
+          <strong>Claude AI:</strong> Option 1 is the best balance — direct flight, good price, best departure time.
+          Option 3 is cheapest but adds a 2h layover in KL. Option 2 costs more for a similar flight time.
+        </div>
+        <div style="color:#536878;font-size:12px;padding:6px 2px 0">Reply <strong style="color:#6ab3f3">1</strong>, <strong style="color:#6ab3f3">2</strong>, or <strong style="color:#6ab3f3">3</strong> to select 👇</div>
+      </div>
+      <div class="time">${now()}</div>`;
+    chat.appendChild(m); scrollDown(chat); r();
+  }, 2600));
+
+  await userMsg(chat, '1', 2800);
+  await botMsg(chat, `
+    <div style="color:#4fae4e;font-weight:700;margin-bottom:6px;font-size:13.5px">✓ Great choice!</div>
+    <div style="font-size:14px;font-weight:600;color:#fff">Bangkok → Tokyo Narita (NRT)</div>
+    <div style="color:#8096a7;font-size:12px;margin-top:3px">TG682 &nbsp;·&nbsp; June 20 &nbsp;·&nbsp; ฿8,200 &nbsp;·&nbsp; 6h 30m &nbsp;·&nbsp; Direct</div>
+    <a class="booking-link" href="#">Book now — Thai Airways (TG682) ↗</a>
+    <div class="keyboard" style="margin-top:8px">
+      <button class="kb-btn">New Search</button>
+      <button class="kb-btn">Change Date</button>
+    </div>`,
+    500, 1100);
+
+  setTimeout(() => scene2(), 4000);
+}
+
+// ═══════════════════════════════════════════
+// SCENE 2 — Autonomous Telegram Alert
+// ═══════════════════════════════════════════
+async function scene2() {
+  sceneLabel.textContent = 'Scene 2 — Autonomous Daily Alert (Telegram)';
+
+  const div = document.createElement('div');
+  div.className = 'date-divider';
+  div.textContent = 'Next Day, May 19';
+  chat.appendChild(div); scrollDown(chat);
+
+  const banner = document.createElement('div');
+  banner.className = 'scene-banner';
+  banner.textContent = 'OpenClaw agent woke up at 08:00 · Checking your watched routes via Gemini API...';
+  chat.appendChild(banner); scrollDown(chat);
+
+  await new Promise(r => setTimeout(r, 1400));
+  showTyping(chat);
+
+  await new Promise(r => setTimeout(() => {
+    removeTyping(chat);
+    const m = document.createElement('div');
+    m.className = 'msg bot';
+    m.innerHTML = `
+      <div class="bubble" style="padding:0;background:transparent">
+        <div class="alert-card">
+          <div class="alert-badge">PRICE ALERT — YOUR WATCH</div>
+          <div style="color:#dde6ee;font-size:13.5px;font-weight:600">Bangkok → Tokyo NRT &nbsp;·&nbsp; June 20</div>
+          <div style="margin:6px 0;display:flex;align-items:baseline;gap:8px">
+            <span class="price-was">฿9,800</span>
+            <span class="price-drop">฿8,200 &nbsp;↓ 16% drop</span>
+          </div>
+          <div style="color:#536878;font-size:11.5px">Checked 08:00 &nbsp;·&nbsp; Gemini API &nbsp;·&nbsp; 6h 30m Direct &nbsp;·&nbsp; TG682</div>
+        </div>
+        <div class="ai-insight" style="margin-top:6px">
+          <strong>Gemini AI:</strong> Prices dropped 16% since Monday. BKK→NRT fares typically bottom out
+          3–4 weeks before departure. This is likely near the floor — good time to book.
+        </div>
+        <div class="keyboard" style="margin-top:8px">
+          <button class="kb-btn selected">Book Now</button>
+          <button class="kb-btn">Snooze 1 day</button>
+          <button class="kb-btn">Remove Watch</button>
+        </div>
+      </div>
+      <div class="time">${now()}</div>`;
+    chat.appendChild(m); scrollDown(chat); r();
+  }, 1800));
+
+  setTimeout(() => scene3(), 5000);
+}
+
+// ═══════════════════════════════════════════
+// SCENE 3 — OpenClaw Terminal + Mini Phone
+// ═══════════════════════════════════════════
+async function scene3() {
+  // Fade out main view, fade in scene 3
+  const mainView   = document.getElementById('main-view');
+  const scene3View = document.getElementById('scene3-view');
+
+  mainView.style.transition = 'opacity 0.8s ease';
+  mainView.style.opacity = '0';
+
+  await new Promise(r => setTimeout(r, 800));
+  mainView.style.display = 'none';
+  scene3View.style.display = 'flex';
+  await new Promise(r => setTimeout(r, 50));
+  scene3View.classList.add('visible');
+
+  // ── Terminal sequence ──
+  const t = (cls, text, delay) => termLine(cls, text, delay);
+  const b = (delay) => termBlank(delay);
+
+  await t('t-dim',    '# OpenClaw Agent v1.2 — Flight Watch Runner',                 300);
+  await t('t-dim',    '# Cron trigger: 08:00 daily',                                 250);
+  await b(200);
+  await t('t-white',  '[08:00:00] Starting flight-watch-runner...',                   200);
+  await t('t-white',  '[08:00:00] Loading watch list from ~/.openclaw/watches.json',  400);
+  await t('t-green',  '[08:00:00] 3 watches found',                                   500);
+  await b(200);
+
+  // Watch 1 — ALERT
+  await t('t-sep',    '─────────────────────────────────────────────────────',        300);
+  await t('t-header', '[08:00:01] Watch 1 / 3 — BKK → NRT · June 20',                200);
+  await t('t-sep',    '─────────────────────────────────────────────────────',        200);
+  await t('t-white',  '[08:00:01] Executing skill: flight-best-deals',                400);
+  await t('t-yellow', '[08:00:02] Calling Gemini API for flight data...',             600);
+  await t('t-green',  '[08:00:03] 3 results returned',                                800);
+  await t('t-white',  '[08:00:03] Best price today:      ฿8,200  (TG682 Direct)',     500);
+  await t('t-white',  '[08:00:03] Best price yesterday:  ฿9,800',                    400);
+  await t('t-green',  '[08:00:03] Change: -16.3% ↓',                                 400);
+  await t('t-alert',  '[08:00:04] THRESHOLD EXCEEDED (> 10%) → sending alert',       500);
+  await t('t-green',  '[08:00:04] Telegram alert sent to @user ✓',                   400);
+
+  // Simultaneously show alert on mini phone
+  showTyping(chat2);
+  await new Promise(r => setTimeout(() => {
+    removeTyping(chat2);
+    const m = document.createElement('div');
+    m.className = 'msg bot';
+    m.innerHTML = `
+      <div class="bubble" style="padding:0;background:transparent">
+        <div class="alert-card" style="padding:8px 10px">
+          <div class="alert-badge">PRICE ALERT</div>
+          <div style="color:#dde6ee;font-size:12px;font-weight:600">BKK → Tokyo NRT · June 20</div>
+          <div style="margin:4px 0;display:flex;align-items:baseline;gap:6px">
+            <span class="price-was" style="font-size:11px">฿9,800</span>
+            <span class="price-drop" style="font-size:14px">฿8,200 ↓ 16%</span>
+          </div>
+          <div style="color:#536878;font-size:10.5px">Gemini API · 08:00 · TG682 Direct</div>
+        </div>
+        <div class="ai-insight" style="font-size:11px;margin-top:5px">
+          <strong>Gemini AI:</strong> Near price floor — good time to book.
+        </div>
+        <div class="keyboard" style="margin-top:6px">
+          <button class="kb-btn" style="font-size:11px;padding:4px 9px">Book Now</button>
+          <button class="kb-btn" style="font-size:11px;padding:4px 9px">Snooze</button>
+        </div>
+      </div>
+      <div class="time">${now()}</div>`;
+    chat2.appendChild(m); scrollDown(chat2); r();
+  }, 300));
+
+  await b(300);
+
+  // Watch 2 — no alert
+  await t('t-sep',    '─────────────────────────────────────────────────────',        400);
+  await t('t-header', '[08:00:05] Watch 2 / 3 — BKK → SYD · July 4',                 200);
+  await t('t-sep',    '─────────────────────────────────────────────────────',        200);
+  await t('t-white',  '[08:00:05] Executing skill: flight-best-deals',                400);
+  await t('t-yellow', '[08:00:06] Calling Gemini API for flight data...',             600);
+  await t('t-green',  '[08:00:07] 3 results returned',                                800);
+  await t('t-white',  '[08:00:07] Best price today:      ฿18,400',                   400);
+  await t('t-white',  '[08:00:07] Best price yesterday:  ฿18,200',                   400);
+  await t('t-dim',    '[08:00:07] Change: +1.1% ↑   Below threshold (< 10%)',        400);
+  await t('t-skip',   '[08:00:07] No alert sent — skipping.',                         350);
+  await b(200);
+
+  // Watch 3 — no change
+  await t('t-sep',    '─────────────────────────────────────────────────────',        300);
+  await t('t-header', '[08:00:08] Watch 3 / 3 — BKK → CDG · August 10',              200);
+  await t('t-sep',    '─────────────────────────────────────────────────────',        200);
+  await t('t-white',  '[08:00:08] Executing skill: flight-best-deals',                400);
+  await t('t-yellow', '[08:00:09] Calling Gemini API for flight data...',             600);
+  await t('t-green',  '[08:00:09] 3 results returned',                                800);
+  await t('t-white',  '[08:00:09] Best price today:      ฿22,100',                   400);
+  await t('t-white',  '[08:00:09] Best price yesterday:  ฿22,100',                   400);
+  await t('t-dim',    '[08:00:09] Change: 0.0%   No change',                         400);
+  await t('t-skip',   '[08:00:09] No alert sent — skipping.',                         350);
+  await b(300);
+
+  // Summary
+  await t('t-sep',    '═════════════════════════════════════════════════════',        300);
+  await t('t-bold',   '[08:00:10] Run complete',                                      300);
+  await t('t-green',  '[08:00:10]   1 alert sent   (Watch 1 — BKK→NRT)',             300);
+  await t('t-dim',    '[08:00:10]   2 no change    (Watch 2, Watch 3)',               300);
+  await t('t-dim',    '[08:00:10]   0 errors',                                        300);
+  await t('t-sep',    '─────────────────────────────────────────────────────',        300);
+  await t('t-dim',    '[08:00:10] Next run: tomorrow at 08:00',                       400);
+  await t('t-dim',    '[08:00:10] OpenClaw agent sleeping...',                        400);
+
+  // Remove cursor at end
+  await new Promise(r => setTimeout(() => { cursorEl?.remove(); r(); }, 600));
+}
+
+// ── Start ──
+scene1();
+</script>
+</body>
+</html>
