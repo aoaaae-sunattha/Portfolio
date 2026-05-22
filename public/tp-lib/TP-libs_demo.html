@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tp-exchanges Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d1117;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #c9d1d9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+    min-height: 100vh;
+  }
+
+  .header {
+    width: 820px;
+    max-width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #58a6ff;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    color: #8b949e;
+    font-size: 12px;
+  }
+
+  .window {
+    width: 820px;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    border: 1px solid #30363d;
+    margin-bottom: 28px;
+  }
+
+  .titlebar {
+    background: #161b22;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #30363d;
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .title-text {
+    flex: 1;
+    text-align: center;
+    color: #8b949e;
+    font-size: 12px;
+  }
+
+  .terminal {
+    background: #0d1117;
+    padding: 18px 20px 22px;
+    min-height: 120px;
+    position: relative;
+  }
+
+  .prompt-line {
+    color: #8b949e;
+    margin-bottom: 10px;
+  }
+
+  .prompt-line .ps { color: #3fb950; }
+  .prompt-line .dir { color: #58a6ff; }
+  .prompt-line .cmd { color: #c9d1d9; }
+  .prompt-line .arg { color: #ffa657; }
+
+  .output { white-space: pre; }
+
+  /* ANSI-ish colors */
+  .c-cyan   { color: #79c0ff; }
+  .c-green  { color: #3fb950; }
+  .c-red    { color: #f85149; }
+  .c-grey   { color: #8b949e; }
+  .c-white  { color: #c9d1d9; }
+  .c-bold   { font-weight: 700; }
+  .c-dim    { opacity: 0.55; }
+
+  .bg-green { background: #3fb950; color: #0d1117; font-weight: 700; padding: 0 4px; border-radius: 2px; }
+  .bg-red   { background: #f85149; color: #0d1117; font-weight: 700; padding: 0 4px; border-radius: 2px; }
+
+  .cursor {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: #c9d1d9;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hidden { display: none; }
+  .fade-in { animation: fadeIn 0.3s ease-in; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  #stage-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-align: center;
+    margin-top: -16px;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>tp-exchanges</h1>
+  <p>AI-Agentic Exchange Test Runner &mdash; Binance Demo</p>
+</div>
+
+<div id="stage-label">▶ Public API</div>
+
+<!-- PUBLIC window -->
+<div class="window" id="win-public">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="title-text">zsh — tp-exchanges</span>
+  </div>
+  <div class="terminal">
+    <div class="prompt-line">
+      <span class="ps">➜</span>&nbsp;<span class="dir">tp-exchanges</span>&nbsp;<span class="cmd">node my-tests/run.js binance</span>&nbsp;<span class="arg">public</span>&nbsp;<span class="cmd">--input</span>&nbsp;<span class="arg">"base=BTC quote=USDT"</span>
+    </div>
+    <div class="output" id="pub-out"></div>
+    <span class="cursor" id="pub-cursor"></span>
+  </div>
+</div>
+
+<!-- PRIVATE window -->
+<div class="window hidden" id="win-private">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="title-text">zsh — tp-exchanges</span>
+  </div>
+  <div class="terminal">
+    <div class="prompt-line">
+      <span class="ps">➜</span>&nbsp;<span class="dir">tp-exchanges</span>&nbsp;<span class="cmd">node my-tests/run.js binance</span>&nbsp;<span class="arg">private</span>&nbsp;<span class="cmd">--cred personal --input</span>&nbsp;<span class="arg">"base=BTC quote=USDT currency=BTC"</span>
+    </div>
+    <div class="output" id="priv-out"></div>
+    <span class="cursor" id="priv-cursor"></span>
+  </div>
+</div>
+
+<script>
+// ─── Public output lines ──────────────────────────────────────────────────────
+const pubLines = [
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+  `<span class="c-bold c-cyan">  🤖 AI-Agentic Exchange Test Runner</span>`,
+  `<span class="c-grey">  Exchange : <span class="c-white">binance</span></span>`,
+  `<span class="c-grey">  Mode     : <span class="c-white">public</span></span>`,
+  `<span class="c-grey">  Methods  : <span class="c-white">getServiceName, getOrderBook, getExchangeVolume, getExchangeTrades, getLastRate, getTradingPairs</span></span>`,
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+  ``,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getServiceName                </span>  <span class="c-green">PASS</span>    <span class="c-dim">1ms</span>  <span class="c-grey">"binance"</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getOrderBook                  </span>  <span class="c-green">PASS</span>    <span class="c-dim">200ms</span>  <span class="c-grey">{bids, asks}</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getExchangeVolume             </span>  <span class="c-green">PASS</span>    <span class="c-dim">118ms</span>  <span class="c-grey">{base_currency, quote_currency, base_volume, ...}</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getExchangeTrades             </span>  <span class="c-green">PASS</span>    <span class="c-dim">149ms</span>  <span class="c-grey">Array[500]</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getLastRate                   </span>  <span class="c-green">PASS</span>    <span class="c-dim">145ms</span>  <span class="c-grey">76887.39</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getTradingPairs               </span>  <span class="c-green">PASS</span>    <span class="c-dim">130ms</span>  <span class="c-grey">Array[2473]</span>`,
+  ``,
+  `<span class="c-bold c-cyan">  🤖 AI Analysis</span>`,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  ``,
+  `<span class="c-green">  ✓ Working services:</span>`,
+  `    • getServiceName`,
+  `    • getOrderBook`,
+  `    • getExchangeVolume`,
+  `    • getExchangeTrades`,
+  `    • getLastRate — price = 76887.39`,
+  `    • getTradingPairs — 2473 pairs`,
+  ``,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  `<span class="c-bold">  SUMMARY</span>`,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  `  Total   : 6`,
+  `  <span class="c-green">Passed  : 6</span>`,
+  ``,
+  `  <span class="bg-green">  ALL TESTS PASSED ✓  </span>`,
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+]
+
+// ─── Private output lines ─────────────────────────────────────────────────────
+const privLines = [
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+  `<span class="c-bold c-cyan">  🤖 AI-Agentic Exchange Test Runner</span>`,
+  `<span class="c-grey">  Exchange : <span class="c-white">binance</span></span>`,
+  `<span class="c-grey">  Mode     : <span class="c-white">private</span></span>`,
+  `<span class="c-grey">  Methods  : <span class="c-white">getTrades, getOpenOrders, getDepositsAndWithdrawals, getAccountBalances, getDepositAddress, subAccountInfo, getMainSubTransferHistory, networks</span></span>`,
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+  ``,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getTrades                     </span>  <span class="c-green">PASS</span>    <span class="c-dim">1006ms</span>  <span class="c-grey">Array[0]</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getOpenOrders                 </span>  <span class="c-green">PASS</span>    <span class="c-dim">117ms</span>  <span class="c-grey">Array[0]</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getDepositsAndWithdrawals     </span>  <span class="c-green">PASS</span>    <span class="c-dim">315ms</span>  <span class="c-grey">Array[5]</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getAccountBalances            </span>  <span class="c-green">PASS</span>    <span class="c-dim">137ms</span>  <span class="c-grey">Array[14]</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">getDepositAddress             </span>  <span class="c-green">PASS</span>    <span class="c-dim">329ms</span>  <span class="c-grey">{address, tag}</span>`,
+  `  <span class="c-red">✗</span>  <span class="c-bold">subAccountInfo                </span>  <span class="c-red">ERROR</span>   <span class="c-dim">132ms</span>`,
+  `      <span class="c-red">Sub-account function is not enabled.</span>`,
+  `  <span class="c-red">✗</span>  <span class="c-bold">getMainSubTransferHistory     </span>  <span class="c-red">ERROR</span>   <span class="c-dim">134ms</span>`,
+  `      <span class="c-red">Sub-account function is not enabled.</span>`,
+  `  <span class="c-green">✓</span>  <span class="c-bold">networks                      </span>  <span class="c-green">PASS</span>    <span class="c-dim">537ms</span>  <span class="c-grey">Array[5]</span>`,
+  ``,
+  `<span class="c-bold c-cyan">  🤖 AI Analysis</span>`,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  ``,
+  `<span class="c-green">  ✓ Working services:</span>`,
+  `    • getTrades — 0 trades returned`,
+  `    • getOpenOrders`,
+  `    • getDepositsAndWithdrawals — 5 records`,
+  `    • getAccountBalances — 14 currencies, 14 with balance`,
+  `    • getDepositAddress`,
+  `    • networks`,
+  ``,
+  `<span class="c-red">  ✗ Issues detected:</span>`,
+  `    • <span class="c-bold">subAccountInfo</span>`,
+  `      <span class="c-red">API error: Sub-account function is not enabled.</span>`,
+  `    • <span class="c-bold">getMainSubTransferHistory</span>`,
+  `      <span class="c-red">API error: Sub-account function is not enabled.</span>`,
+  ``,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  `<span class="c-bold">  SUMMARY</span>`,
+  `<span class="c-grey">────────────────────────────────────────────────────────────</span>`,
+  `  Total   : 8`,
+  `  <span class="c-green">Passed  : 6</span>`,
+  `  <span class="c-red">Failed  : 2</span>`,
+  ``,
+  `  <span class="bg-red">  2 TEST(S) FAILED ✗  </span>`,
+  `<span class="c-grey">════════════════════════════════════════════════════════════</span>`,
+]
+
+// ─── Animator ────────────────────────────────────────────────────────────────
+function animateLines(lines, outEl, cursorEl, delayBetween, onDone) {
+  let i = 0
+  function next() {
+    if (i >= lines.length) {
+      cursorEl.classList.remove('cursor')
+      if (onDone) onDone()
+      return
+    }
+    const div = document.createElement('div')
+    div.innerHTML = lines[i]
+    div.classList.add('fade-in')
+    outEl.appendChild(div)
+    i++
+    setTimeout(next, delayBetween)
+  }
+  next()
+}
+
+// ─── Sequence ────────────────────────────────────────────────────────────────
+const label = document.getElementById('stage-label')
+
+// Start public after 800ms
+setTimeout(() => {
+  animateLines(
+    pubLines,
+    document.getElementById('pub-out'),
+    document.getElementById('pub-cursor'),
+    90,
+    () => {
+      // After public done, wait 1.4s then show private
+      setTimeout(() => {
+        label.textContent = '▶ Private API'
+        const wp = document.getElementById('win-private')
+        wp.classList.remove('hidden')
+        wp.classList.add('fade-in')
+
+        setTimeout(() => {
+          animateLines(
+            privLines,
+            document.getElementById('priv-out'),
+            document.getElementById('priv-cursor'),
+            90,
+            null
+          )
+        }, 500)
+      }, 1400)
+    }
+  )
+}, 800)
+</script>
+</body>
+</html>
